@@ -4,8 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>港深雙城微旅行 行程助手</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 極速穩定的 Vue 3 CDN -->
     <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.js"></script>
+    <!-- FontAwesome Icon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* 防止 Vue 載入前畫面閃爍與原始碼外露 */
@@ -35,9 +38,11 @@
 
     <div id="app" v-cloak class="max-w-md mx-auto bg-hkRetroCream min-h-screen shadow-2xl relative flex flex-col overflow-x-hidden pb-32">
         
+        <!-- 頁首 Banner 區塊 -->
         <div class="h-[250px] w-full relative overflow-hidden bg-hkRetroBlue">
             <img src="Web app Banner 素材.png" alt="港深行程Banner" class="w-full h-full object-cover">
             
+            <!-- 浮動分頁導覽 Tab 按鈕 -->
             <div class="absolute bottom-12 right-4 flex space-x-1.5 bg-white/80 backdrop-blur-md p-1.5 rounded-full shadow-lg z-30 max-w-[90%] overflow-x-auto no-scrollbar">
                 <button @click="currentTab = 'itinerary'" :class="{'bg-hkRetroGreen text-white': currentTab === 'itinerary', 'text-slate-600': currentTab !== 'itinerary'}" class="w-9 h-9 rounded-full flex shrink-0 transition-all">
                     <i class="fa-solid fa-calendar-days text-xs m-auto"></i>
@@ -51,15 +56,20 @@
                 <button @click="currentTab = 'expenses'" :class="{'bg-hkRetroGreen text-white': currentTab === 'expenses', 'text-slate-600': currentTab !== 'expenses'}" class="w-9 h-9 rounded-full flex shrink-0 transition-all">
                     <i class="fa-solid fa-wallet text-xs m-auto"></i>
                 </button>
-                <button @click="currentTab = 'diary'" :class="{'bg-hkRetroGreen text-white': currentTab === 'diary', 'text-slate-600': currentTab !== 'diary'}" class="w-9 h-9 rounded-full flex shrink-0 transition-all" title="手帳紀錄">
+                <button @click="currentTab = 'diary'" :class="{'bg-hkRetroGreen text-white': currentTab === 'diary', 'text-slate-600': currentTab !== 'diary'}" class="w-9 h-9 rounded-full flex shrink-0 transition-all">
                     <i class="fa-solid fa-pen-to-square text-xs m-auto"></i>
                 </button>
             </div>
         </div>
 
+        <!-- 主內容區域 -->
         <div class="-mt-8 rounded-t-[32px] bg-hkRetroCream relative z-20 px-4 pt-6 flex-1">
             
+            <!-- ==========================================
+                 分頁一：每日行程表
+            =========================================== -->
             <div v-if="currentTab === 'itinerary'">
+                <!-- 天氣資訊 -->
                 <div class="bg-white/70 backdrop-blur-sm rounded-2xl p-3 mb-4 flex items-center justify-between shadow-sm border border-slate-100">
                     <div class="flex items-center space-x-3">
                         <i class="fa-solid fa-cloud-sun text-2xl text-hkRetroOrange"></i>
@@ -74,6 +84,7 @@
                     </div>
                 </div>
 
+                <!-- 橫向滑動日期選單 -->
                 <div class="flex space-x-3 overflow-x-auto no-scrollbar pb-4 mb-4">
                     <button v-for="(day, index) in days" :key="index" 
                             @click="selectedDayIndex = index"
@@ -84,19 +95,25 @@
                     </button>
                 </div>
 
+                <!-- 行程列表時間軸 -->
                 <div class="space-y-3 relative before:absolute before:top-4 before:bottom-4 before:left-[19px] before:w-[2px] before:bg-slate-200">
                     <div v-for="(item, idx) in activeDayItinerary" :key="item.id" class="relative">
+                        
+                        <!-- 交通工具與時間展示（全新：直接呈現自訂文字） -->
                         <div v-if="idx > 0" class="ml-10 my-2 flex items-center space-x-2 text-xs text-slate-400 font-medium">
-                            <div class="bg-white px-2.5 py-1 rounded-full border border-slate-100 flex items-center space-x-1 shadow-sm">
+                            <div class="bg-white px-2.5 py-1 rounded-full border border-slate-100 flex items-center space-x-1.5 shadow-sm">
                                 <i :class="getTransitIcon(item.transitMode)" class="text-hkRetroGreen"></i>
-                                <span class="font-bold text-slate-600">{{ item.transitTime || '15' }} 分鐘</span>
+                                <span class="font-bold text-slate-700">{{ item.transitMode || '設定交通' }}</span>
+                                <span v-if="item.transitTime" class="text-slate-400 font-normal">({{ item.transitTime }} 分鐘)</span>
                             </div>
                         </div>
 
+                        <!-- 行程卡片主體 -->
                         <div class="flex items-start space-x-3 group">
                             <div :class="getCategoryBg(item.category)" class="w-10 h-10 rounded-full flex items-center justify-center text-white shadow-md relative z-10 shrink-0 mt-1">
                                 <i :class="getCategoryIcon(item.category)" class="text-sm"></i>
                             </div>
+
                             <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 flex-1 hover:shadow-md transition-shadow relative">
                                 <div class="absolute top-3 right-3 flex space-x-1 opacity-60 group-hover:opacity-100 transition-opacity">
                                     <button @click="moveItem(idx, -1)" class="text-slate-400 hover:text-slate-600 p-1"><i class="fa-solid fa-chevron-up text-xs"></i></button>
@@ -112,11 +129,13 @@
                                 </div>
 
                                 <h4 class="font-bold text-base text-slate-800 pr-16">{{ item.name }}</h4>
+                                
                                 <div class="text-xs text-slate-500 space-y-1 mt-2">
                                     <p v-if="item.time && item.category !== '航班'" class="flex items-center"><i class="fa-regular fa-clock w-4 text-slate-400"></i>時間/營業: {{ item.time }}</p>
                                     <p v-if="item.ticket && item.category === '景點'" class="flex items-center"><i class="fa-solid fa-ticket w-4 text-slate-400"></i>門票: {{ item.ticket }}</p>
                                     <p v-if="item.note" class="flex items-start bg-slate-50 p-1.5 rounded-lg text-slate-600 mt-1"><i class="fa-solid fa-tags w-4 text-hkRetroOrange/80 mt-0.5 shrink-0"></i><span class="ml-1 flex-1">{{ item.note }}</span></p>
                                 </div>
+
                                 <div class="mt-3 pt-2 border-t border-slate-100 flex justify-end">
                                     <a :href="'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(item.name)" target="_blank" class="inline-flex items-center space-x-1 text-xs text-hkRetroGreen font-bold hover:underline">
                                         <i class="fa-solid fa-location-arrow"></i>
@@ -125,9 +144,11 @@
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
 
+                <!-- 右下角圓形浮動 "+" 按鈕 -->
                 <div class="absolute bottom-6 right-6 z-40">
                     <button @click="openAddModal('itinerary')" class="w-14 h-14 bg-hkRetroOrange text-white rounded-full shadow-2xl flex items-center justify-center text-xl border-2 border-white">
                         <i class="fa-solid fa-plus"></i>
@@ -135,6 +156,9 @@
                 </div>
             </div>
 
+            <!-- ==========================================
+                 分頁二：必備資訊
+            =========================================== -->
             <div v-if="currentTab === 'info'" class="space-y-4">
                 <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
                     <h3 class="font-bold text-md text-slate-800 mb-3 flex items-center"><i class="fa-solid fa-calculator text-hkRetroOrange mr-2"></i>即時外幣匯率換算</h3>
@@ -195,6 +219,9 @@
                 </div>
             </div>
 
+            <!-- ==========================================
+                 分頁三：購物清單 (全新升級：顯示自訂備註欄)
+            =========================================== -->
             <div v-if="currentTab === 'shopping'">
                 <div class="grid grid-cols-2 gap-3">
                     <div v-for="(shop, sIdx) in shoppingList" :key="sIdx" class="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100 flex flex-col">
@@ -209,9 +236,15 @@
                                 <input type="file" accept="image/*" @change="uploadShoppingImg($event, sIdx)" class="hidden">
                             </label>
                         </div>
-                        <div class="p-3 flex-1 flex flex-col justify-between">
-                            <p class="font-bold text-sm text-slate-700 line-clamp-2">{{ shop.name }}</p>
-                            <button @click="shoppingList.splice(sIdx, 1)" class="text-right text-xs text-red-400 hover:text-red-600 mt-2"><i class="fa-regular fa-trash-can"></i> 刪除</button>
+                        <div class="p-3 flex-1 flex flex-col justify-between space-y-2">
+                            <div>
+                                <p class="font-bold text-sm text-slate-700 line-clamp-1">{{ shop.name }}</p>
+                                <!-- 備註展示區 -->
+                                <p v-if="shop.note" class="text-[11px] text-slate-500 bg-slate-50 p-1.5 rounded-lg border border-slate-100 mt-1 font-medium whitespace-pre-wrap leading-tight">
+                                    {{ shop.note }}
+                                </p>
+                            </div>
+                            <button @click="shoppingList.splice(sIdx, 1)" class="text-right text-xs text-red-400 hover:text-red-600 self-end"><i class="fa-regular fa-trash-can text-[10px]"></i> 刪除</button>
                         </div>
                     </div>
                 </div>
@@ -222,6 +255,9 @@
                 </div>
             </div>
 
+            <!-- ==========================================
+                 分頁四：花費記帳
+            =========================================== -->
             <div v-if="currentTab === 'expenses'" class="space-y-4">
                 <div class="bg-gradient-to-br from-hkRetroGreen to-emerald-800 text-white rounded-3xl p-5 shadow-lg">
                     <p class="text-xs text-green-200/80 uppercase tracking-widest font-bold">換算整合總支出</p>
@@ -245,7 +281,6 @@
                             <button @click="expenses.splice(eIdx, 1)" class="text-slate-300 hover:text-red-500"><i class="fa-solid fa-xmark text-xs"></i></button>
                         </div>
                     </div>
-                    <div v-if="expenses.length === 0" class="p-8 text-center text-xs text-slate-400">目前尚無消費紀錄。</div>
                 </div>
                 <div class="absolute bottom-6 right-6 z-40">
                     <button @click="openAddModal('expenses')" class="w-14 h-14 bg-hkRetroGreen text-white rounded-full shadow-2xl flex items-center justify-center text-xl border-2 border-white">
@@ -254,6 +289,9 @@
                 </div>
             </div>
 
+            <!-- ==========================================
+                 分頁五：手帳紀錄
+            =========================================== -->
             <div v-if="currentTab === 'diary'" class="space-y-4">
                 <div v-for="(log, dIdx) in diaryList" :key="dIdx" class="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100 p-4 space-y-3">
                     <div v-if="log.image" class="h-44 w-full rounded-xl overflow-hidden bg-slate-100">
@@ -274,10 +312,6 @@
                         <button @click="diaryList.splice(dIdx, 1)" class="text-xs text-red-400 hover:text-red-600"><i class="fa-regular fa-trash-can mr-1"></i>刪除紀錄</button>
                     </div>
                 </div>
-                <div v-if="diaryList.length === 0" class="p-12 text-center text-xs text-slate-400 bg-white/50 rounded-2xl border border-dashed">
-                    <i class="fa-solid fa-pen-fancy text-xl mb-2 text-slate-300 block"></i>
-                    這趟旅程還沒有寫下手帳，點擊右下角開始上記錄第一家美食吧！
-                </div>
                 <div class="absolute bottom-6 right-6 z-40">
                     <button @click="openAddModal('diary')" class="w-14 h-14 bg-hkRetroOrange text-white rounded-full shadow-2xl flex items-center justify-center text-xl border-2 border-white">
                         <i class="fa-solid fa-plus"></i>
@@ -287,6 +321,9 @@
 
         </div>
 
+        <!-- ==========================================
+             🔒 核心安全防護彈出視窗 (Modal)
+        =========================================== -->
         <div v-show="modal.show" style="display: none;" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-end justify-center">
             <div class="bg-white w-full max-w-md rounded-t-[28px] p-6 space-y-4 max-h-[90vh] overflow-y-auto shadow-2xl">
                 <div class="flex justify-between items-center pb-2 border-b border-slate-100">
@@ -294,6 +331,7 @@
                     <button @click="modal.show = false" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-circle-xmark text-xl"></i></button>
                 </div>
 
+                <!-- 1. 行程表單內容 -->
                 <div v-if="modal.type === 'itinerary'" class="space-y-3 text-sm">
                     <div>
                         <label class="block text-xs font-bold text-slate-500 mb-1">行程分類項目</label>
@@ -305,6 +343,7 @@
                         <label class="block text-xs font-bold text-slate-500 mb-1">地標/項目名稱</label>
                         <input type="text" v-model="modal.data.name" class="w-full bg-slate-50 border border-slate-200 p-2.5 rounded-xl" placeholder="例如：大館監獄">
                     </div>
+                    
                     <div v-if="modal.data.category === '航班'" class="grid grid-cols-2 gap-2 bg-emerald-50/50 p-3 rounded-xl border border-emerald-100">
                         <div>
                             <label class="block text-[11px] font-bold text-emerald-800 mb-1">航班編號</label>
@@ -315,6 +354,7 @@
                             <input type="text" v-model="modal.data.time" class="w-full bg-white border p-2 rounded-lg" placeholder="09:15-10:55">
                         </div>
                     </div>
+
                     <div v-if="modal.data.category !== '航班'">
                         <label class="block text-xs font-bold text-slate-500 mb-1">時間 / 營業時間</label>
                         <input type="text" v-model="modal.data.time" class="w-full bg-slate-50 border border-slate-200 p-2.5 rounded-xl" placeholder="例如：11:30-01:00">
@@ -323,71 +363,75 @@
                         <label class="block text-xs font-bold text-slate-500 mb-1">門票資訊欄位</label>
                         <input type="text" v-model="modal.data.ticket" class="w-full bg-slate-50 border border-slate-200 p-2.5 rounded-xl" placeholder="例如：免費">
                     </div>
+                    
+                    <!-- 交通自訂輸入框 (全新調整：改為全自訂純文字欄位) -->
                     <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-2">
-                        <span class="text-xs font-bold text-slate-600 block"><i class="fa-solid fa-route mr-1 text-hkRetroGreen"></i> 交通設定</span>
-                        <div class="grid grid-cols-2 gap-2">
-                            <div>
-                                <select v-model="modal.data.transitMode" class="w-full bg-white border p-1.5 rounded-lg text-xs">
-                                    <option>步行</option><option>開車</option><option>大眾運輸</option>
-                                </select>
+                        <span class="text-xs font-bold text-slate-600 block"><i class="fa-solid fa-route mr-1 text-hkRetroGreen"></i> 前往此行程的交通方式自訂</span>
+                        <div class="grid grid-cols-3 gap-2">
+                            <div class="col-span-2">
+                                <label class="block text-[10px] text-slate-400 font-medium mb-1">交通工具 / 路線說明</label>
+                                <input type="text" v-model="modal.data.transitMode" class="w-full bg-white border border-slate-200 p-1.5 rounded-lg text-xs" placeholder="例如：搭地鐵到中環、步行、搭天星小輪">
                             </div>
-                            <div>
-                                <input type="number" v-model="modal.data.transitTime" class="w-full bg-white border p-1.5 rounded-lg text-xs" placeholder="分鐘">
+                            <div class="col-span-1">
+                                <label class="block text-[10px] text-slate-400 font-medium mb-1">耗時(分鐘)</label>
+                                <input type="number" v-model="modal.data.transitTime" class="w-full bg-white border border-slate-200 p-1.5 rounded-lg text-xs" placeholder="15">
                             </div>
                         </div>
                     </div>
+
                     <div>
                         <label class="block text-xs font-bold text-slate-500 mb-1">特色 & 備註細節</label>
-                        <textarea v-model="modal.data.note" rows="2" class="w-full bg-slate-50 border border-slate-200 p-2.5 rounded-xl" placeholder="備註寫在這裡..."></textarea>
+                        <textarea v-model="modal.data.note" rows="2" class="w-full bg-slate-50 border border-slate-200 p-2.5 rounded-xl" placeholder="有什麼備註事項可以寫在這裡..."></textarea>
                     </div>
                 </div>
 
+                <!-- 2. 購物清單表單 (全新升級：整合備註欄輸入) -->
                 <div v-if="modal.type === 'shopping'" class="space-y-3 text-sm">
                     <div>
-                        <label class="block text-xs font-bold text-slate-500 mb-1">物品名稱</label>
-                        <input type="text" v-model="modal.data.name" class="w-full bg-slate-50 border p-2.5 rounded-xl" placeholder="小熊珍妮曲奇餅乾">
+                        <label class="block text-xs font-bold text-slate-500 mb-1">想買的物品名稱</label>
+                        <input type="text" v-model="modal.data.name" class="w-full bg-slate-50 border border-slate-200 p-2.5 rounded-xl" placeholder="小熊珍妮曲奇餅乾">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 mb-1">備註欄 (規格 / 價格 / 代購對象)</label>
+                        <textarea v-model="modal.data.note" rows="3" class="w-full bg-slate-50 border border-slate-200 p-2.5 rounded-xl" placeholder="例如：買4味大盒裝的 / 幫大姐帶2盒 / 預估 HK$150"></textarea>
                     </div>
                 </div>
 
+                <!-- 3. 記帳花費表單 -->
                 <div v-if="modal.type === 'expenses'" class="space-y-3 text-sm">
                     <div class="grid grid-cols-2 gap-2">
                         <div>
-                            <label class="block text-xs font-bold text-slate-500 mb-1">消費類別</label>
-                            <select v-model="modal.data.category" class="w-full bg-slate-50 border p-2.5 rounded-xl">
-                                <option>交通</option><option>飲食</option><option>住宿</option><option>門票</option><option>購物</option><option>其他</option>
-                            </select>
+                            <label class="block text-xs font-bold text-slate-500 mb-1">類別</label>
+                            <select v-model="modal.data.category" class="w-full bg-slate-50 border p-2.5 rounded-xl"><option>交通</option><option>飲食</option><option>住宿</option><option>門票</option><option>購物</option><option>其他</option></select>
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-slate-500 mb-1">消費日期</label>
+                            <label class="block text-xs font-bold text-slate-500 mb-1">日期</label>
                             <input type="date" v-model="modal.data.date" class="w-full bg-slate-50 border p-2 rounded-xl">
                         </div>
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-500 mb-1">花費項目名稱</label>
-                        <input type="text" v-model="modal.data.name" class="w-full bg-slate-50 border p-2.5 rounded-xl" placeholder="例如：棋子燒鵝脆皮午餐">
+                        <input type="text" v-model="modal.data.name" class="w-full bg-slate-50 border p-2.5 rounded-xl" placeholder="例如：潮汕牛肉火鍋">
                     </div>
                     <div class="grid grid-cols-3 gap-2">
-                        <div class="col-span-1">
+                        <div>
                             <label class="block text-xs font-bold text-slate-500 mb-1">幣別</label>
                             <select v-model="modal.data.currency" class="w-full bg-slate-50 border p-2.5 rounded-xl font-bold text-hkRetroGreen">
-                                <option value="CNY">人民幣</option>
-                                <option value="HKD">港幣</option>
-                                <option value="TWD">台幣</option>
+                                <option value="CNY">人民幣</option><option value="HKD">港幣</option><option value="TWD">台幣</option>
                             </select>
                         </div>
-                        <div class="col-span-1">
+                        <div>
                             <label class="block text-xs font-bold text-slate-500 mb-1">消費金額</label>
-                            <input type="number" v-model="modal.data.amount" class="w-full bg-slate-50 border border-slate-200 p-2.5 rounded-xl" placeholder="金額">
+                            <input type="number" v-model="modal.data.amount" class="w-full bg-slate-50 border border-slate-200 p-2.5 rounded-xl" placeholder="200">
                         </div>
-                        <div class="col-span-1">
+                        <div>
                             <label class="block text-xs font-bold text-slate-500 mb-1">付款方式</label>
-                            <select v-model="modal.data.payMethod" class="w-full bg-slate-50 border p-2.5 rounded-xl">
-                                <option>現金</option><option>信用卡</option>
-                            </select>
+                            <select v-model="modal.data.payMethod" class="w-full bg-slate-50 border p-2.5 rounded-xl"><option>現金</option><option>信用卡</option></select>
                         </div>
                     </div>
                 </div>
 
+                <!-- 4. 手帳錄入表單 -->
                 <div v-if="modal.type === 'diary'" class="space-y-3 text-sm">
                     <div>
                         <label class="block text-xs font-bold text-slate-500 mb-1">手帳主題 / 店家地標名稱</label>
@@ -401,11 +445,7 @@
                         <div>
                             <label class="block text-xs font-bold text-slate-500 mb-1">美食/體驗評分</label>
                             <select v-model="modal.data.rating" class="w-full bg-slate-50 border p-2.5 rounded-xl text-amber-500 font-bold">
-                                <option :value="5">⭐⭐⭐⭐⭐ 必吃神店</option>
-                                <option :value="4">⭐⭐⭐⭐ 值得一試</option>
-                                <option :value="3">⭐⭐⭐ 表現普通</option>
-                                <option :value="2">⭐⭐ 不太符合胃口</option>
-                                <option :value="1">⭐ 踩雷大反推</option>
+                                <option :value="5">⭐⭐⭐⭐⭐ 必吃神店</option><option :value="4">⭐⭐⭐⭐ 值得一試</option><option :value="3">⭐⭐⭐ 表現普通</option><option :value="2">⭐⭐ 不合胃口</option><option :value="1">⭐ 踩雷反推</option>
                             </select>
                         </div>
                     </div>
@@ -416,15 +456,16 @@
                                 <i class="fa-solid fa-image mr-1.5 text-hkRetroGreen"></i> 選擇手機相片
                                 <input type="file" accept="image/*" @change="uploadDiaryImg($event)" class="hidden">
                             </label>
-                            <span v-if="modal.data.image" class="text-xs text-emerald-600 font-bold"><i class="fa-solid fa-circle-check"></i> 相片已成功讀取</span>
+                            <span v-if="modal.data.image" class="text-xs text-emerald-600 font-bold"><i class="fa-solid fa-circle-check"></i> 相片上傳成功</span>
                         </div>
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-500 mb-1">詳細美味點評 / 心情隨筆</label>
-                        <textarea v-model="modal.data.note" rows="3" class="w-full bg-slate-50 border border-slate-200 p-2.5 rounded-xl" placeholder="點評一下好不好吃、或是寫點旅行日記..."></textarea>
+                        <textarea v-model="modal.data.note" rows="3" class="w-full bg-slate-50 border border-slate-200 p-2.5 rounded-xl" placeholder="隨手寫點日記..."></textarea>
                     </div>
                 </div>
 
+                <!-- 操作按鈕 -->
                 <div class="flex space-x-2 pt-4 border-t border-slate-100">
                     <button v-if="modal.isEdit" @click="confirmDelete" class="bg-red-50 text-red-600 border border-red-200 font-bold px-4 py-2.5 rounded-xl text-sm flex-1">
                         <i class="fa-regular fa-trash-can mr-1"></i> 刪除
@@ -446,7 +487,6 @@
                 return {
                     currentTab: 'itinerary',
                     selectedDayIndex: 0,
-                    // 基準固定匯率
                     fx: { amount: 100, currency: 'HKD', hkdTwd: 4.15, cnyTwd: 4.45 },
                     weather: { city: '香港尖沙咀', temp: '28', feelsLike: '31', desc: '多雲偶陣雨' },
                     days: [
@@ -457,47 +497,45 @@
                     ],
                     itineraries: [
                         [
-                            { id: 1, category: '航班', name: '長榮航空 BR845 (高雄KHH - 香港HKG)', time: '09:15-10:55', flightNo: 'BR845', note: '出發前往香港', transitMode: '大眾運輸', transitTime: '0' },
-                            { id: 2, category: '住宿', name: '唯港薈 (Hotel ICON)', time: '12:30 寄行李 / 15:00 Check in', note: '提前到店好像可以先用設施，爸爸可以去健身房', transitMode: '大眾運輸', transitTime: '40' },
-                            { id: 3, category: '美食', name: '棋子燒鵝（尖沙咀）', time: '13:30-15:00', note: '午餐美食饗宴', transitMode: '步行', transitTime: '12' },
-                            { id: 4, category: '其他', name: '飯店辦理入房與休息', time: '15:00', note: '休息片刻', transitMode: '步行', transitTime: '12' },
-                            { id: 5, category: '景點', name: '中環半山扶手電梯', time: '下午/傍晚', note: '渡輪or地鐵到中環，搭半山扶梯', transitMode: '大眾運輸', transitTime: '25' },
-                            { id: 6, category: '美食', name: 'Vission Bakery（中環）', time: '07:30-21:00', note: '人氣烘焙點心', transitMode: '步行', transitTime: '8' },
-                            { id: 7, category: '景點', name: '大館監獄 / 外國建築', time: '傍晚', note: '拍照歷史古蹟打卡', transitMode: '步行', transitTime: '6' },
-                            { id: 8, category: '美食', name: '聰嫂甜品（尖沙咀）', time: '11:30-01:00', note: '美味夜宵甜點', transitMode: '大眾運輸', transitTime: '30' }
+                            { id: 1, category: '航班', name: '長榮航空 BR845 (高雄KHH - 香港HKG)', time: '09:15-10:55', flightNo: 'BR845', note: '出發前往香港', transitMode: '搭飛機', transitTime: '0' },
+                            { id: 2, category: '住宿', name: '唯港薈 (Hotel ICON)', time: '12:30 寄行李 / 15:00 Check in', note: '提前到店好像可以先用設施，爸爸可以去健身房', transitMode: '搭機場快線轉接駁車', transitTime: '40' },
+                            { id: 3, category: '美食', name: '棋子燒鵝（尖沙咀）', time: '13:30-15:00', note: '午餐美食饗宴', transitMode: '出飯店沿路步行', transitTime: '12' },
+                            { id: 4, category: '其他', name: '飯店辦理入房與休息', time: '15:00', note: '休息片刻', transitMode: '徒步回飯店', transitTime: '12' },
+                            { id: 5, category: '景點', name: '中環半山扶手電梯', time: '下午/傍晚', note: '渡輪or地鐵到中環，搭半山扶梯', transitMode: '尖沙咀搭天星小輪到中環', transitTime: '25' },
+                            { id: 6, category: '美食', name: 'Vission Bakery（中環）', time: '07:30-21:00', note: '人氣烘焙點心', transitMode: '半山電梯旁步行', transitTime: '8' },
+                            { id: 7, category: '景點', name: '大館監獄 / 外國建築', time: '傍晚', note: '拍照歷史古蹟打卡', transitMode: '步行前去', transitTime: '6' },
+                            { id: 8, category: '美食', name: '聰嫂甜品（尖沙咀）', time: '11:30-01:00', note: '美味夜宵甜點', transitMode: '搭港鐵荃灣線回尖沙咀', transitTime: '30' }
                         ],
                         [
-                            { id: 9, category: '住宿', name: '唯港匯辦理退房', time: '12:00前', note: '記得買高鐵票！往西九龍高鐵站', transitMode: '步行', transitTime: '0' },
-                            { id: 10, category: '美食', name: '倫敦大酒樓（旺角）', time: '11:00前', note: '3F要搭檯，有推車早茶', transitMode: '大眾運輸', transitTime: '20' },
-                            { id: 11, category: '美食', name: '澳洲牛奶公司（佐敦）', time: '營業時間內', note: '招牌炒蛋燉奶', transitMode: '大眾運輸', transitTime: '15' },
-                            { id: 12, category: '美食', name: 'Owl’s 泡芙（尖沙咀）', time: '15:30開門', note: '美味甜點行程', transitMode: '大眾運輸', transitTime: '15' },
-                            { id: 13, category: '住宿', name: '里白酒店（深圳會展中心福民站）', time: '18:00後', note: '近福民地鐵站，回唯港匯拿行李後出發跨境', transitMode: '大眾運輸', transitTime: '55' },
-                            { id: 14, category: '美食', name: '脆鯇魚火鍋！！！', time: '晚餐', note: '必吃脆彈美味火鍋', transitMode: '大眾運輸', transitTime: '15' },
-                            { id: 15, category: '景點', name: '東門老街 / 水圍夜市', time: '晚間', note: '夜生活逛街吃小吃', transitMode: '大眾運輸', transitTime: '20' }
+                            { id: 9, category: '住宿', name: '唯港匯辦理退房', time: '12:00前', note: '記得買高鐵票！往西九龍高鐵站', transitMode: '準備出發', transitTime: '0' },
+                            { id: 10, category: '美食', name: '倫敦大酒樓（旺角）', time: '11:00前', note: '3F要搭檯，有推車早茶', transitMode: '搭地鐵到旺角站', transitTime: '20' },
+                            { id: 11, category: '美食', name: '澳洲牛奶公司（佐敦）', time: '營業時間內', note: '招牌炒蛋燉奶', transitMode: '搭港鐵到佐敦站', transitTime: '15' },
+                            { id: 12, category: '美食', name: 'Owl’s 泡芙（尖沙咀）', time: '15:30開門', note: '美味甜點行程', transitMode: '搭地鐵回尖沙咀', transitTime: '15' },
+                            { id: 13, category: '住宿', name: '里白酒店（深圳會展中心福民站）', time: '18:00後', note: '近福民地鐵站，回唯港匯拿行李後出發跨境', transitMode: '香港西九龍搭高鐵至深圳福田', transitTime: '55' },
+                            { id: 14, category: '美食', name: '脆鯇魚火鍋！！！', time: '晚餐', note: '必吃脆彈美味火鍋', transitMode: '深圳地鐵或打車', transitTime: '15' },
+                            { id: 15, category: '景點', name: '東門老街 / 水圍夜市', time: '晚間', note: '夜生活逛街吃小吃', transitMode: '搭深圳地鐵', transitTime: '20' }
                         ],
                         [
-                            { id: 16, category: '美食', name: '牛肉火鍋', time: '中午', note: '必點牛胸口油！！！', transitMode: '步行', transitTime: '0' },
-                            { id: 17, category: '景點', name: '華僑城創意文化園', time: '下午', note: '文青藝術園區散步', transitMode: '大眾運輸', transitTime: '30' },
-                            { id: 18, category: '景點', name: '深圳灣萬象城 / 人才公園 / 深圳灣公園', time: '傍晚夜景', note: '散步看夕陽與璀璨城市燈光', transitMode: '大眾運輸', transitTime: '25' }
+                            { id: 16, category: '美食', name: '牛肉火鍋', time: '中午', note: '必點牛胸口油！！！', transitMode: '步行前去', transitTime: '0' },
+                            { id: 17, category: '景點', name: '華僑城創意文化園', time: '下午', note: '文青藝術園區散步', transitMode: '打車前往', transitTime: '30' },
+                            { id: 18, category: '景點', name: '深圳灣萬象城 / 人才公園 / 深圳灣公園', time: '傍晚夜景', note: '散步看夕陽與璀璨城市燈光', transitMode: '搭地鐵或打D計程車', transitTime: '25' }
                         ],
                         [
-                            { id: 19, category: '住宿', name: '里白酒店退房', time: '12:00前', note: '準備收拾行李回港', transitMode: '步行', transitTime: '0' },
-                            { id: 20, category: '其他', name: '啟程回港', time: '最晚14:00回港', note: '目前安排之後會再修改', transitMode: '大眾運輸', transitTime: '45' }
+                            { id: 19, category: '住宿', name: '里白酒店退房', time: '12:00前', note: '準備收拾行李回港', transitMode: '收拾行李', transitTime: '0' },
+                            { id: 20, category: '核心', name: '啟程回港', time: '最晚14:00回港', note: '目前安排之後會再修改', transitMode: '深圳福田搭高鐵跨城回香港', transitTime: '45' }
                         ]
                     ],
+                    // 購物清單預設資料(加上備註範例)
                     shoppingList: [
-                        { name: '珍妮曲奇小熊餅乾', image: '' },
-                        { name: '大排檔三合一港式奶茶', image: '' }
+                        { name: '珍妮曲奇小熊餅乾', image: '', note: '買經典4味大盒裝x2，幫部門同事代購。' },
+                        { name: '大排檔三合一港式奶茶', image: '', note: '百佳超級市場購買，多買幾盒送禮。' }
                     ],
-                    // 初始化記帳清單，預先帶入不同幣別做示範
                     expenses: [
                         { category: '住宿', name: '里白酒店兩晚房費', date: '2026-06-14', amount: 840, currency: 'CNY', payMethod: '信用卡' },
-                        { category: '飲食', name: '棋子燒鵝午餐', date: '2026-06-13', amount: 380, currency: 'HKD', payMethod: '現金' },
-                        { category: '交通', name: '高雄機場高鐵接駁', date: '2026-06-13', amount: 450, currency: 'TWD', payMethod: '現金' }
+                        { category: '飲食', name: '棋子燒鵝午餐', date: '2026-06-13', amount: 380, currency: 'HKD', payMethod: '現金' }
                     ],
-                    // 全新初始化手帳列表資料
                     diaryList: [
-                        { title: '大館監獄超好拍！', date: '2026-06-13', rating: 5, note: '古蹟修復得非常好，外國建築超有歷史感，在這裡跟爸爸合照了好多張，推推！', image: '' }
+                        { title: '大館監獄超好拍！', date: '2026-06-13', rating: 5, note: '古蹟修復得非常精緻，外國建築超有歷史感。在這裡跟家人合照了好多張，非常充實！', image: '' }
                     ],
                     modal: { show: false, type: 'itinerary', title: '', isEdit: false, editIndex: null, data: {} }
                 }
@@ -510,7 +548,6 @@
                     let rate = this.fx.currency === 'HKD' ? this.fx.hkdTwd : this.fx.cnyTwd;
                     return (this.fx.amount * rate).toFixed(1);
                 },
-                // 核心邏輯：將各國幣別自動換算成台幣加總
                 totalExpensesInTWD() {
                     let total = this.expenses.reduce((sum, item) => {
                         let rate = 1;
@@ -530,10 +567,14 @@
                     const bgs = { '景點': 'bg-sky-500', '住宿': 'bg-indigo-600', '美食': 'bg-hkRetroOrange', '購物': 'bg-pink-500', '航班': 'bg-emerald-600', '其他': 'bg-slate-500' };
                     return bgs[cat] || 'bg-hkRetroGreen';
                 },
+                // 智慧大腦：自動化匹配使用者輸入的純文字，派發精準的 ICON 圖示
                 getTransitIcon(mode) {
-                    if (mode === '開車') return 'fa-solid fa-car';
-                    if (mode === '大眾運輸') return 'fa-solid fa-bus-simple';
-                    return 'fa-solid fa-person-walking';
+                    if (!mode) return 'fa-solid fa-route';
+                    const text = mode.toLowerCase();
+                    if (text.includes('步') || text.includes('走') || text.includes('徒')) return 'fa-solid fa-person-walking';
+                    if (text.includes('車') || text.includes('的士') || text.includes('駕') || text.includes('計程')) return 'fa-solid fa-car';
+                    if (text.includes('地鐵') || text.includes('港鐵') || text.includes('巴') || text.includes('捷') || text.includes('鐵') || text.includes('船') || text.includes('渡') || text.includes('飛機')) return 'fa-solid fa-bus-simple';
+                    return 'fa-solid fa-route';
                 },
                 getExpenseCategoryColor(cat) {
                     const colors = { '交通': 'bg-blue-100 text-blue-700', '飲食': 'bg-orange-100 text-orange-700', '住宿': 'bg-purple-100 text-purple-700', '門票': 'bg-emerald-100 text-emerald-700', '購物': 'bg-pink-100 text-pink-700', '其他': 'bg-slate-100 text-slate-700' };
@@ -558,10 +599,10 @@
                     
                     if (type === 'itinerary') {
                         this.modal.title = '✨ 新增旅程項目';
-                        this.modal.data = { category: '景點', name: '', time: '', ticket: '', note: '', transitMode: '大眾運輸', transitTime: '15', flightNo: '' };
+                        this.modal.data = { category: '景點', name: '', time: '', ticket: '', note: '', transitMode: '搭乘大眾運輸', transitTime: '15', flightNo: '' };
                     } else if (type === 'shopping') {
                         this.modal.title = '🛍️ 新增購物清單';
-                        this.modal.data = { name: '', image: '' };
+                        this.modal.data = { name: '', image: '', note: '' }; // 加入空備註字串
                     } else if (type === 'expenses') {
                         this.modal.title = '💰 記錄新花費';
                         this.modal.data = { category: '飲食', name: '', date: today, amount: '', currency: 'CNY', payMethod: '現金' };
@@ -612,7 +653,6 @@
                         reader.readAsDataURL(file);
                     }
                 },
-                // 手帳相片轉 Base64 儲存方法
                 uploadDiaryImg(event) {
                     const file = event.target.files[0];
                     if (file) {

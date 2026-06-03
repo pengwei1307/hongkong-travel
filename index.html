@@ -13,14 +13,14 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         
-        /* 網頁全域大底色 */
+        /* 網頁全域底色，用於照片加載前的沉穩基底 */
         body { 
             background-color: #030611; 
         }
 
         /* 🔮 高級都會極簡「淺米色/奶茶色」純淨毛玻璃面版 (Glassmorphism 特效) */
         .glass-panel {
-            background: rgba(253, 251, 247, 0.85);
+            background: rgba(253, 251, 247, 0.82);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.5);
@@ -29,7 +29,7 @@
 
         /* 內部小元件專用：高透光淺色毛玻璃 */
         .glass-panel-light {
-            background: rgba(255, 255, 255, 0.52);
+            background: rgba(255, 255, 255, 0.5);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.6);
@@ -91,7 +91,7 @@
                         <span class="text-2xl filter drop-shadow-sm">{{ activeDayWeather.icon }}</span>
                         <div>
                             <p class="text-[10px] text-hkThemeGreen font-black uppercase tracking-widest">Weather Forecast · {{ days[selectedDayIndex].dateStr }}</p>
-                            <p class="text-sm font-bold text-hkNavyText">{{ activeDayWeather.city }} · {{ activeDayWeather.desc }}</p>
+                            <p class="text-sm font-black text-hkNavyText">{{ activeDayWeather.city }} · {{ activeDayWeather.desc }}</p>
                         </div>
                     </div>
                     <div class="text-right">
@@ -167,7 +167,7 @@
                                 <h4 class="font-black text-base text-hkNavyText pr-16 tracking-wide">{{ item.name }}</h4>
                                 
                                 <div class="text-xs text-hkMutedText space-y-1.5 mt-2.5 font-semibold">
-                                    <p v-if="item.time" class="flex items-center"><i class="fa-regular fa-clock w-4 text-hkThemeGreen"></i>時間/營業: {{ item.time }}</p>
+                                    <p v-if="item.time" class="flex items-center"><i class="fa-regular fa-clock w-4 text-hkThemeGreen"></i>時間: {{ item.time }}</p>
                                     <p v-if="item.ticket && item.category === '景點'" class="flex items-center"><i class="fa-solid fa-ticket w-4 text-hkAccentOrange"></i>門票: {{ item.ticket }}</p>
                                     <p v-if="item.note" class="flex items-start bg-amber-50/50 p-2.5 rounded-xl text-slate-700 mt-2 border border-amber-900/10 shadow-inner"><i class="fa-solid fa-quote-left w-4 text-hkAccentOrange shrink-0 text-[9px] mt-0.5 opacity-70"></i><span class="ml-1 flex-1 text-slate-800 leading-relaxed font-medium">{{ item.note }}</span></p>
                                 </div>
@@ -213,7 +213,7 @@
                 </div>
 
                 <div class="glass-panel rounded-2xl shadow-md p-4 space-y-3 text-hkNavyText">
-                    <h3 class="font-black text-sm text-hkNavyText flex items-center"><i class="fa-solid fa-plane text-hkAccentOrange mr-2"></i>長榮航空航班資訊</h3>
+                    <h3 class="font-black text-sm text-hkNavyText flex items-center"><i class="fa-solid fa-plane text-hkAccentOrange mr-2"></i>長榮航空正本航班資訊</h3>
                     <div class="border-b border-slate-200 pb-2">
                         <div class="flex justify-between font-bold text-xs text-hkThemeGreen">
                             <span>去程 BR845</span>
@@ -234,21 +234,21 @@
                     <h3 class="font-black text-md text-hkNavyText flex items-center"><i class="fa-solid fa-hotel text-hkThemeGreen mr-2"></i>入住酒店導航清單</h3>
                     <div class="text-xs space-y-3 divide-y divide-slate-200">
                         <div class="space-y-0.5 pt-1">
-                            <p class="font-bold text-hkNavyText text-sm">唯港薈 (Hotel ICON)</p>
+                            <p class="font-bold text-hkNavyText text-sm">第一晚：唯港薈 (Hotel ICON)</p>
                             <p class="text-hkMutedText">📍 香港尖沙咀科學館道17號 (電話: +852 3400 1000)</p>
                             <a href="https://www.google.com/maps/search/?api=1&query=Hotel+ICON+Hong+Kong" target="_blank" class="inline-block text-hkAccentOrange font-black mt-1.5 hover:underline">開啟 Google 地圖導航 ➡️</a>
                         </div>
                         <div class="space-y-0.5 pt-3">
-                            <p class="font-bold text-hkNavyText text-sm">里白酒店 (深圳會展中心店)</p>
-                            <p class="text-hkMutedText">📍 深圳福田區福民地鐵站附近</p>
-                            <a href="https://www.google.com/maps/search/?api=1&query=深圳里白酒店" target="_blank" class="inline-block text-hkSkyBlue font-black mt-1.5 hover:underline">開啟 Google 地圖導航 ➡️</a>
+                            <p class="font-bold text-hkNavyText text-sm">第二、三晚：里白酒店 (深圳會展中心店)</p>
+                            <p class="text-hkMutedText">📍 深圳福田區 (鄰近福民地鐵站)</p>
+                            <a href="https://www.google.com/maps/search/?api=1&query=深圳里白酒店" target="_blank" class="inline-block text-hkAccentOrange font-black mt-1.5 hover:underline">開啟 Google 地圖導航 ➡️</a>
                         </div>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-2 gap-3 text-xs font-bold text-hkNavyText">
                     <div class="glass-panel p-3 rounded-xl">
-                        <p class="text-hkMutedText uppercase text-[10px] tracking-wider mb-0.5">緊急求助醫療</p>
+                        <p class="text-hkMutedText uppercase text-[10px] tracking-wider mb-0.5">緊急醫療求助</p>
                         <p class="text-red-700">香港/深圳通話: 999 / 110</p>
                     </div>
                     <div class="glass-panel p-3 rounded-xl">
@@ -272,9 +272,8 @@
                                 <input type="file" accept="image/*" @change="uploadShoppingImg($event, sIdx)" class="hidden">
                             </label>
                         </div>
-                        <div class="p-3 flex-1 flex flex-col justify-between space-y-2 bg-white/40">
+                        <div class="p-3 flex-1 flex flex-col justify-between space-y-2">
                             <div>
-                                <p class="font-black text-sm text-hkNavyText truncate">🛍 ...</p>
                                 <p class="font-black text-sm text-hkNavyText truncate">🛍️ {{ shop.name }}</p>
                                 <p v-if="shop.note" class="text-[11px] text-slate-600 bg-white/60 p-1.5 rounded-xl border border-slate-300/60 mt-1 font-medium whitespace-pre-wrap leading-tight shadow-sm">
                                     {{ shop.note }}
@@ -310,7 +309,7 @@
                             </div>
                         </div>
                         <div class="text-right flex items-center space-x-3">
-                            <span class="text-sm font-bold text-hkAccentOrange">{{ getCurrencySymbol(exp.currency) }} {{ exp.amount }}</span>
+                            <span class="text-sm font-black text-hkAccentOrange">{{ getCurrencySymbol(exp.currency) }} {{ exp.amount }}</span>
                             <button @click="expenses.splice(eIdx, 1)" class="text-slate-400 hover:text-red-600 transition-colors"><i class="fa-solid fa-circle-xmark"></i></button>
                         </div>
                     </div>
@@ -339,7 +338,7 @@
                     </div>
                     <p v-if="log.note" class="text-xs text-slate-700 bg-white/50 p-3 rounded-xl border border-slate-200 font-medium leading-relaxed whitespace-pre-line shadow-inner">{{ log.note }}</p>
                     <div class="flex justify-end pt-1">
-                        <button @click="diaryList.splice(dIdx, 1)" class="text-xs text-slate-400 font-bold hover:text-white"><i class="fa-regular fa-trash-can mr-1"></i>刪除紀錄</button>
+                        <button @click="diaryList.splice(dIdx, 1)" class="text-xs text-red-600 font-bold hover:underline"><i class="fa-regular fa-trash-can mr-1"></i>刪除手帳</button>
                     </div>
                 </div>
                 <div class="fixed bottom-6 max-w-md w-full pr-10 flex justify-end z-40 pointer-events-none">
@@ -351,7 +350,7 @@
 
         </div>
 
-        <div v-if="modal.show" class="fixed inset-0 bg-slate-955/80 backdrop-blur-xl z-50 flex items-end justify-center">
+        <div v-if="modal.show" class="fixed inset-0 bg-slate-950/80 backdrop-blur-xl z-50 flex items-end justify-center">
             <div class="bg-slate-100 w-full max-w-md rounded-t-[32px] p-6 space-y-4 max-h-[90vh] overflow-y-auto border-t border-slate-300 shadow-2xl text-slate-800">
                 <div class="flex justify-between items-center pb-2 border-b border-slate-200">
                     <h3 class="font-black text-lg text-slate-900">{{ modal.title }}</h3>
@@ -425,13 +424,13 @@
                     <div class="grid grid-cols-2 gap-2">
                         <div>
                             <label class="block text-xs font-bold text-slate-500 mb-1">消費類別</label>
-                            <select v-model="modal.data.category" class="w-full bg-slate-900 border border-slate-700 p-2.5 rounded-xl font-bold text-white outline-none">
+                            <select v-model="modal.data.category" class="w-full bg-white border border-slate-300 p-2.5 rounded-xl font-bold text-slate-900 outline-none">
                                 <option>交通</option><option>飲食</option><option>住宿</option><option>門票</option><option>購物</option><option>其他</option>
                             </select>
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-slate-500 mb-1">日期</label>
-                            <input type="date" v-model="modal.data.date" class="w-full bg-slate-900 border border-slate-700 p-2 rounded-xl font-bold text-white outline-none">
+                            <input type="date" v-model="modal.data.date" class="w-full bg-white border border-slate-300 p-2 rounded-xl font-bold text-slate-900 outline-none">
                         </div>
                     </div>
                     <div>
@@ -464,7 +463,7 @@
                     <div class="grid grid-cols-2 gap-2">
                         <div>
                             <label class="block text-xs font-bold text-slate-500 mb-1">記錄日期</label>
-                            <input type="date" v-model="modal.data.date" class="w-full bg-white border border-slate-200 p-2 rounded-xl font-bold text-white outline-none">
+                            <input type="date" v-model="modal.data.date" class="w-full bg-white border border-slate-300 p-2 rounded-xl font-bold text-white outline-none">
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-slate-500 mb-1">美食/景點評分</label>
@@ -497,7 +496,7 @@
                     <button v-if="modal.isEdit" @click="confirmDelete" class="bg-red-100 text-red-700 border border-red-300 font-bold px-4 py-2.5 rounded-xl text-sm flex-1">
                         刪除
                     </button>
-                    <button @click="saveModalData" class="bg-slate-800 text-white font-black px-4 py-2.5 rounded-xl text-sm flex-[2] text-center shadow-lg">
+                    <button @click="saveModalData" class="bg-slate-800 text-white font-black px-4 py-2.5 rounded-xl text-sm flex-[2] text-center shadow-md">
                         儲存變更
                     </button>
                 </div>
@@ -528,33 +527,174 @@
                         { weekday: 'Sun', dateStr: '6/16' }
                     ],
                     itineraries: [
-                        // 6/13 行程明細
                         [
                             { id: 1, category: '航班', name: '長榮航空 BR845 (高雄KHH - 香港HKG)', time: '09:15-10:55', flightNo: 'BR845', note: '出發前往香港', transitMode: '搭乘豪華飛機', transitTime: '0' },
-                            { id: 2, category: '住宿', name: '唯港薈 (Hotel ICON)', time: '12:30 寄放行李 / 15:00 Check in', note: '提前到店好像可以先用設施，爸爸可以去健身房', transitMode: '搭機場快線轉接駁專車', transitTime: '40' },
-                            { id: 3, category: '美食', name: '棋子燒鵝（尖沙咀）', time: '13:30-15:00', note: '午餐美食饗宴，香脆外皮燒鵝', transitMode: '沿路徒步前去', transitTime: '12' },
-                            { id: 4, category: '其他', name: '飯店休息', time: '15:00-16:30', note: '回房放 luggage 短暫休息片刻', transitMode: '走路回飯店放行李', transitTime: '12' },
-                            { id: 5, category: '其他', name: '移動前往中環', time: '16:30-17:00', note: '可以選擇搭乘渡輪 or 地鐵前往中環', transitMode: '尖沙咀搭天星小輪到中環', transitTime: '25' },
-                            { id: 6, category: '景點', name: '中環半山扶手電梯', time: '17:00-18:00', note: '體驗世界最長的戶外有蓋徒步扶梯系統', transitMode: '碼頭漫步前往扶梯', transitTime: '15' },
-                            { id: 7, category: '美食', name: 'Vission Bakery（中環）', time: '07:30-21:00', note: '人氣超旺的烘焙法式點心店', transitMode: '半山電梯旁散步', transitTime: '8' },
-                            { id: 8, category: '景點', name: '大館監獄 / 外國歷史建築', time: '18:30-20:00', note: '拍照歷史古蹟與現代文青打卡地標群', transitMode: '步行前去大館', transitTime: '6' },
-                            { id: 9, category: '美食', name: '聰嫂甜品（尖沙咀）', time: '11:30-01:00', note: '美味的夜宵甜點，吃完糖水回酒店睡覺', transitMode: '搭乘港鐵荃灣線返回尖沙咀', transitTime: '30' }
+                            { id: 2, category: '住宿', name: '唯港薈 (Hotel ICON)', time: '12:30 寄行李 / 15:00 Check in', note: '提前到店好像可以先用設施，爸爸可以去健身房', transitMode: '搭機場快線轉接駁專車', transitTime: '40' },
+                            { id: 3, category: '美食', name: '棋子燒鵝（尖沙咀）', time: '13:30-15:00', note: '午餐美食饗宴', transitMode: '沿路徒步前去', transitTime: '12' },
+                            { id: 4, category: '其他', name: '飯店辦理入房與休息', time: '15:00', note: '休息片刻', transitMode: '走路回飯店放行李', transitTime: '12' },
+                            { id: 5, category: '景點', name: '中環半山扶手電梯', time: '下午/傍晚', note: '渡輪or地鐵到中環，搭半山扶梯', transitMode: '尖沙咀搭天星小輪到中環', transitTime: '25' },
+                            { id: 6, category: '美食', name: 'Vission Bakery（中環）', time: '07:30-21:00', note: '人氣烘焙點心', transitMode: '半山電梯旁散步', transitTime: '8' },
+                            { id: 7, category: '景點', name: '大館監獄 / 外國建築', time: '傍晚', note: '拍照歷史古蹟打卡', transitMode: '步行前去', transitTime: '6' },
+                            { id: 8, category: '美食', name: '聰嫂甜品（尖沙咀）', time: '11:30-01:00', note: '美味夜宵甜點', transitMode: '搭乘港鐵荃灣線回尖沙咀', transitTime: '30' }
                         ],
-                        // 6/14 行程明細
                         [
-                            { id: 10, category: '住宿', name: '唯港匯退房', time: '12:00前辦理', note: '退房寄放行李，*切記一定要先訂好高鐵車票！', transitMode: '早晨整理行李', transitTime: '0' },
-                            { id: 11, category: '美食', name: '倫敦大酒樓（旺角）', time: '11:00前早茶', note: '在3F用餐要搭檯（拼桌），傳統推車港點很有氣氛', transitMode: '搭乘地鐵前往旺角站', transitTime: '20' },
-                            { id: 12, category: '美食', name: '澳洲牛奶公司（佐敦）', time: '營業時間內', note: '神級招牌炒蛋、燉奶、厚多士必點項目', transitMode: '搭港鐵到佐敦站', transitTime: '15' },
-                            { id: 13, category: '美食', name: 'Owl’s 泡芙（尖沙咀）', time: '15:30開門', note: '米其林推薦的爆漿冰淇淋泡芙甜點', transitMode: '搭地鐵返回尖沙咀', transitTime: '15' },
-                            { id: 14, category: '其他', name: '回唯港匯拿行李 往西九龍高鐵站', time: '16:30-17:30', note: '取回寄存行李，前去香港西九龍站跨城通關', transitMode: '漫步回飯店取件並打車前往高鐵站', transitTime: '20' },
-                            { id: 15, category: '住宿', name: '里白酒店（深圳會展中心福民站）', time: '18:30後 Check In', note: '近福民地鐵站，順利抵達深圳酒店辦理入房', transitMode: '深圳福田站搭地鐵至福民站', transitTime: '35' },
-                            { id: 16, category: '美食', name: '順德脆鯇魚火鍋！！！', time: '19:30 晚餐', note: '口感極致脆彈的鯇魚肉，必吃爆款美食！！！', transitMode: '出酒店打車或搭乘地鐵', transitTime: '15' },
-                            { id: 17, category: '景點', name: '東門老街 / 水圍夜市', time: '21:30 深夜逛街', note: '深圳深夜不夜城小吃、逛街聖地大集合', transitMode: '搭乘地鐵前去老街區', transitTime: '20' }
+                            { id: 9, category: '住宿', name: '唯港匯辦理退房', time: '12:00前', note: '記得買高鐵票！往西九龍高鐵站', transitMode: '收拾整頓行李', transitTime: '0' },
+                            { id: 10, category: '美食', name: '倫敦大酒樓（旺角）', time: '11:00前', note: '3F要搭檯，有推車早茶', transitMode: '搭乘地鐵前往旺角站', transitTime: '20' },
+                            { id: 11, category: '美食', name: '澳洲牛奶公司（佐敦）', time: '營業時間內', note: '招牌炒蛋燉奶', transitMode: '搭港鐵到佐敦站', transitTime: '15' },
+                            { id: 12, category: '美食', name: 'Owl’s 泡芙（尖沙咀）', time: '15:30開門', note: '美味甜點行程', transitMode: '搭地鐵返回尖沙咀', transitTime: '15' },
+                            { id: 13, category: '住宿', name: '里白酒店（深圳會展中心福民站）', time: '18:00後', note: '近福民地鐵站，回唯港匯拿行李後出發跨境', transitMode: '香港西九龍搭高鐵至深圳福田站', transitTime: '55' },
+                            { id: 14, category: '美食', name: '脆鯇魚火鍋！！！', time: '晚餐', note: '必吃脆彈美味火鍋', transitMode: '深圳打車或搭乘地鐵', transitTime: '15' },
+                            { id: 15, category: '景點', name: '東門老街 / 水圍夜市', time: '晚間', note: '夜生活逛街吃小吃', transitMode: '搭乘深圳地鐵', transitTime: '20' }
                         ],
-                        // 6/15 行程明細
                         [
-                            { id: 18, category: '美食', name: '潮汕牛肉火鍋', time: '12:00 中餐', note: '必點爽脆神級「牛胸口油」！！！', transitMode: '步行前去火鍋店', transitTime: '0' },
-                            { id: 19, category: '景點', name: '華僑城創意文化園', time: '14:30-17:00', note: '深圳文青工業風藝術聚集地、文創小店散步', transitMode: '打計程車前往華僑城', transitTime: '30' },
-                            { id: 20, category: '景點', name: '深圳灣萬象城 / 人才公園 / 深圳灣公園', time: '17:30 傍晚夜景', note: '海濱長廊散步看落日夕陽，夜間欣賞絕美璀璨城市燈光秀展演', transitMode: '搭地鐵或打D前往深圳灣', transitTime: '25' }
+                            { id: 16, category: '美食', name: '牛肉火鍋', time: '中午', note: '必點牛胸口油！！！', transitMode: '步行前去', transitTime: '0' },
+                            { id: 17, category: '景點', name: '華僑城創意文化園', time: '下午', note: '文青藝術園區散步', transitMode: '打計程車前往', transitTime: '30' },
+                            { id: 18, category: '景點', name: '深圳灣萬象城 / 人才公園 / 深圳灣公園', time: '傍晚夜景', note: '散步看夕陽與璀璨城市燈光', transitMode: '搭地鐵或打D前往', transitTime: '25' }
                         ],
-                        // 6/16 行程明細
+                        [
+                            { id: 19, category: '住宿', name: '里白酒店退房', time: '12:00前', note: '準備收拾行李回港', transitMode: '確認帶齊隨身行李', transitTime: '0' },
+                            { id: 20, category: '核心', name: '啟程回港', time: '最晚14:00回港', note: '目前安排之後會再修改', transitMode: '深圳福田搭高鐵跨城返回香港', transitTime: '45' }
+                        ]
+                    ],
+                    shoppingList: [
+                        { name: '珍妮曲奇小熊餅乾', image: '', note: '經典4味大盒裝x2，出發尖沙咀時順路買。' },
+                        { name: '大排檔三合一港式奶茶', image: '', note: '百佳超級市場或惠康購買。' }
+                    ],
+                    expenses: [
+                        { category: '住宿', name: '里白酒店兩晚房費', date: '2026-06-14', amount: 840, currency: 'CNY', payMethod: '信用卡' },
+                        { category: '飲食', name: '棋子燒鵝午餐', date: '2026-06-13', amount: 380, currency: 'HKD', payMethod: '現金' }
+                    ],
+                    diaryList: [
+                        { title: '維港星空夜色太震撼了', date: '2026-06-13', rating: 5, note: '精緻通透的大樓燈火，搭配經典天星小輪，比想像中還要高階奢華。', image: '' }
+                    ],
+                    modal: { show: false, type: 'itinerary', title: '', isEdit: false, editIndex: null, data: {} }
+                }
+            },
+            computed: {
+                activeDayItinerary() {
+                    return this.itineraries[this.selectedDayIndex] || [];
+                },
+                activeDayWeather() {
+                    return this.weathers[this.selectedDayIndex] || { city: '香港', temp: '25', feelsLike: '25', desc: '明朗', icon: '☀️' };
+                },
+                calculatedTWD() {
+                    let rate = this.fx.currency === 'HKD' ? this.fx.hkdTwd : this.fx.cnyTwd;
+                    return (Number(this.fx.amount || 0) * rate).toFixed(1);
+                },
+                totalExpensesInTWD() {
+                    let total = this.expenses.reduce((sum, item) => {
+                        let rate = 1;
+                        if (item.currency === 'HKD') rate = this.fx.hkdTwd;
+                        if (item.currency === 'CNY') rate = this.fx.cnyTwd;
+                        return sum + (Number(item.amount || 0) * rate);
+                    }, 0);
+                    return Math.round(total).toLocaleString();
+                }
+            },
+            methods: {
+                getCategoryIcon(cat) {
+                    const icons = { '景點': 'fa-solid fa-camera-retro', '住宿': 'fa-solid fa-hotel', '美食': 'fa-solid fa-utensils', '購物': 'fa-solid fa-bag-shopping', '航班': 'fa-solid fa-plane', '其他': 'fa-solid fa-ellipsis' };
+                    return icons[cat] || 'fa-solid fa-location-dot';
+                },
+                getCategoryBg(cat) {
+                    const bgs = { '景點': 'bg-sky-600', '住宿': 'bg-indigo-600', '美食': 'bg-hkRoseGold', '購物': 'bg-hkPink', '航班': 'bg-emerald-600', '其他': 'bg-slate-500' };
+                    return bgs[cat] || 'bg-sky-600';
+                },
+                getTransitIcon(mode) {
+                    if (!mode) return 'fa-solid fa-route';
+                    const text = mode.toLowerCase();
+                    if (text.includes('步') || text.includes('走') || text.includes('徒')) return 'fa-solid fa-person-walking';
+                    if (text.includes('車') || text.includes('的士') || text.includes('駕') || text.includes('計程') || text.includes('打d')) return 'fa-solid fa-car';
+                    if (text.includes('地鐵') || text.includes('港鐵') || text.includes('巴') || text.includes('捷') || text.includes('鐵') || text.includes('船') || text.includes('渡') || text.includes('飛機')) return 'fa-solid fa-bus-simple';
+                    return 'fa-solid fa-route';
+                },
+                getExpenseCategoryColor(cat) {
+                    const colors = { '交通': 'bg-cyan-100 text-cyan-800', '飲食': 'bg-orange-100 text-hkRoseGold', '住宿': 'bg-indigo-100 text-indigo-800', '門票': 'bg-emerald-100 text-emerald-800', '購物': 'bg-pink-100 text-hkPink', '其他': 'bg-slate-200 text-slate-800' };
+                    return colors[cat] || 'bg-slate-200 text-slate-800';
+                },
+                getCurrencySymbol(cur) {
+                    const symbols = { 'TWD': 'NT$', 'CNY': '¥', 'HKD': 'HK$' };
+                    return symbols[cur] || '$';
+                },
+                moveItem(index, direction) {
+                    let targetIndex = index + direction;
+                    if (targetIndex < 0 || targetIndex >= this.activeDayItinerary.length) return;
+                    let temp = this.activeDayItinerary[index];
+                    this.activeDayItinerary[index] = this.activeDayItinerary[targetIndex];
+                    this.activeDayItinerary[targetIndex] = temp;
+                },
+                openAddModal(type) {
+                    this.modal.type = type;
+                    this.modal.isEdit = false;
+                    this.modal.show = true;
+                    let today = new Date().toISOString().split('T')[0];
+                    
+                    if (type === 'itinerary') {
+                        this.modal.title = '🚀 規劃新行程';
+                        this.modal.data = { category: '景點', name: '', time: '', ticket: '', note: '', transitMode: '搭乘大眾運輸', transitTime: '15', flightNo: '' };
+                    } else if (type === 'shopping') {
+                        this.modal.title = '🛍️ 新增購物清單';
+                        this.modal.data = { name: '', image: '', note: '' };
+                    } else if (type === 'expenses') {
+                        this.modal.title = '💰 新增旅程支出';
+                        this.modal.data = { category: '飲食', name: '', date: today, amount: '', currency: 'CNY', payMethod: '現金' };
+                    } else if (type === 'diary') {
+                        this.modal.title = '📖 寫下一篇旅途手帳';
+                        this.modal.data = { title: '', date: today, rating: 5, note: '', image: '' };
+                    }
+                },
+                openEditModal(item, index) {
+                    this.modal.type = 'itinerary';
+                    this.modal.isEdit = true;
+                    this.modal.editIndex = index;
+                    this.modal.title = '📝 修改行程欄位';
+                    this.modal.data = JSON.parse(JSON.stringify(item));
+                    this.modal.show = true;
+                },
+                saveModalData() {
+                    if (this.modal.type === 'diary' && !this.modal.data.title) return alert('請填寫手帳主題！');
+                    if (this.modal.type !== 'diary' && !this.modal.data.name) return alert('請填寫名稱！');
+                    
+                    if (this.modal.type === 'itinerary') {
+                        if (this.modal.isEdit) {
+                            this.itineraries[this.selectedDayIndex][this.modal.editIndex] = this.modal.data;
+                        } else {
+                            this.modal.data.id = Date.now();
+                            this.itineraries[this.selectedDayIndex].push(this.modal.data);
+                        }
+                    } else if (this.modal.type === 'shopping') {
+                        this.shoppingList.push(this.modal.data);
+                    } else if (this.modal.type === 'expenses') {
+                        this.expenses.unshift(this.modal.data);
+                    } else if (this.modal.type === 'diary') {
+                        this.diaryList.unshift(this.modal.data);
+                    }
+                    this.modal.show = false;
+                },
+                confirmDelete() {
+                    if (confirm('確定要從行程中刪除這個項目嗎？')) {
+                        this.itineraries[this.selectedDayIndex].splice(this.modal.editIndex, 1);
+                        this.modal.show = false;
+                    }
+                },
+                uploadShoppingImg(event, index) {
+                    const file = event.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = (e) => { this.shoppingList[index].image = e.target.result; };
+                        reader.readAsDataURL(file);
+                    }
+                },
+                uploadDiaryImg(event) {
+                    const file = event.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = (e) => { this.modal.data.image = e.target.result; };
+                        reader.readAsDataURL(file);
+                    }
+                }
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>

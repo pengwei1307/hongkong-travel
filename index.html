@@ -911,27 +911,29 @@
                     ];
                     this.saveToLocalCache();
                 },
-                saveToLocalCache() 
+                saveToLocalCache() {
+    localStorage.setItem('hk_sz_itineraries', JSON.stringify(this.itineraries));
+    localStorage.setItem('hk_sz_shoppingList', JSON.stringify(this.shoppingList));
+    localStorage.setItem('hk_sz_expenses', JSON.stringify(this.expenses));
+    localStorage.setItem('hk_sz_diaryList', JSON.stringify(this.diaryList));
+},
+
                 removeImageFields() {
-                    this.itineraries = this.itineraries.map(day => {
-                    return day.map(item => {
-                    return { ...item, image: '' }; });
+                this.itineraries = this.itineraries.map(day => {
+                return day.map(item => {
+                return { ...item, image: '' };
+        });
     });
 
-                    this.shoppingList = this.shoppingList.map(item => {
-                    return { ...item, image: '' };
+                this.shoppingList = this.shoppingList.map(item => {
+                return { ...item, image: '' };
     });
 
-                    this.diaryList = this.diaryList.map(item => {
-                    return { ...item, image: '' };
+                this.diaryList = this.diaryList.map(item => {
+                return { ...item, image: '' };
     });
 },
-                {
-                    localStorage.setItem('hk_sz_itineraries', JSON.stringify(this.itineraries));
-                    localStorage.setItem('hk_sz_shoppingList', JSON.stringify(this.shoppingList));
-                    localStorage.setItem('hk_sz_expenses', JSON.stringify(this.expenses));
-                    localStorage.setItem('hk_sz_diaryList', JSON.stringify(this.diaryList));
-                },
+                
                 pushDataToCloud() {
     this.cloudStatus = 'syncing';
     this.removeImageFields();

@@ -35,6 +35,21 @@
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.7);
         }
+        /* 🎫 登機證票券挖洞效果：左右凹洞會真正透明，能看到背景圖 */
+.boarding-pass-ticket {
+    --ticket-hole: 13px;
+    --ticket-hole-y: 60%;
+
+    -webkit-mask-image:
+        radial-gradient(circle var(--ticket-hole) at left var(--ticket-hole-y), transparent 98%, #000 100%),
+        radial-gradient(circle var(--ticket-hole) at right var(--ticket-hole-y), transparent 98%, #000 100%);
+    -webkit-mask-composite: source-in;
+
+    mask-image:
+        radial-gradient(circle var(--ticket-hole) at left var(--ticket-hole-y), transparent 98%, #000 100%),
+        radial-gradient(circle var(--ticket-hole) at right var(--ticket-hole-y), transparent 98%, #000 100%);
+    mask-composite: intersect;
+}
 
         /* 🎯 全面統一所有「新增/編輯」表單文字框與選擇框樣式 (高階純淨白底) */
         .ui-input {
@@ -210,61 +225,88 @@
                                 <i :class="getCategoryIcon(item.category)" class="text-xs"></i>
                             </div>
 
-                            <div v-if="item.category === '航班'" class="flex-1 relative">
-    <div class="relative overflow-hidden rounded-2xl bg-[#fffdf8] border border-slate-300/80 shadow-lg">
-        <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-hkThemeGreen via-hkAccentOrange to-hkRoseGold opacity-90"></div>
-
-        <div class="bg-slate-900/95 text-white px-4 py-3">
-            <div class="absolute top-3 right-3 flex space-x-1 opacity-60 group-hover:opacity-100">
-                <button @click="openEditModal(item, idx)" class="text-white/80 p-1">
-                    <i class="fa-solid fa-pen text-xs"></i>
-                </button>
-            </div>
-
-            <div class="flex items-end justify-between pr-6">
+                            <div v-if="item.category === '航班'" class="flex-1">
+    <div class="boarding-pass-ticket relative rounded-[22px] bg-[#fffdf8] border border-slate-300/80 shadow-lg overflow-hidden">
+        
+        <!-- 深棕色登機證票頭 -->
+        <div class="bg-gradient-to-r from-[#26170F] via-[#3A2418] to-[#6B4A32] text-white px-4 py-3">
+            <div class="flex items-start justify-between gap-3">
                 <div>
-                    <p class="text-[9px] uppercase tracking-[0.28em] text-white/55">Boarding Pass</p>
-                    <p class="text-base font-semibold tracking-[0.18em] mt-1">{{ item.flightNo || 'FLIGHT' }}</p>
+                    <p class="text-[8px] uppercase tracking-[0.24em] text-white/55 mb-1">
+                        Boarding Pass
+                    </p>
+                    <p class="text-xl font-semibold tracking-[0.14em] leading-none">
+                        {{ item.flightNo || 'FLIGHT' }}
+                    </p>
                 </div>
-                <div class="text-right">
-                    <p class="text-[9px] uppercase tracking-[0.22em] text-white/55">Boarding Time</p>
-                    <p class="text-sm font-semibold mt-1">{{ item.time || '--:--' }}</p>
+
+                <div class="flex items-start gap-2">
+                    <div class="text-right">
+                        <p class="text-[8px] uppercase tracking-[0.2em] text-white/55 mb-1">
+                            Flight Time
+                        </p>
+                        <p class="text-sm font-semibold leading-none">
+                            {{ item.time || '--:--' }}
+                        </p>
+                    </div>
+
+                    <button @click="openEditModal(item, idx)" class="text-white/70 hover:text-white transition-all pt-0.5">
+                        <i class="fa-solid fa-pen text-xs"></i>
+                    </button>
                 </div>
             </div>
         </div>
 
-        <div class="relative px-4 py-4 text-hkNavyText">
-            <div class="grid grid-cols-[1fr_auto_1fr] items-center gap-3 pb-4">
-                <div>
-                    <p class="text-[8px] uppercase tracking-[0.22em] text-hkMutedText mb-1">From / To</p>
-                    <p class="text-sm font-semibold leading-snug">{{ item.name }}</p>
+        <!-- 航線主資訊 -->
+        <div class="px-4 py-4 text-hkNavyText">
+            <div class="grid grid-cols-[1fr_auto_1fr] items-center gap-3">
+                <div class="min-w-0">
+                    <p class="text-[8px] uppercase tracking-[0.2em] text-hkMutedText mb-1">
+                        From
+                    </p>
+                    <p class="text-3xl font-semibold tracking-[0.06em] leading-none">
+                        {{ item.fromCode || (item.flightNo === 'BR850' ? 'HKG' : 'KHH') }}
+                    </p>
+                    <p class="text-xs font-medium text-slate-600 mt-1">
+                        {{ item.fromCity || (item.flightNo === 'BR850' ? '香港' : '高雄') }}
+                    </p>
                 </div>
 
-                <div class="w-8 h-8 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center">
-                    <i class="fa-solid fa-plane text-hkAccentOrange text-xs"></i>
+                <div class="flex flex-col items-center justify-center">
+                    <div class="w-9 h-9 rounded-full bg-[#f3eee7] border border-[#e4d8c8] flex items-center justify-center shadow-inner">
+                        <i class="fa-solid fa-plane text-hkAccentOrange text-xs"></i>
+                    </div>
                 </div>
 
-                <div class="text-right">
-                    <p class="text-[8px] uppercase tracking-[0.22em] text-hkMutedText mb-1">Travel Date</p>
-                    <p class="text-sm font-semibold">{{ days[selectedDayIndex].dateStr }}</p>
+                <div class="min-w-0 text-right">
+                    <p class="text-[8px] uppercase tracking-[0.2em] text-hkMutedText mb-1">
+                        To
+                    </p>
+                    <p class="text-3xl font-semibold tracking-[0.06em] leading-none">
+                        {{ item.toCode || (item.flightNo === 'BR850' ? 'KHH' : 'HKG') }}
+                    </p>
+                    <p class="text-xs font-medium text-slate-600 mt-1">
+                        {{ item.toCity || (item.flightNo === 'BR850' ? '高雄' : '香港') }}
+                    </p>
                 </div>
             </div>
 
-            <div class="relative my-3">
-                <div class="border-t border-dashed border-slate-300"></div>
-                <div class="absolute -top-3 -left-7 w-6 h-6 rounded-full bg-[#fdfbf7] border border-slate-200"></div>
-                <div class="absolute -top-3 -right-7 w-6 h-6 rounded-full bg-[#fdfbf7] border border-slate-200"></div>
-            </div>
+            <!-- 虛線撕線：左右凹洞會由 CSS mask 真正挖掉 -->
+            <div class="my-4 border-t border-dashed border-slate-300"></div>
 
-            <div v-if="item.note" class="mt-3 text-[11px] leading-relaxed text-slate-700 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2">
+            <!-- 備註 -->
+            <div v-if="item.note" class="text-[11px] leading-relaxed text-slate-700 bg-[#f8f3ec] border border-[#eadfce] rounded-xl px-3 py-2.5">
                 {{ item.note }}
             </div>
 
-            <div class="mt-4 pt-3 border-t border-slate-200 flex items-center justify-between">
-                <p class="text-[10px] font-mono tracking-[0.18em] text-slate-400">
+            <!-- 底部資訊 -->
+            <div class="mt-3.5 pt-3 border-t border-slate-200 flex items-center justify-between gap-2">
+                <p class="text-[10px] font-mono tracking-[0.12em] text-slate-400 truncate">
                     SEQ {{ item.id }} · {{ item.flightNo || 'BOARDING' }}
                 </p>
-                <a :href="getMapLink(item)" target="_blank" class="inline-flex items-center space-x-1 text-xs text-hkThemeGreen font-semibold hover:underline transition-all">
+
+                <a :href="getMapLink(item)" target="_blank"
+                   class="inline-flex items-center space-x-1 text-[11px] text-hkThemeGreen font-semibold hover:underline transition-all shrink-0">
                     <i class="fa-solid fa-map-location-dot"></i>
                     <span>機場地圖導航</span>
                 </a>

@@ -880,11 +880,13 @@
                 },
                 uploadDiaryImg(event) {
                     const file = event.target.files[0];
-                    if (file) { const reader = new FileReader(); reader.onload = (e) => { this.modal.data.image = e.target.result; this.pushDataToCloud(); }; reader.readAsDataURL(file); }
+                    if (!file) return;
+                    const reader = new FileReader(); reader.onload = (e) => { this.modal.data.image = e.target.result; }; reader.readAsDataURL(file);
                 },
                 uploadItineraryImg(event) {
-                    const file = event.target.files[0];
-                    if (file) { const reader = new FileReader(); reader.onload = (e) => { this.modal.data.image = e.target.result; this.pushDataToCloud(); }; reader.readAsDataURL(file); }
+                   const file = event.target.files[0];
+                   if (!file) return;
+                   const reader = new FileReader(); reader.onload = (e) => { this.modal.data.image = e.target.result; }; reader.readAsDataURL(file);
                 }
             }
         }).mount('#app');

@@ -35,10 +35,10 @@
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.7);
         }
-        /* 🎫 登機證票券挖洞效果：左右凹洞會真正透明，能看到背景圖 */
+        /* 🎫 登機證票券效果：左右凹洞真正透明，虛線與凹洞共用同一條中軸 */
 .boarding-pass-ticket {
     --ticket-hole: 13px;
-    --ticket-hole-y: 60%;
+    --ticket-hole-y: 56%;
 
     -webkit-mask-image:
         radial-gradient(circle var(--ticket-hole) at left var(--ticket-hole-y), transparent 98%, #000 100%),
@@ -49,6 +49,16 @@
         radial-gradient(circle var(--ticket-hole) at left var(--ticket-hole-y), transparent 98%, #000 100%),
         radial-gradient(circle var(--ticket-hole) at right var(--ticket-hole-y), transparent 98%, #000 100%);
     mask-composite: intersect;
+}
+
+.boarding-pass-tear-line {
+    position: absolute;
+    left: 14px;
+    right: 14px;
+    top: var(--ticket-hole-y);
+    border-top: 1px dashed rgba(148, 163, 184, 0.8);
+    pointer-events: none;
+    z-index: 5;
 }
 
         /* 🎯 全面統一所有「新增/編輯」表單文字框與選擇框樣式 (高階純淨白底) */
@@ -226,36 +236,89 @@
                             </div>
 
                             <div v-if="item.category === '航班'" class="flex-1">
-    <div class="boarding-pass-ticket relative rounded-[22px] bg-white/95 border border-white/70 shadow-md overflow-hidden">
+    <div class="boarding-pass-ticket relative rounded-[20px] bg-white/95 border border-white/70 shadow-md overflow-hidden">
         
-        <!-- 深棕色登機證票頭 -->
-        <div class="bg-gradient-to-r from-[#24170F] via-[#332117] to-[#4A3021] text-white px-4 py-3">
+        <!-- 虛線撕線：和左右挖空凹洞共用同一條中軸 -->
+        <div class="boarding-pass-tear-line"></div>
+
+        <!-- 深咖啡色票頭 -->
+        <div class="bg-gradient-to-r from-[#24170F] via-[#332117] to-[#4A3021] text-white px-3.5 py-2">
             <div class="flex items-start justify-between gap-3">
                 <div>
-                    <p class="text-[8px] uppercase tracking-[0.24em] text-white/55 mb-1">
+                    <p class="text-[8px] uppercase tracking-[0.22em] text-white/55 mb-0.5">
                         Boarding Pass
                     </p>
-                    <p class="text-xl font-semibold tracking-[0.12em] leading-none">
+                    <p class="text-sm font-semibold tracking-[0.12em] leading-none">
                         {{ item.flightNo || 'FLIGHT' }}
                     </p>
                 </div>
 
                 <div class="flex items-start gap-2">
                     <div class="text-right">
-                        <p class="text-[8px] uppercase tracking-[0.2em] text-white/55 mb-1">
+                        <p class="text-[8px] uppercase tracking-[0.2em] text-white/55 mb-0.5">
                             Flight Time
                         </p>
-                        <p class="text-sm font-semibold leading-none">
+                        <p class="text-xs font-semibold leading-none">
                             {{ item.time || '--:--' }}
                         </p>
                     </div>
 
-                    <button @click="openEditModal(item, idx)" class="text-white/70 hover:text-white transition-all pt-0.5">
+                    <button @click="openEditModal(item, idx)" class="text-white/65 hover:text-white transition-all pt-0.5">
                         <i class="fa-solid fa-pen text-xs"></i>
                     </button>
                 </div>
             </div>
         </div>
+
+        <!-- 航線主資訊 -->
+        <div class="px-3.5 py-2.5 text-hkNavyText">
+            <div class="grid grid-cols-[1fr_auto_1fr] items-center gap-3">
+                <div class="min-w-0">
+                    <p class="text-[8px] uppercase tracking-[0.18em] text-hkMutedText mb-0.5">
+                        From
+                    </p>
+                    <p class="text-base font-semibold tracking-[0.08em] leading-none">
+                        {{ item.fromCode || (item.flightNo === 'BR850' ? 'HKG' : 'KHH') }}
+                    </p>
+                    <p class="text-[11px] font-medium text-slate-600 mt-0.5">
+                        {{ item.fromCity || (item.flightNo === 'BR850' ? '香港' : '高雄') }}
+                    </p>
+                </div>
+
+                <div class="flex items-center justify-center px-1">
+                    <i class="fa-solid fa-plane text-hkAccentOrange text-lg"></i>
+                </div>
+
+                <div class="min-w-0 text-right">
+                    <p class="text-[8px] uppercase tracking-[0.18em] text-hkMutedText mb-0.5">
+                        To
+                    </p>
+                    <p class="text-base font-semibold tracking-[0.08em] leading-none">
+                        {{ item.toCode || (item.flightNo === 'BR850' ? 'KHH' : 'HKG') }}
+                    </p>
+                    <p class="text-[11px] font-medium text-slate-600 mt-0.5">
+                        {{ item.toCity || (item.flightNo === 'BR850' ? '高雄' : '香港') }}
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 下半部：備註 + 地圖 -->
+        <div class="px-3.5 pb-2.5 pt-3.5 text-hkNavyText">
+            <div v-if="item.note" class="text-[11px] leading-snug text-slate-700 bg-slate-50/90 border border-slate-200 rounded-xl px-3 py-2">
+                {{ item.note }}
+            </div>
+
+            <div class="mt-2.5 pt-2 border-t border-slate-200 flex justify-end">
+                <a :href="getMapLink(item)" target="_blank"
+                   class="inline-flex items-center space-x-1 text-[11px] text-hkThemeGreen font-semibold hover:underline transition-all">
+                    <i class="fa-solid fa-map-location-dot"></i>
+                    <span>機場地圖導航</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
 
         <!-- 航線主資訊 -->
         <div class="px-4 py-4 text-hkNavyText">

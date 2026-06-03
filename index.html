@@ -362,8 +362,7 @@
                                     {{ shop.note }}
                                 </p>
                             </div>
-                            <button @click="shoppingList.splice(sIdx, 1)" class="text-right text-xs text-red-600 font-bold self-end hover:underline"><i class="fa-regular fa-trash-can text-[10px]"></i> 刪除</button>
-                        </div>
+                                <button @click="deleteShoppingItem(sIdx)" class="text-right text-xs text-red-600 font-bold self-end hover:underline"><i class="fa-regular fa-trash-can text-[10px]"></i> 刪除</button>                        </div>
                     </div>
                 </div>
                 <div class="fixed bottom-6 max-w-md w-full pr-10 flex justify-end z-40 pointer-events-none">
@@ -857,6 +856,12 @@
                         this.pushDataToCloud(); // 全自動同步推播至全家人手機與其他裝置
                     }
                 },
+                deleteShoppingItem(index) {
+                    if (confirm('確定要刪除這個購物項目嗎？')) {
+                    this.shoppingList.splice(index, 1);
+                    this.pushDataToCloud();
+    }
+},
                 uploadShoppingImg(event, index) {
                     const file = event.target.files[0];
                     if (file) { const reader = new FileReader(); reader.onload = (e) => { this.shoppingList[index].image = e.target.result; this.pushDataToCloud(); }; reader.readAsDataURL(file); }

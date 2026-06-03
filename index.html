@@ -1123,15 +1123,16 @@
                     this.activeDayItinerary[targetIndex] = temp;
                     this.pushDataToCloud(); // 觸發即時雲端同步
                 },
-                openAddModal(type) {
-                    this.modal.type = type; this.modal.isEdit = false; this.modal.show = true;
+                openAddModal(type) { this.modal.type = type; this.modal.isEdit = false; this.modal.show = true;
                     let today = new Date().toISOString().split('T')[0];
-                    if (type === 'itinerary') { this.modal.title = '🚀 規劃新行程'; this.modal.data = {  category: '景點', name: '',
-    time: '', ticket: '', note: '', transitMode: '搭乘大眾運輸', transitTime: '15', flightNo: '', image: '',
-    region: this.selectedDayIndex === 2 ? 'shenzhen' : 'hongkong'}; } 
-                    else if (type === 'shopping') { this.modal.title = '📝 新增願望清單'; this.modal.data = { type: '購物', name: '', note: '' }; }
-                    else if (type === 'expenses') { this.modal.title = '💰 新增旅程支出'; this.modal.data = { category: '飲食', name: '', date: today, amount: '', currency: 'CNY', payMethod: '現金' }; } 
-                    else if (type === 'diary') { this.modal.title = '📝 新增旅行筆記'; this.modal.data = { title: '', date: today, note: '', image: '' }; }
+                    if (type === 'itinerary') { this.modal.title = '🚀 規劃新行程'; this.modal.data = { category: '景點',
+            name: '', time: '', ticket: '', note: '', transitMode: '搭乘大眾運輸', transitTime: '15', flightNo: '', image: '',
+            region: this.selectedDayIndex === 2 ? 'shenzhen' : 'hongkong' };} 
+                    else if (type === 'shopping') { this.modal.title = '📝 新增願望清單'; this.modal.data = { type: '購物', name: '', note: ''};} 
+                    else if (type === 'expenses') { this.modal.title = '💰 新增旅程支出'; this.modal.data = { category: '飲食', name: '', date: today, amount: '', currency: 'CNY', payMethod: '現金' };} 
+                    else if (type === 'diary') { this.modal.title = '📝 新增旅行筆記'; this.modal.data = {
+            title: '', date: today, note: '', image: '' }; }
+            },
                 openEditModal(item, index) {
                     this.modal.type = 'itinerary'; this.modal.isEdit = true; this.modal.editIndex = index; this.modal.title = '📝 修改行程欄位';
                     this.modal.data = JSON.parse(JSON.stringify(item)); this.modal.show = true;

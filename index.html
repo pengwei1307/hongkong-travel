@@ -137,9 +137,9 @@
                 <div class="flex items-center justify-center space-x-2">
                     <h1 class="text-2xl font-black text-white tracking-[0.22em] filter drop-shadow-md pl-4">港深雙城行</h1>
                     <span class="text-xs transition-all duration-300">
-                        <i v-if="cloudStatus === 'synced'" class="fa-solid fa-cloud-arrow-up text-emerald-400 filter drop-shadow" title="全家族雲端同步中"></i>
-                        <i v-if="cloudStatus === 'syncing'" class="fa-solid fa-spinner fa-spin text-hkSkyBlue" title="正在同步變更至全家手機..."></i>
-                        <i v-if="cloudStatus === 'error'" class="fa-solid fa-cloud-bounce text-red-400" title="共享雲端儲存中"></i>
+                        <i v-if="cloudStatus === 'synced'" class="fa-solid fa-cloud-arrow-up text-emerald-400 filter drop-shadow-md" title="跨裝置雲端數據同步成功"></i>
+                        <i v-if="cloudStatus === 'syncing'" class="fa-solid fa-spinner fa-spin text-hkSkyBlue" title="正在讀取/推送最新全家族共享資料..."></i>
+                        <i v-if="cloudStatus === 'error'" class="fa-solid fa-cloud-bounce text-red-400" title="本地離線儲存安全防護導通"></i>
                     </span>
                 </div>
                 <div class="w-10 h-[2.5px] bg-hkAccentOrange mx-auto mt-2.5 rounded-full"></div>
@@ -309,7 +309,7 @@
                         <div class="space-y-0.5 pt-1">
                             <p class="font-bold text-hkNavyText text-sm">第一晚：唯港薈 (Hotel ICON)</p>
                             <p class="text-hkMutedText">📍 香港尖沙咀科學館道17號</p>
-                            <a href="https://www.google.com/maps/search/?api=1&query=%E5%94%AF%E6%B8%AF%E8%94%A5%20Hotel%20ICON" target="_blank" class="inline-block text-hkAccentOrange font-black mt-1.5 hover:underline">開啟 Google 地圖 ➡️</a>
+                            <a href="http://maps.google.com/?q=Hotel+ICON+Hong+Kong2" target="_blank" class="inline-block text-hkAccentOrange font-black mt-1.5 hover:underline">開啟 Google 地圖 ➡️</a>
                         </div>
                         <div class="space-y-0.5 pt-3">
                             <p class="font-bold text-hkNavyText text-sm">第二、三晚：里白酒店 (深圳會展中心店)</p>
@@ -331,9 +331,9 @@
                 </div>
 
                 <div class="glass-panel rounded-2xl p-4 shadow-md text-center">
-                    <p class="text-xs text-hkMutedText font-bold mb-2">💡 開發同步地帶（快取記憶管理）</p>
+                    <p class="text-xs text-hkMutedText font-bold mb-2">💡 開發重置區域（全家族同步快取清洗）</p>
                     <button @click="clearLocalStorageCache" class="w-full bg-red-500/10 text-red-700 hover:bg-red-500/20 border border-red-300 font-black py-2.5 rounded-xl text-xs transition-all">
-                        ⚠️ 清除本地記憶，強制重置並同步全家族與 GitHub 預設正本數據
+                        ⚠️ 清除機體快取，強制重置並載入 GitHub 最預設乾淨行程
                     </button>
                 </div>
             </div>
@@ -389,7 +389,7 @@
                             </div>
                         </div>
                         <div class="text-right flex items-center space-x-3">
-                            <span class="text-sm font-black text-hkAccentOrange">{{ getCurrencySymbol(exp.currency) }} {{ exp.amount }}</span>
+                            <span class="text-sm font-bold text-hkAccentOrange">{{ getCurrencySymbol(exp.currency) }} {{ exp.amount }}</span>
                             <button @click="expenses.splice(eIdx, 1)" class="text-slate-400 hover:text-red-600 transition-colors"><i class="fa-solid fa-circle-xmark"></i></button>
                         </div>
                     </div>
@@ -418,7 +418,7 @@
                     </div>
                     <p v-if="log.note" class="text-xs text-slate-700 bg-white/50 p-3 rounded-xl border border-slate-200 font-medium leading-relaxed whitespace-pre-line shadow-inner">{{ log.note }}</p>
                     <div class="flex justify-end pt-1">
-                        <button @click="diaryList.splice(dIdx, 1)" class="text-xs text-slate-500 font-bold hover:text-white"><i class="fa-regular fa-trash-can mr-1"></i>刪除手帳</button>
+                        <button @click="diaryList.splice(dIdx, 1)" class="text-xs text-red-600 font-bold hover:underline"><i class="fa-regular fa-trash-can mr-1"></i>刪除手帳</button>
                     </div>
                 </div>
                 <div class="fixed bottom-6 max-w-md w-full pr-10 flex justify-end z-40 pointer-events-none">
@@ -430,7 +430,7 @@
 
         </div>
 
-        <div v-if="modal.show" class="fixed inset-0 bg-slate-950/80 backdrop-blur-xl z-50 flex items-end justify-center">
+        <div v-if="modal.show" class="fixed inset-0 bg-slate-955/80 backdrop-blur-xl z-50 flex items-end justify-center">
             <div class="bg-slate-100 w-full max-w-md rounded-t-[32px] p-6 space-y-4 max-h-[90vh] overflow-y-auto border-t border-slate-300 shadow-2xl text-slate-800">
                 <div class="flex justify-between items-center pb-2 border-b border-slate-200">
                     <h3 class="font-black text-lg text-slate-900">{{ modal.title }}</h3>
@@ -605,7 +605,7 @@
                     currentTab: 'itinerary',
                     selectedDayIndex: 0,
                     cloudStatus: 'loading', // loading, synced, syncing, error
-                    // 🔒 免註冊家族雲端同步共享專用金鑰口袋空間
+                    // 🌟 共享數據雲端專屬鑰匙口袋編號，實現跨裝置自動讀寫對齊
                     cloudUrl: 'https://kvdb.io/HKSZ2026_Tour_Shared_Bucket_Boutique/family_shared_data',
                     fx: { amount: 100, currency: 'HKD', hkdTwd: 4.15, cnyTwd: 4.45 },
                     weathers: [
@@ -620,9 +620,8 @@
                         { weekday: 'Sat', dateStr: '6/15' },
                         { weekday: 'Sun', dateStr: '6/16' }
                     ],
-                    // 預設正本行程資料庫 (全展開無省略)
+                    // 預設正本數據資料庫
                     defaultItineraries: [
-                        // 6/13 完整行程明細
                         [
                             { id: 1, category: '航班', name: '去程：長榮航空 BR845 (高雄KHH ✈️ 香港HKG)', time: '09:15-10:55', flightNo: 'BR845', note: '出發前往香港，開啟精彩雙城微旅行！', transitMode: '搭乘豪華客機', transitTime: '100', image: '' },
                             { id: 2, category: '住宿', name: '唯港薈 (Hotel ICON) 寄行李', time: '12:30', note: '中午抵達先寄行李。15:00可以正式Check in。提前到店好像可以先使用設施，爸爸可以去健身房健身！', transitMode: '搭機場快線轉專車接駁', transitTime: '40', image: '' },
@@ -633,7 +632,6 @@
                             { id: 7, category: '景點', name: '大館監獄 / 外國歷史建築', time: '夜間', note: '精緻的古蹟群建築，文青拍照與打卡首選地。', transitMode: '徒步逛過去', transitTime: '6', image: '' },
                             { id: 8, category: '美食', name: '聰嫂甜品（尖沙咀）', time: '11:30-01:00', note: '吃完美味的排隊甜點，再心滿意足回飯店睡覺。', transitMode: '搭港鐵荃灣線跨海回尖沙咀', transitTime: '35', image: '' }
                         ],
-                        // 6/14 完整行程明細 (內含精準地圖分界)
                         [
                             { id: 9, category: '住宿', name: '唯港匯退房辦理', time: '12:00前', note: '記得買高鐵票！往西九龍高鐵站移動。', transitMode: '清點隨身行李準備', transitTime: '0', image: '' },
                             { id: 10, category: '美食', name: '倫敦大酒樓（旺角早茶）', time: '11:00前抵達', note: '3F經典港點推車！需要自己跟別人搭檯拼桌喔。', transitMode: '搭乘地鐵前往旺角站', transitTime: '20', image: '' },
@@ -643,13 +641,11 @@
                             { id: 14, category: '美食', name: '順德脆鯇魚火鍋！！！', time: '晚餐饗宴', note: '口感超級脆彈、爽口無比的鯇魚火鍋，必吃！！！', transitMode: '地鐵或打D計程車', transitTime: '15', image: '' },
                             { id: 15, category: '景點', name: '東門老街 / 水圍夜市', time: '深夜逛街', note: '深夜小吃與逛街大集合，體驗繁華夜生活。', transitMode: '搭乘深圳地鐵', transitTime: '20', image: '' }
                         ],
-                        // 6/15 完整行程明細
                         [
                             { id: 16, category: '美食', name: '潮汕牛肉火鍋午餐', time: '中午 12:00', note: '必點牛胸口油！！！爽脆彈牙不油膩。', transitMode: '步行前去', transitTime: '0', image: '' },
                             { id: 17, category: '景點', name: '華僑城創意文化園', time: '下午', note: '深圳著名的文青藝術園區，文創氛圍滿滿。', transitMode: '打計程車前往', transitTime: '30', image: '' },
                             { id: 18, category: '景點', name: '深圳灣萬象城 / 人才公園 / 深圳灣公園', time: '傍晚夜景', note: '散步看夕陽與璀璨城市燈光秀。', transitMode: '搭地鐵或打D前往', transitTime: '25', image: '' }
                         ],
-                        // 6/16 完整行程明細
                         [
                             { id: 19, category: '住宿', name: '里白酒店退房', time: '12:00前', note: '收拾整頓全部行李，準備啟程返回香港。', transitMode: '清點手提行李', transitTime: '0', image: '' },
                             { id: 20, category: '其他', name: '啟程回港移動', time: '最晚 14:00 回港', note: '目前安排之後會再修改。', transitMode: '深圳福田搭高鐵回香港西九龍', transitTime: '45', image: '' },
@@ -660,39 +656,12 @@
                     shoppingList: [],
                     expenses: [],
                     diaryList: [],
-                    // 🎯 核心補回：宣告漏掉的控制面板變數，完美根除卡死當機黑屏 Bug
                     modal: { show: false, type: 'itinerary', title: '', isEdit: false, editIndex: null, data: { name: '', image: '', amount: '', category: '飲食' } }
                 }
             },
+            // 🧠 核心技術修正：網頁每次開啟，全自動、無差別、強制去雲端共享口袋抓取最更新的資料
             mounted() {
-                this.cloudStatus = 'syncing';
-                fetch(this.cloudUrl)
-                    .then(res => {
-                        if (res.status === 404) {
-                            this.loadLocalOrDefaults();
-                            this.cloudStatus = 'synced';
-                            return null;
-                        }
-                        return res.json();
-                    })
-                    .then(data => {
-                        if (data) {
-                            this.itineraries = data.itineraries || [];
-                            this.shoppingList = data.shoppingList || [];
-                            this.expenses = data.expenses || [];
-                            this.diaryList = data.diaryList || [];
-                            localStorage.setItem('hk_sz_itineraries', JSON.stringify(this.itineraries));
-                            localStorage.setItem('hk_sz_shoppingList', JSON.stringify(this.shoppingList));
-                            localStorage.setItem('hk_sz_expenses', JSON.stringify(this.expenses));
-                            localStorage.setItem('hk_sz_diaryList', JSON.stringify(this.diaryList));
-                            this.cloudStatus = 'synced';
-                        }
-                    })
-                    .catch(err => {
-                        console.warn('雲端超時，自動切換至本地晶片快取讀取:', err);
-                        this.loadLocalOrDefaults();
-                        this.cloudStatus = 'error';
-                    });
+                this.syncFromCloud();
             },
             computed: {
                 activeDayItinerary() { return this.itineraries[this.selectedDayIndex] || []; },
@@ -709,6 +678,34 @@
                 }
             },
             methods: {
+                // 🔄 跨裝置全自動拉取機制：強制以雲端資料蓋過本地，實現手機改完、筆電重新整理立刻看見
+                syncFromCloud() {
+                    this.cloudStatus = 'syncing';
+                    fetch(this.cloudUrl)
+                        .then(res => {
+                            if (res.status === 404) {
+                                this.loadLocalOrDefaults();
+                                this.cloudStatus = 'synced';
+                                return null;
+                            }
+                            return res.json();
+                        })
+                        .then(data => {
+                            if (data) {
+                                this.itineraries = data.itineraries || [];
+                                this.shoppingList = data.shoppingList || [];
+                                this.expenses = data.expenses || [];
+                                this.diaryList = data.diaryList || [];
+                                this.saveToLocalCache();
+                                this.cloudStatus = 'synced';
+                            }
+                        })
+                        .catch(err => {
+                            console.warn('雲端同步超時，降級讀取本地儲存:', err);
+                            this.loadLocalOrDefaults();
+                            this.cloudStatus = 'error';
+                        });
+                },
                 loadLocalOrDefaults() {
                     this.itineraries = localStorage.getItem('hk_sz_itineraries') ? JSON.parse(localStorage.getItem('hk_sz_itineraries')) : JSON.parse(JSON.stringify(this.defaultItineraries));
                     this.shoppingList = localStorage.getItem('hk_sz_shoppingList') ? JSON.parse(localStorage.getItem('hk_sz_shoppingList')) : [
@@ -722,34 +719,36 @@
                     this.diaryList = localStorage.getItem('hk_sz_diaryList') ? JSON.parse(localStorage.getItem('hk_sz_diaryList')) : [
                         { title: '維港星空夜色太震撼了', date: '2026-06-13', rating: 5, note: '精緻通透的大樓燈火，搭配經典天星小輪，比想像中還要高階奢華。', image: '' }
                     ];
+                    this.saveToLocalCache();
                 },
-                pushDataToCloud() {
-                    this.cloudStatus = 'syncing';
+                saveToLocalCache() {
                     localStorage.setItem('hk_sz_itineraries', JSON.stringify(this.itineraries));
                     localStorage.setItem('hk_sz_shoppingList', JSON.stringify(this.shoppingList));
                     localStorage.setItem('hk_sz_expenses', JSON.stringify(this.expenses));
                     localStorage.setItem('hk_sz_diaryList', JSON.stringify(this.diaryList));
-
+                },
+                pushDataToCloud() {
+                    this.cloudStatus = 'syncing';
+                    this.saveToLocalCache();
                     const payload = {
                         itineraries: this.itineraries,
                         shoppingList: this.shoppingList,
                         expenses: this.expenses,
                         diaryList: this.diaryList
                     };
-
                     fetch(this.cloudUrl, { method: 'POST', body: JSON.stringify(payload) })
                     .then(() => { this.cloudStatus = 'synced'; })
-                    .catch(err => { console.error('同步失敗:', err); this.cloudStatus = 'error'; });
+                    .catch(err => { console.error('雲端封裝同步失敗:', err); this.cloudStatus = 'error'; });
                 },
                 clearLocalStorageCache() {
-                    if (confirm('確定要完全清除本機記憶與雲端口袋，將全家人手機與 GitHub 的初始預設行程重置同步嗎？')) {
+                    if (confirm('確定要完全洗白本機與雲端中的所有手動自訂資料，重置回 GitHub 的初始淨空正本嗎？')) {
                         localStorage.clear();
                         fetch(this.cloudUrl, { method: 'DELETE' }).catch(() => {});
-                        alert('同步洗白完畢！網頁將自動重新整理。');
+                        alert('同步清除完畢！網頁即將自動重新載入。');
                         window.location.reload();
                     }
                 },
-                // 🗺️ 智慧跨境跳轉：精確判定 14 號與 16 號跨國混編地標
+                // 🗺️ 智慧跨境跳轉演算法：精準識別 14、16 號兩天跨國混編地標
                 isShenzhenItinerary(item) {
                     if (item.name.includes('回程') || item.name.includes('BR850') || item.name.includes('去程') || item.name.includes('BR845')) return false;
                     return this.selectedDayIndex === 1 || this.selectedDayIndex === 2 || 
@@ -761,11 +760,8 @@
                 },
                 getMapLink(item) {
                     const query = encodeURIComponent(item.name);
-                    if (this.isShenzhenItinerary(item)) {
-                        return `https://www.amap.com/search?query=${query}`;
-                    } else {
-                        return `https://www.google.com/maps/search/?api=1&query=${query}`;
-                    }
+                    if (this.isShenzhenItinerary(item)) { return `https://www.amap.com/search?query=${query}`; } 
+                    else { return `https://www.google.com/maps/search/?api=1&query=${query}`; }
                 },
                 getCategoryIcon(cat) {
                     const icons = { '景點': 'fa-solid fa-camera-retro', '住宿': 'fa-solid fa-hotel', '美食': 'fa-solid fa-utensils', '購物': 'fa-solid fa-bag-shopping', '航班': 'fa-solid fa-plane', '其他': 'fa-solid fa-ellipsis' };
@@ -794,7 +790,7 @@
                     let temp = this.activeDayItinerary[index];
                     this.activeDayItinerary[index] = this.activeDayItinerary[targetIndex];
                     this.activeDayItinerary[targetIndex] = temp;
-                    this.pushDataToCloud();
+                    this.pushDataToCloud(); // 觸發即時雲端同步
                 },
                 openAddModal(type) {
                     this.modal.type = type; this.modal.isEdit = false; this.modal.show = true;
@@ -820,13 +816,13 @@
                     else if (this.modal.type === 'diary') { this.diaryList.unshift(this.modal.data); }
                     
                     this.modal.show = false;
-                    this.pushDataToCloud(); // 自動同步
+                    this.pushDataToCloud(); // 全自動同步推播至全家人手機與其他裝置
                 },
                 confirmDelete() {
                     if (confirm('確定要從行程中刪除這個項目嗎？')) {
                         this.itineraries[this.selectedDayIndex].splice(this.modal.editIndex, 1);
                         this.modal.show = false;
-                        this.pushDataToCloud(); // 自動同步
+                        this.pushDataToCloud(); // 全自動同步推播至全家人手機與其他裝置
                     }
                 },
                 uploadShoppingImg(event, index) {
@@ -835,11 +831,11 @@
                 },
                 uploadDiaryImg(event) {
                     const file = event.target.files[0];
-                    if (file) { const reader = new FileReader(); reader.onload = (e) => { this.modal.data.image = e.target.result; }; reader.readAsDataURL(file); }
+                    if (file) { const reader = new FileReader(); reader.onload = (e) => { this.modal.data.image = e.target.result; this.pushDataToCloud(); }; reader.readAsDataURL(file); }
                 },
                 uploadItineraryImg(event) {
                     const file = event.target.files[0];
-                    if (file) { const reader = new FileReader(); reader.onload = (e) => { this.modal.data.image = e.target.result; }; reader.readAsDataURL(file); }
+                    if (file) { const reader = new FileReader(); reader.onload = (e) => { this.modal.data.image = e.target.result; this.pushDataToCloud(); }; reader.readAsDataURL(file); }
                 }
             }
         }).mount('#app');

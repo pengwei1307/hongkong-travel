@@ -509,24 +509,41 @@
 
         <div class="space-y-2.5">
             <template v-for="(shop, sIdx) in shoppingList" :key="'shopping-' + sIdx">
-                <div v-if="(shop.type || '購物') === '購物'"
-                     class="bg-white/55 border border-white/70 rounded-xl px-3 py-3 flex items-start justify-between gap-3">
-                    
-                    <div class="min-w-0 flex-1">
-                        <p class="note-text text-sm font-semibold text-hkNavyText leading-snug">
-                            {{ shop.name }}
-                        </p>
+               <div v-if="(shop.type || '購物') === '購物'"
+     class="bg-white/55 border border-white/70 rounded-xl px-3 py-3 flex items-start justify-between gap-3">
+    
+    <button @click="toggleShoppingDone(sIdx)"
+            class="shrink-0 mt-0.5 w-5 h-5 rounded-full border flex items-center justify-center transition-all"
+            :class="shop.done ? 'bg-hkThemeGreen border-hkThemeGreen text-white' : 'border-slate-300 text-transparent bg-white/70'">
+        <i class="fa-solid fa-check text-[10px]"></i>
+    </button>
 
-                        <div v-if="shop.note" class="mt-1.5">
-    <p class="note-text text-[11px] text-slate-600 leading-relaxed"
-       :class="expandedWishNotes[sIdx] ? 'wish-note-expanded' : 'wish-note-collapsed'">
-        {{ shop.note }}
-    </p>
+    <div class="min-w-0 flex-1">
+        <p class="note-text text-sm font-semibold leading-snug"
+           :class="shop.done ? 'text-slate-400 line-through' : 'text-hkNavyText'">
+            {{ shop.name }}
+        </p>
 
-    <button v-if="shop.note.length > 28"
-            @click="toggleWishNoteExpand(sIdx)"
-            class="mt-1.5 text-[11px] font-semibold text-hkThemeGreen hover:underline">
-        {{ expandedWishNotes[sIdx] ? '收合備註' : '展開備註' }}
+        <div v-if="shop.note" class="mt-1.5">
+            <p class="note-text text-[11px] leading-relaxed"
+               :class="[
+                   expandedWishNotes[sIdx] ? 'wish-note-expanded' : 'wish-note-collapsed',
+                   shop.done ? 'text-slate-400 line-through' : 'text-slate-600'
+               ]">
+                {{ shop.note }}
+            </p>
+
+            <button v-if="shop.note.length > 28"
+                    @click="toggleWishNoteExpand(sIdx)"
+                    class="mt-1.5 text-[11px] font-semibold text-hkThemeGreen hover:underline">
+                {{ expandedWishNotes[sIdx] ? '收合備註' : '展開備註' }}
+            </button>
+        </div>
+    </div>
+
+    <button @click="deleteShoppingItem(sIdx)"
+            class="shrink-0 text-slate-400 hover:text-red-600 transition-colors pt-0.5">
+        <i class="fa-regular fa-trash-can text-xs"></i>
     </button>
 </div>
                     </div>
@@ -1175,7 +1192,7 @@
                     if (type === 'itinerary') { this.modal.title = '🚀 規劃新行程'; this.modal.data = { category: '景點',
             name: '', time: '', ticket: '', note: '', transitMode: '搭乘大眾運輸', transitTime: '15', flightNo: '', image: '',
             region: this.selectedDayIndex === 2 ? 'shenzhen' : 'hongkong' };} 
-                    else if (type === 'shopping') { this.modal.title = '📝 新增願望清單'; this.modal.data = { type: '購物', name: '', note: ''};} 
+                    else if (type === 'shopping') { this.modal.title = '📝 新增願望清單'; this.modal.data = { type: '購物', name: '', note: '', done: false };} 
                     else if (type === 'expenses') { this.modal.title = '💰 新增旅程支出'; this.modal.data = { category: '飲食', name: '', date: today, amount: '', currency: 'CNY', payMethod: '現金' };} 
                     else if (type === 'diary') { this.modal.title = '📝 新增旅行筆記'; this.modal.data = {
             title: '', date: today, note: '', image: '' }; }
@@ -1219,6 +1236,9 @@
         }
     }
 },
+                toggleShoppingDone(index) { const item = this.shoppingList[index]; this.shoppingList[index] = { ...item, done: !item.done };
+            this.pushDataToCloud(); },
+                
                 deleteShoppingItem(index) {
                     if (confirm('確定要刪除這個購物項目嗎？')) {
                     this.shoppingList.splice(index, 1);

@@ -83,21 +83,24 @@
             border-color: #1E4620 !important;
         }
     </style>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        hkNavyText: '#0F172A',      /* 高級深色字體 */
-                        hkMutedText: '#475569',     /* 次要內文灰 */
-                        hkAccentOrange: '#D96B43',   /* 復古核心暖橘 */
-                        hkThemeGreen: '#1E4620',    /* 質感優雅暗綠 */
-                        hkPassBlue: '#0284C7'       /* 登機證晶瑩藍 */
-                    }
+   <script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                colors: {
+                    hkNavyText: '#0F172A',
+                    hkMutedText: '#475569',
+                    hkAccentOrange: '#D96B43',
+                    hkThemeGreen: '#1E4620',
+                    hkPassBlue: '#0284C7',
+                    hkSkyBlue: '#38BDF8',
+                    hkRoseGold: '#C9A227',
+                    hkPink: '#DB2777',
                 }
             }
         }
-    </script>
+    }
+</script>
 </head>
 <body class="antialiased text-slate-800 font-sans tracking-wide">
 
@@ -430,7 +433,7 @@
 
         </div>
 
-        <div v-if="modal.show" class="fixed inset-0 bg-slate-955/80 backdrop-blur-xl z-50 flex items-end justify-center">
+        <div v-if="modal.show" class="fixed inset-0 bg-slate-950/80 backdrop-blur-xl z-50 flex items-end justify-center">
             <div class="bg-slate-100 w-full max-w-md rounded-t-[32px] p-6 space-y-4 max-h-[90vh] overflow-y-auto border-t border-slate-300 shadow-2xl text-slate-800">
                 <div class="flex justify-between items-center pb-2 border-b border-slate-200">
                     <h3 class="font-black text-lg text-slate-900">{{ modal.title }}</h3>

@@ -541,10 +541,10 @@
         </div>
     </div>
 
-    <button @click="deleteShoppingItem(sIdx)"
-            class="shrink-0 text-slate-400 hover:text-red-600 transition-colors pt-0.5">
-        <i class="fa-regular fa-trash-can text-xs"></i>
-    </button>
+    <button @click="openEditShoppingModal(shop, sIdx)"
+        class="shrink-0 text-slate-400 hover:text-hkThemeGreen transition-colors pt-0.5">
+    <i class="fa-solid fa-pen text-xs"></i>
+</button>
 </div>
              </template>
             
@@ -596,10 +596,10 @@
 </div>
                     </div>
 
-                    <button @click="deleteShoppingItem(sIdx)"
-                            class="shrink-0 text-slate-400 hover:text-red-600 transition-colors pt-0.5">
-                        <i class="fa-regular fa-trash-can text-xs"></i>
-                    </button>
+                    <button @click="openEditShoppingModal(shop, sIdx)"
+        class="shrink-0 text-slate-400 hover:text-hkThemeGreen transition-colors pt-0.5">
+    <i class="fa-solid fa-pen text-xs"></i>
+</button>
                 </div>
             </template>
 
@@ -680,16 +680,11 @@
                 </div>
 
                 <div class="shrink-0 flex items-center space-x-2 pt-0.5">
-                    <button @click="openEditDiaryModal(log, dIdx)"
-                            class="text-slate-500 hover:text-hkThemeGreen transition-colors">
-                        <i class="fa-solid fa-pen text-xs"></i>
-                    </button>
-
-                    <button @click="deleteDiaryItem(dIdx)"
-                            class="text-slate-400 hover:text-red-600 transition-colors">
-                        <i class="fa-regular fa-trash-can text-xs"></i>
-                    </button>
-                </div>
+    <button @click="openEditDiaryModal(log, dIdx)"
+            class="text-slate-500 hover:text-hkThemeGreen transition-colors">
+        <i class="fa-solid fa-pen text-xs"></i>
+    </button>
+</div>
             </div>
 
             <div v-if="log.note" class="mt-3">
@@ -1197,6 +1192,15 @@
                 openEditDiaryModal(item, index) {
     this.modal.type = 'diary'; this.modal.isEdit = true; this.modal.editIndex = index; this.modal.title = '📝 修改旅行筆記'; this.modal.data = JSON.parse(JSON.stringify(item)); this.modal.show = true;
                 },
+
+                openEditShoppingModal(item, index) {
+                    this.modal.type = 'shopping';
+                    this.modal.isEdit = true;
+                    this.modal.editIndex = index;
+                    this.modal.title = '📝 修改願望清單';
+                    this.modal.data = JSON.parse(JSON.stringify(item));
+                    this.modal.show = true;
+                },
                 
                 saveModalData() {
                    if (this.modal.type === 'diary' && !this.modal.data.title) return alert('請填寫筆記標題！');
@@ -1205,17 +1209,26 @@
                     if (this.modal.type === 'itinerary') {
                         if (this.modal.isEdit) { this.itineraries[this.selectedDayIndex][this.modal.editIndex] = this.modal.data; } 
                         else { this.modal.data.id = Date.now(); this.itineraries[this.selectedDayIndex].push(this.modal.data); }
-                    } else if (this.modal.type === 'shopping') { this.shoppingList.push(this.modal.data); } 
+                    } else if (this.modal.type === 'shopping') { if (this.modal.isEdit) { this.shoppingList[this.modal.editIndex] = this.modal.data;
+                    } else { this.shoppingList.push(this.modal.data);}}
                     else if (this.modal.type === 'expenses') { this.expenses.unshift(this.modal.data); } 
                    else if (this.modal.type === 'diary') { if (this.modal.isEdit) { this.diaryList[this.modal.editIndex] = this.modal.data; } else { this.diaryList.unshift(this.modal.data);} }
                     
                     this.modal.show = false;
                     this.pushDataToCloud(); // 全自動同步推播至全家人手機與其他裝置
                 },
-                confirmDelete() {
+               confirmDelete() {
     if (this.modal.type === 'itinerary') {
         if (confirm('確定要從行程中刪除這個項目嗎？')) {
             this.itineraries[this.selectedDayIndex].splice(this.modal.editIndex, 1);
+            this.modal.show = false;
+            this.pushDataToCloud();
+        }
+    }
+
+    if (this.modal.type === 'shopping') {
+        if (confirm('確定要刪除這個願望清單項目嗎？')) {
+            this.shoppingList.splice(this.modal.editIndex, 1);
             this.modal.show = false;
             this.pushDataToCloud();
         }

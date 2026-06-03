@@ -447,12 +447,17 @@
                             <option>景點</option><option>住宿</option><option>美食</option><option>購物</option><option>航班</option><option>其他</option>
                         </select>
                     </div>
+                    
+                     <div>
+                        <label class="block text-xs font-bold text-slate-500 mb-1">地標/項目名稱</label>
+                        <input type="text" v-model="modal.data.name" class="ui-input" placeholder="例如：華僑城創意文化園">
+                    </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-500 mb-1">地點城市</label>
-    <select v-model="modal.data.region" class="ui-select">
-        <option value="hongkong">香港：使用 Google 地圖</option>
-        <option value="shenzhen">深圳：使用高德地圖</option>
-    </select>
+                        <select v-model="modal.data.region" class="ui-select">
+                            <option value="hongkong">香港：使用 Google 地圖</option>
+                            <option value="shenzhen">深圳：使用高德地圖</option>
+                        </select>
                     </div>
                     
                     <div v-if="modal.data.category === '航班'" class="grid grid-cols-2 gap-2 bg-slate-200/50 p-3 rounded-xl border border-slate-300">

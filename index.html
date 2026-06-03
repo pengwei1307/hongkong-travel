@@ -13,9 +13,10 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         
-        /* 網頁全域底色 */
+        /* 網頁全域底色與滾動軸安全防護，確保 sticky 吸頂效果 100% 導通生效 */
         body { 
             background-color: #030611; 
+            overflow-x: hidden;
         }
 
         /* 🔮 高級都會極簡「淺米色/奶茶色」純淨毛玻璃面版 (Glassmorphism 特效) */
@@ -24,7 +25,7 @@
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.6);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.18);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
         }
 
         /* 內部小元件專用：高透光淺色毛玻璃 */
@@ -43,11 +44,11 @@
             padding: 12px !important;
             border-radius: 12px !important;
             font-weight: bold !important;
-            color: #0F172A !important;
+            color: #0F172A !important; /* hkNavyText */
             outline: none !important;
         }
         .ui-input:focus {
-            border-color: #1E4620 !important;
+            border-color: #1E4620 !important; /* 聚焦時切換為質感暗綠邊框 */
         }
         .ui-select {
             width: 100%;
@@ -100,14 +101,14 @@
 </head>
 <body class="antialiased text-slate-800 font-sans tracking-wide">
 
-    <div id="app" v-cloak class="max-w-md mx-auto bg-slate-955 min-h-screen relative z-10 flex flex-col overflow-x-hidden pb-32 border-x border-slate-800/40 shadow-2xl">
-        
-        <div class="fixed inset-0 z-0 pointer-events-none overflow-hidden max-w-md mx-auto border-x border-slate-800/40">
-            <img src="網頁背景.png" alt="維港實景夜景" class="w-full h-full object-cover">
-            <div class="absolute inset-0 bg-slate-900/60"></div>
-        </div>
+    <div class="fixed inset-0 z-0 pointer-events-none overflow-hidden max-w-md mx-auto border-x border-slate-800/40">
+        <img src="網頁背景.png" alt="維港實景夜景" class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-slate-900/60"></div>
+    </div>
 
-        <div class="h-[250px] w-full relative overflow-hidden border-b border-slate-800/20 z-10">
+    <div id="app" v-cloak class="max-w-md mx-auto bg-transparent min-h-screen relative z-10 flex flex-col pb-32 border-x border-slate-800/40 shadow-2xl">
+        
+        <div class="h-[250px] w-full relative overflow-hidden border-b border-slate-800/20 z-10 shrink-0">
             <img src="Web app Banner 素材.jpg" alt="港深插畫Banner" class="w-full h-full object-cover">
             
             <div class="absolute bottom-12 right-4 flex space-x-1.5 bg-white/60 backdrop-blur-xl p-1.5 rounded-2xl border border-white/40 shadow-xl z-30 max-w-[90%] overflow-x-auto no-scrollbar">
@@ -129,17 +130,17 @@
             </div>
         </div>
 
-        <div class="-mt-8 rounded-t-[32px] bg-transparent relative z-20 px-4 pt-6 flex-1">
+        <div class="-mt-8 rounded-t-[32px] bg-transparent relative z-20 px-4 pt-6 flex-1 flex flex-col">
             
-            <div class="mb-5 text-center z-10 relative">
-                <span class="text-[10px] uppercase font-black tracking-[0.28em] text-white/40 block mb-1">Premium Private Tour</span>
-                <h1 class="text-2xl font-black text-white tracking-[0.2em] filter drop-shadow-md">港深雙城行</h1>
+            <div class="mb-5 text-center z-10 relative shrink-0">
+                <span class="text-[10px] uppercase font-black tracking-[0.28em] text-white/50 block mb-1">Boutique Private Itinerary</span>
+                <h1 class="text-2xl font-black text-white tracking-[0.22em] filter drop-shadow-md">港深雙城行</h1>
                 <div class="w-10 h-[2.5px] bg-hkAccentOrange mx-auto mt-2.5 rounded-full"></div>
             </div>
 
-            <div v-if="currentTab === 'itinerary'" class="space-y-4">
+            <div v-if="currentTab === 'itinerary'" class="space-y-4 flex-1 flex flex-col">
                 
-                <div class="glass-panel rounded-2xl p-4 flex items-center justify-between shadow-md">
+                <div class="glass-panel rounded-2xl p-4 flex items-center justify-between shadow-md shrink-0">
                     <div class="flex items-center space-x-3">
                         <span class="text-2xl filter drop-shadow-sm">{{ activeDayWeather.icon }}</span>
                         <div>
@@ -153,11 +154,11 @@
                     </div>
                 </div>
 
-                <div class="sticky top-0 z-30 -mx-4 px-4 py-2 bg-slate-900/10 backdrop-blur-md border-b border-white/10 shadow-sm">
+                <div class="sticky top-0 z-30 -mx-4 px-4 py-2.5 bg-[#fdfbf7]/90 backdrop-blur-md border-b border-slate-200/60 shadow-sm shrink-0">
                     <div class="flex space-x-2.5 overflow-x-auto no-scrollbar">
                         <button v-for="(day, index) in days" :key="index" 
                                 @click="selectedDayIndex = index"
-                                :class="{'bg-slate-800 text-white shadow-md transform scale-105 font-bold': selectedDayIndex === index, 'bg-white/90 text-slate-700 border border-white/50': selectedDayIndex !== index}"
+                                :class="{'bg-slate-800 text-white shadow-md transform scale-105 font-bold': selectedDayIndex === index, 'bg-white/90 text-slate-700 border border-slate-300': selectedDayIndex !== index}"
                                 class="flex flex-col items-center justify-center min-w-[66px] h-16 rounded-xl transition-all duration-300 shadow-sm">
                             <span class="text-[10px] uppercase font-bold tracking-wider mb-0.5" :class="selectedDayIndex === index ? 'text-hkRoseGold' : 'text-slate-400'">{{ day.weekday }}</span>
                             <span class="text-sm font-extrabold">{{ day.dateStr }}</span>
@@ -165,7 +166,7 @@
                     </div>
                 </div>
 
-                <div class="space-y-4 relative before:absolute before:top-4 before:bottom-4 before:left-[19px] before:w-[2px] before:bg-white/20">
+                <div class="space-y-4 relative pb-12 flex-1 before:absolute before:top-4 before:bottom-4 before:left-[19px] before:w-[2px] before:bg-white/20">
                     <div v-for="(item, idx) in activeDayItinerary" :key="item.id" class="relative">
                         
                         <div v-if="idx > 0" class="ml-10 my-2 flex items-center space-x-2 text-xs">
@@ -295,7 +296,7 @@
                         <div class="space-y-0.5 pt-1">
                             <p class="font-bold text-hkNavyText text-sm">第一晚：唯港薈 (Hotel ICON)</p>
                             <p class="text-hkMutedText">📍 香港尖沙咀科學館道17號</p>
-                            <a href="https://www.google.com/maps/search/?api=1&query=%E5%94%AF%E6%B8%AF%E8%96%A4%20Hotel%20ICON" target="_blank" class="inline-block text-hkAccentOrange font-black mt-1.5 hover:underline">開啟 Google 地圖 ➡️</a>
+                            <a href="https://www.google.com/maps/search/?api=1&query=%E5%94%AF%E6%B8%AF%E8%94%A5%20Hotel%20ICON%20%E9%A6%99%E6%B8%AF" target="_blank" class="inline-block text-hkAccentOrange font-black mt-1.5 hover:underline">開啟 Google 地圖 ➡️</a>
                         </div>
                         <div class="space-y-0.5 pt-3">
                             <p class="font-bold text-hkNavyText text-sm">第二、三晚：里白酒店 (深圳會展中心店)</p>
@@ -317,7 +318,7 @@
                 </div>
             </div>
 
-            <div v-if="currentTab === 'shopping'">
+            <div v-if="currentTab === 'shopping'" class="space-y-4">
                 <div class="grid grid-cols-2 gap-3">
                     <div v-for="(shop, sIdx) in shoppingList" :key="sIdx" class="glass-panel rounded-2xl overflow-hidden flex flex-col shadow-md text-hkNavyText">
                         <div class="h-32 bg-slate-200/50 relative border-b border-slate-200">
@@ -624,7 +625,7 @@
                             { id: 17, category: '景點', name: '華僑城創意文化園', time: '下午', note: '深圳著名的文青藝術園區，文創氛圍滿滿。', transitMode: '打計程車前往', transitTime: '30', image: '' },
                             { id: 18, category: '景點', name: '深圳灣萬象城 / 人才公園 / 深圳灣公園', time: '傍晚夜景', note: '散步看夕陽與璀璨城市燈光秀。', transitMode: '搭地鐵或打D前往', transitTime: '25', image: '' }
                         ],
-                        // 6/16 完整行程明細 (回程包含與第一天格式相同之精美登機證卡片)
+                        // 6/16 完整行程明細 (已於尾端附上與第一天格式相同之精美回程班機登機證卡片)
                         [
                             { id: 19, category: '住宿', name: '里白酒店退房', time: '12:00前', note: '收拾整頓全部行李，準備啟程返回香港。', transitMode: '清點手提行李', transitTime: '0', image: '' },
                             { id: 20, category: '其他', name: '啟程回港移動', time: '最晚 14:00 回港', note: '目前安排之後會再修改。', transitMode: '深圳福田搭高鐵回香港西九龍', transitTime: '45', image: '' },
@@ -667,20 +668,21 @@
                 }
             },
             methods: {
-                // 🗺️ 智慧跨境跳轉地圖判斷演算法
+                // 🗺️ 依據規格需求：香港地名跳轉 Google Map，深圳地名全自動智慧切換至高德地圖
                 isShenzhenItinerary(item) {
                     return this.selectedDayIndex === 1 || this.selectedDayIndex === 2 || 
                            item.name.includes('深圳') || item.name.includes('里白') || 
                            item.name.includes('老街') || item.name.includes('華僑城') || 
-                           item.name.includes('萬象城') || item.name.includes('火鍋');
+                           item.name.includes('萬象城') || item.name.includes('火鍋') || 
+                           item.name.includes('人才');
                 },
                 getMapLink(item) {
                     const query = encodeURIComponent(item.name);
                     if (this.isShenzhenItinerary(item)) {
-                        // 內地地標全自動導航至高德地圖
+                        // 深圳及內地地標，智慧切換高德地圖導航網址
                         return `https://www.amap.com/search?query=${query}`;
                     } else {
-                        // 香港地標全自動導航至 Google 地圖
+                        // 香港地標，智慧切換 Google 地圖導航網址
                         return `https://www.google.com/maps/search/?api=1&query=${query}`;
                     }
                 },

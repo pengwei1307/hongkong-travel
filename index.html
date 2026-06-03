@@ -546,15 +546,7 @@
         <i class="fa-regular fa-trash-can text-xs"></i>
     </button>
 </div>
-                    </div>
-
-                    <button @click="deleteShoppingItem(sIdx)"
-                            class="shrink-0 text-slate-400 hover:text-red-600 transition-colors pt-0.5">
-                        <i class="fa-regular fa-trash-can text-xs"></i>
-                    </button>
-                </div>
-            </template>
-
+                    
             <p v-if="!shoppingList.some(shop => (shop.type || '購物') === '購物')"
                class="text-[11px] text-hkMutedText bg-white/40 rounded-xl px-3 py-3 text-center">
                 目前還沒有購物項目。

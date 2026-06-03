@@ -1209,11 +1209,9 @@
                     if (this.modal.type === 'itinerary') {
                         if (this.modal.isEdit) { this.itineraries[this.selectedDayIndex][this.modal.editIndex] = this.modal.data; } 
                         else { this.modal.data.id = Date.now(); this.itineraries[this.selectedDayIndex].push(this.modal.data); }
-                    } else if (this.modal.type === 'shopping') { if (this.modal.isEdit) { this.shoppingList[this.modal.editIndex] = this.modal.data;
-                    } else { this.shoppingList.push(this.modal.data);}}
+                    } else if (this.modal.type === 'shopping') { if (this.modal.isEdit) { this.shoppingList[this.modal.editIndex] = this.modal.data;} else { this.shoppingList.push(this.modal.data);}this.sortShoppingDoneToBottom();}
                     else if (this.modal.type === 'expenses') { this.expenses.unshift(this.modal.data); } 
-                   else if (this.modal.type === 'diary') { if (this.modal.isEdit) { this.diaryList[this.modal.editIndex] = this.modal.data; } else { this.diaryList.unshift(this.modal.data);} }
-                    
+                   else if (this.modal.type === 'diary') { if (this.modal.isEdit) { this.diaryList[this.modal.editIndex] = this.modal.data; } else { this.diaryList.unshift(this.modal.data);} } 
                     this.modal.show = false;
                     this.pushDataToCloud(); // 全自動同步推播至全家人手機與其他裝置
                 },
@@ -1242,8 +1240,37 @@
         }
     }
 },
-                toggleShoppingDone(index) { const item = this.shoppingList[index]; this.shoppingList[index] = { ...item, done: !item.done };
-            this.pushDataToCloud(); },
+                sortShoppingDoneToBottom() {
+    const shoppingNotDone = this.shoppingList.filter(item => {
+        return (item.type || '購物') === '購物' && !item.done;
+    });
+
+    const shoppingDone = this.shoppingList.filter(item => {
+        return (item.type || '購物') === '購物' && item.done;
+    });
+
+    const otherItems = this.shoppingList.filter(item => {
+        return (item.type || '購物') !== '購物';
+    });
+
+    this.shoppingList = [
+        ...shoppingNotDone,
+        ...shoppingDone,
+        ...otherItems
+    ];
+},
+                
+                toggleShoppingDone(index) {
+    const item = this.shoppingList[index];
+
+    this.shoppingList[index] = {
+        ...item,
+        done: !item.done
+    };
+
+    this.sortShoppingDoneToBottom();
+    this.pushDataToCloud();
+},
                 
                 deleteShoppingItem(index) {
                     if (confirm('確定要刪除這個購物項目嗎？')) {

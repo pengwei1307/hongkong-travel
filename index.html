@@ -164,12 +164,12 @@
                     </div>
                 </div>
 
-                <div class="sticky top-0 z-30 -mx-4 px-4 py-2.5 bg-transparent shrink-0">
-    <div class="grid grid-cols-4 overflow-hidden rounded-2xl bg-slate-950/55 backdrop-blur-xl border border-white/15 shadow-lg">
+               <div class="sticky top-0 z-30 -mx-4 bg-slate-950/55 backdrop-blur-xl border-y border-white/15 shadow-lg shrink-0">
+    <div class="grid grid-cols-4">
         <button v-for="(day, index) in days" :key="index"
                 @click="selectedDayIndex = index"
                 class="relative h-14 flex flex-col items-center justify-center transition-all duration-300 border-r border-white/15 last:border-r-0"
-                :class="selectedDayIndex === index ? 'text-white' : 'text-white/55'">
+                :class="selectedDayIndex === index ? 'text-white bg-white/10' : 'text-white/55'">
             
             <span class="text-[10px] uppercase font-black tracking-[0.18em] mb-0.5"
                   :class="selectedDayIndex === index ? 'text-hkRoseGold' : 'text-white/45'">
@@ -181,7 +181,7 @@
             </span>
 
             <span v-if="selectedDayIndex === index"
-                  class="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-[2px] bg-hkAccentOrange rounded-full">
+                  class="absolute bottom-0 left-0 w-full h-[2px] bg-hkAccentOrange">
             </span>
         </button>
     </div>

@@ -13,22 +13,22 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         
-        /* 全域網頁大底色：呼應維港夜景星空 */
+        /* 網頁全域大底色：延伸自璀璨維港夜景的深藍色調 */
         body { 
             background-color: #040712; 
             background-image: radial-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px);
             background-size: 30px 30px;
         }
 
-        /* 🔮 高級都會極簡純淨毛玻璃面版 (Glassmorphism 特效) */
+        /* 🔮 都會極簡純淨毛玻璃面版 (Glassmorphism 特效) */
         .glass-panel {
-            background: rgba(15, 25, 48, 0.6);
+            background: rgba(15, 25, 48, 0.60);
             backdrop-filter: blur(24px);
             -webkit-backdrop-filter: blur(24px);
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
-        /* 內部小卡片專用：輕量高透光毛玻璃 */
+        /* 內部小元件專用：高透光微亮毛玻璃 */
         .glass-panel-light {
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(16px);
@@ -45,7 +45,7 @@
                         hkRoseGold: '#FB923C',     /* 都會玫瑰金 */
                         hkDeepNavy: '#060B19',     /* 神祕維港藍 */
                         hkSpaceBlack: '#02050D',   /* 極致星空黑 */
-                        hkMintGreen: '#34D399',    /* 質感薄荷綠 */
+                        hkMintGreen: '#34D399',    /* 高級薄荷綠 */
                         hkPink: '#F472B6'          /* 時髦芭比粉 */
                     }
                 }
@@ -93,7 +93,7 @@
                     </div>
                     <div class="text-right">
                         <span class="text-xl font-bold text-hkRoseGold">{{ activeDayWeather.temp }}°C</span>
-                        <p class="text-[9px] text-slate-400">體感 {{ activeDayWeather.feelsLike }}°C</p>
+                        <p class="text-[9px] text-slate-400 font-medium">體感 {{ activeDayWeather.feelsLike }}°C</p>
                     </div>
                 </div>
 
@@ -156,9 +156,9 @@
 
                             <div v-else class="glass-panel rounded-2xl p-4 flex-1 shadow-xl hover:bg-slate-800/30 transition-all duration-300 relative">
                                 <div class="absolute top-3 right-3 flex space-x-1 opacity-20 group-hover:opacity-100 transition-opacity">
-                                    <button @click="moveItem(idx, -1)" class="text-slate-400 hover:text-white p-1"><i class="fa-solid fa-chevron-up text-xs"></i></button>
-                                    <button @click="moveItem(idx, 1)" class="text-slate-400 hover:text-white p-1"><i class="fa-solid fa-chevron-down text-xs"></i></button>
-                                    <button @click="openEditModal(item, idx)" class="text-hkSkyBlue hover:text-white p-1"><i class="fa-solid fa-pen text-xs"></i></button>
+                                    <button @click="moveItem(idx, -1)" class="text-slate-400 hover:text-white p-1" title="上移"><i class="fa-solid fa-chevron-up text-xs"></i></button>
+                                    <button @click="moveItem(idx, 1)" class="text-slate-400 hover:text-white p-1" title="下移"><i class="fa-solid fa-chevron-down text-xs"></i></button>
+                                    <button @click="openEditModal(item, idx)" class="text-hkSkyBlue hover:text-white p-1" title="編輯項目"><i class="fa-solid fa-pen text-xs"></i></button>
                                 </div>
 
                                 <h4 class="font-bold text-base text-white pr-16 tracking-wide">{{ item.name }}</h4>
@@ -166,13 +166,13 @@
                                 <div class="text-xs text-slate-400 space-y-1.5 mt-2.5 font-medium">
                                     <p v-if="item.time" class="flex items-center"><i class="fa-regular fa-clock w-4 text-hkSkyBlue/80"></i>時間: {{ item.time }}</p>
                                     <p v-if="item.ticket && item.category === '景點'" class="flex items-center"><i class="fa-solid fa-ticket w-4 text-hkRoseGold/80"></i>門票: {{ item.ticket }}</p>
-                                    <p v-if="item.note" class="flex items-start bg-slate-950/50 p-2.5 rounded-xl text-slate-300 mt-2 border border-white/[0.02]"><i class="fa-solid fa-quote-left w-4 text-hkRoseGold shrink-0 text-[9px] mt-0.5 opacity-70"></i><span class="ml-1 flex-1 text-slate-300 leading-relaxed">{{ item.note }}</span></p>
+                                    <p v-if="item.note" class="flex items-start bg-slate-950/40 p-2.5 rounded-xl text-slate-300 mt-2 border border-white/[0.02]"><i class="fa-solid fa-quote-left w-4 text-hkRoseGold shrink-0 text-[9px] mt-0.5 opacity-70"></i><span class="ml-1 flex-1 text-slate-300 leading-relaxed">{{ item.note }}</span></p>
                                 </div>
 
                                 <div class="mt-3.5 pt-2 border-t border-white/5 flex justify-end">
                                     <a :href="'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(item.name)" target="_blank" class="inline-flex items-center space-x-1 text-xs text-hkSkyBlue font-bold hover:brightness-110 transition-all">
                                         <i class="fa-solid fa-map-location-dot"></i>
-                                        <span>智慧導航 ➡️</span>
+                                        <span>地圖導航 ➡️</span>
                                     </a>
                                 </div>
                             </div>
@@ -193,7 +193,7 @@
                     <h3 class="font-bold text-md text-white mb-3 flex items-center"><i class="fa-solid fa-money-bill-transfer text-hkSkyBlue mr-2"></i>即時跨境匯率試算</h3>
                     <div class="space-y-3 text-sm">
                         <div class="flex space-x-2">
-                            <input type="number" v-model="fx.amount" class="w-full bg-slate-900/60 border border-slate-800 rounded-xl p-2.5 font-bold text-white outline-none focus:border-hkSkyBlue">
+                            <input type="number" v-model="fx.amount" class="w-full bg-slate-900/60 border border-slate-700 rounded-xl p-2.5 font-bold text-white outline-none focus:border-hkSkyBlue">
                             <select v-model="fx.currency" class="bg-slate-800 border border-slate-700 rounded-xl px-3 font-bold text-hkSkyBlue outline-none">
                                 <option value="HKD">港幣 (HKD)</option>
                                 <option value="CNY">人民幣 (CNY)</option>
@@ -207,36 +207,47 @@
                 </div>
 
                 <div class="glass-panel rounded-2xl shadow-xl p-4 space-y-3">
-                    <h3 class="font-bold text-sm text-white flex items-center"><i class="fa-solid fa-plane text-hkRoseGold mr-2"></i>長榮航空航班正本資訊</h3>
+                    <h3 class="font-bold text-sm text-white flex items-center"><i class="fa-solid fa-plane text-hkRoseGold mr-2"></i>長榮航空正本航班資訊</h3>
                     <div class="border-b border-white/5 pb-2">
                         <div class="flex justify-between font-bold text-xs text-hkSkyBlue">
                             <span>去程 BR845</span>
                             <span>高雄 KHH ✈️ 香港 HKG</span>
                         </div>
-                        <p class="text-[11px] text-slate-400 mt-1">🕒 時間：09:15 - 10:55</p>
+                        <p class="text-[11px] text-slate-400 mt-1">🕒 時間：09:15 - 10:55 (飛行 1小時40分)</p>
                     </div>
                     <div>
                         <div class="flex justify-between font-bold text-xs text-hkRoseGold">
                             <span>回程 BR850</span>
                             <span>香港 HKG ✈️ 高雄 KHH</span>
                         </div>
-                        <p class="text-[11px] text-slate-400 mt-1">🕒 時間：19:25 - 21:00</p>
+                        <p class="text-[11px] text-slate-400 mt-1">🕒 時間：19:25 - 21:00 (飛行 1小時35分)</p>
                     </div>
                 </div>
 
                 <div class="glass-panel rounded-2xl p-4 shadow-xl space-y-3">
-                    <h3 class="font-bold text-md text-white flex items-center"><i class="fa-solid fa-hotel text-hkMintGreen mr-2"></i>入住酒店導航清單</h3>
+                    <h3 class="font-bold text-md text-white flex items-center"><i class="fa-solid fa-hotel text-hkMintGreen mr-2"></i>特選入住酒店導航清單</h3>
                     <div class="text-xs space-y-3 divide-y divide-white/5">
                         <div class="space-y-0.5 pt-1">
-                            <p class="font-bold text-white text-sm">唯港薈 (Hotel ICON)</p>
-                            <p class="text-slate-400">📍 香港尖沙咀科學館道17號</p>
-                            <a href="https://www.google.com/maps/search/?api=1&query=Hotel+ICON+Hong+Kong" target="_blank" class="inline-block text-hkSkyBlue font-bold mt-1.5 hover:underline">地圖智慧導航 ➡️</a>
+                            <p class="font-bold text-white text-sm">第一晚：唯港薈 (Hotel ICON)</p>
+                            <p class="text-slate-400">📍 香港尖沙咀科學館道17號 (電話: +852 3400 1000)</p>
+                            <a href="https://www.google.com/maps/search/?api=1&query=Hotel+ICON+Hong+Kong" target="_blank" class="inline-block text-hkSkyBlue font-bold mt-1.5 hover:underline">開啟 Google 地圖導航 ➡️</a>
                         </div>
                         <div class="space-y-0.5 pt-3">
-                            <p class="font-bold text-white text-sm">里白酒店 (深圳會展中心店)</p>
-                            <p class="text-slate-400">📍 深圳福田區 (近福民地鐵站)</p>
-                            <a href="https://www.google.com/maps/search/?api=1&query=深圳里白酒店" target="_blank" class="inline-block text-hkSkyBlue font-bold mt-1.5 hover:underline">地圖智慧導航 ➡️</a>
+                            <p class="font-bold text-white text-sm">第二、三晚：里白酒店 (深圳會展中心店)</p>
+                            <p class="text-slate-400">📍 深圳福田區 (鄰近福民地鐵站)</p>
+                            <a href="https://www.google.com/maps/search/?api=1&query=深圳里白酒店" target="_blank" class="inline-block text-hkSkyBlue font-bold mt-1.5 hover:underline">開啟 Google 地圖導航 ➡️</a>
                         </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 text-xs font-bold">
+                    <div class="glass-panel p-3 rounded-xl">
+                        <p class="text-slate-400 uppercase text-[10px] tracking-wider mb-0.5">緊急求助醫療</p>
+                        <p class="text-hkRoseGold">港/深通話: 999 / 110 / 120</p>
+                    </div>
+                    <div class="glass-panel p-3 rounded-xl">
+                        <p class="text-slate-400 uppercase text-[10px] tracking-wider mb-0.5">跨境高鐵提示</p>
+                        <p class="text-white">提前購買西九龍跨境車票</p>
                     </div>
                 </div>
             </div>
@@ -248,7 +259,7 @@
                             <img v-if="shop.image" :src="shop.image" class="w-full h-full object-cover">
                             <div v-else class="w-full h-full flex flex-col items-center justify-center text-slate-600">
                                 <i class="fa-regular fa-image text-xl mb-1"></i>
-                                <span class="text-[9px]">上傳照片</span>
+                                <span class="text-[9px]">點相機上傳照片</span>
                             </div>
                             <label class="absolute bottom-2 right-2 bg-slate-900/80 text-hkSkyBlue w-7 h-7 rounded-lg flex items-center justify-center cursor-pointer border border-white/10">
                                 <i class="fa-solid fa-camera text-xs m-auto"></i>
@@ -257,224 +268,4 @@
                         </div>
                         <div class="p-3 flex-1 flex flex-col justify-between space-y-2">
                             <div>
-                                <p class="font-bold text-sm text-white truncate">🛍️ {{ shop.name }}</p>
-                                <p v-if="shop.note" class="text-[11px] text-slate-400 bg-slate-950/40 p-1.5 rounded-xl border border-white/5 mt-1 font-medium whitespace-pre-wrap leading-tight">
-                                    {{ shop.note }}
-                                </p>
-                            </div>
-                            <button @click="shoppingList.splice(sIdx, 1)" class="text-right text-xs text-slate-500 font-bold self-end hover:text-white"><i class="fa-regular fa-trash-can text-[10px]"></i> 刪除</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="fixed bottom-6 max-w-md w-full pr-10 flex justify-end z-40 pointer-events-none">
-                    <button @click="openAddModal('shopping')" class="pointer-events-auto w-14 h-14 bg-gradient-to-br from-hkSkyBlue to-blue-600 text-white rounded-full flex items-center justify-center text-xl border border-white/20 shadow-xl">
-                        <i class="fa-solid fa-plus"></i>
-                    </button>
-                </div>
-            </div>
-
-            <div v-if="currentTab === 'expenses'" class="space-y-4">
-                <div class="glass-panel rounded-3xl p-5 border border-white/10 shadow-xl">
-                    <p class="text-xs text-slate-400 font-bold uppercase tracking-widest">旅程消費總支出計價</p>
-                    <div class="mt-2 flex items-baseline space-x-1">
-                        <span class="text-3xl font-black text-white">NT$ {{ totalExpensesInTWD }}</span>
-                        <span class="text-xs text-hkSkyBlue ml-2">(自動換算新台幣)</span>
-                    </div>
-                </div>
-
-                <div class="glass-panel rounded-2xl shadow-xl overflow-hidden divide-y divide-white/5">
-                    <div v-for="(exp, eIdx) in expenses" :key="eIdx" class="p-3.5 flex items-center justify-between">
-                        <div class="flex items-center space-x-3">
-                            <span :class="getExpenseCategoryColor(exp.category)" class="text-[11px] px-2 py-0.5 rounded-lg font-bold border border-white/5">{{ exp.category }}</span>
-                            <div>
-                                <p class="text-sm font-bold text-white">{{ exp.name }}</p>
-                                <p class="text-[10px] text-slate-500 font-bold">{{ exp.date }} · {{ exp.payMethod }}</p>
-                            </div>
-                        </div>
-                        <div class="text-right flex items-center space-x-3">
-                            <span class="text-sm font-bold text-hkRoseGold">{{ getCurrencySymbol(exp.currency) }} {{ exp.amount }}</span>
-                            <button @click="expenses.splice(eIdx, 1)" class="text-slate-300 hover:text-hkPink transition-colors"><i class="fa-solid fa-circle-xmark"></i></button>
-                        </div>
-                    </div>
-                </div>
-                <div class="fixed bottom-6 max-w-md w-full pr-10 flex justify-end z-40 pointer-events-none">
-                    <button @click="openAddModal('expenses')" class="pointer-events-auto w-14 h-14 bg-gradient-to-br from-hkSkyBlue to-blue-600 text-white rounded-full flex items-center justify-center text-xl border border-white/20 shadow-xl">
-                        <i class="fa-solid fa-plus"></i>
-                    </button>
-                </div>
-            </div>
-
-            <div v-if="currentTab === 'diary'" class="space-y-4">
-                <div v-for="(log, dIdx) in diaryList" :key="dIdx" class="glass-panel rounded-2xl p-4 space-y-3 shadow-xl">
-                    <div v-if="log.image" class="h-44 w-full rounded-xl overflow-hidden border border-white/10">
-                        <img :src="log.image" class="w-full h-full object-cover">
-                    </div>
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h4 class="font-bold text-base text-white">✏️ {{ log.title }}</h4>
-                            <p class="text-[10px] text-slate-500 font-bold">📅 {{ log.date }}</p>
-                        </div>
-                        <div class="text-yellow-400 text-xs shrink-0 bg-slate-900/60 px-2.5 py-1 rounded-xl border border-white/5">
-                            <i v-for="s in log.rating" :key="'star-'+s" class="fa-solid fa-star"></i>
-                            <i v-for="s in (5 - log.rating)" :key="'empty-'+s" class="fa-regular fa-star opacity-20"></i>
-                        </div>
-                    </div>
-                    <p v-if="log.note" class="text-xs text-slate-300 bg-slate-950/40 p-3 rounded-xl border border-white/5 font-medium leading-relaxed">{{ log.note }}</p>
-                    <div class="flex justify-end pt-1">
-                        <button @click="diaryList.splice(dIdx, 1)" class="text-xs text-slate-500 font-bold hover:text-white"><i class="fa-regular fa-trash-can mr-1"></i>刪除紀錄</button>
-                    </div>
-                </div>
-                
-                <div class="fixed bottom-6 max-w-md w-full pr-10 flex justify-end z-40 pointer-events-none">
-                    <button @click="openAddModal('diary')" class="pointer-events-auto w-14 h-14 bg-gradient-to-br from-hkPink to-purple-600 text-white rounded-full flex items-center justify-center text-xl border border-white/20 shadow-xl">
-                        <i class="fa-solid fa-plus"></i>
-                    </button>
-                </div>
-            </div>
-
-        </div>
-
-        <div v-if="modal.show" class="fixed inset-0 bg-slate-955/80 backdrop-blur-xl z-50 flex items-end justify-center">
-            <div class="bg-slate-900 w-full max-w-md rounded-t-[32px] p-6 space-y-4 max-h-[90vh] overflow-y-auto border-t border-white/10 shadow-2xl text-slate-300">
-                <div class="flex justify-between items-center pb-2 border-b border-white/5">
-                    <h3 class="font-bold text-lg text-white">{{ modal.title }}</h3>
-                    <button @click="modal.show = false" class="text-slate-400 hover:text-white"><i class="fa-solid fa-circle-xmark text-2xl"></i></button>
-                </div>
-
-                <div v-if="modal.type === 'itinerary'" class="space-y-3 text-sm">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-400 mb-1">行程分類項目</label>
-                        <select v-model="modal.data.category" class="w-full bg-slate-950 border border-slate-800 p-2.5 rounded-xl font-bold text-white outline-none">
-                            <option>景點</option><option>住宿</option><option>美食</option><option>購物</option><option>航班</option><option>其他</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-400 mb-1">地標/項目名稱</label>
-                        <input type="text" v-model="modal.data.name" class="w-full bg-slate-950 border border-slate-800 p-2.5 rounded-xl font-bold text-white outline-none">
-                    </div>
-                    
-                    <div v-if="modal.data.category === '航班'" class="grid grid-cols-2 gap-2 bg-slate-950 p-3 rounded-xl border border-white/5">
-                        <div>
-                            <label class="block text-[11px] font-bold text-slate-400 mb-1">航班編號</label>
-                            <input type="text" v-model="modal.data.flightNo" class="w-full bg-slate-900 border border-slate-700 p-2 rounded-lg font-bold text-white" placeholder="BR845">
-                        </div>
-                        <div>
-                            <label class="block text-[11px] font-bold text-slate-400 mb-1">起降飛行時間</label>
-                            <input type="text" v-model="modal.data.time" class="w-full bg-slate-900 border border-slate-700 p-2 rounded-lg font-bold text-white" placeholder="09:15-10:55">
-                        </div>
-                    </div>
-
-                    <div v-if="modal.data.category !== '航班'">
-                        <label class="block text-xs font-bold text-slate-400 mb-1">時間 / 營業時間說明</label>
-                        <input type="text" v-model="modal.data.time" class="w-full bg-slate-950 border border-slate-800 p-2.5 rounded-xl font-bold text-white outline-none">
-                    </div>
-                    <div v-if="modal.data.category === '景點'">
-                        <label class="block text-xs font-bold text-slate-400 mb-1">門票費用資訊</label>
-                        <input type="text" v-model="modal.data.ticket" class="w-full bg-slate-950 border border-slate-800 p-2.5 rounded-xl font-bold text-white outline-none">
-                    </div>
-                    
-                    <div class="bg-slate-950 p-3 rounded-xl border border-white/5 space-y-2">
-                        <span class="text-xs font-bold text-hkSkyBlue block"><i class="fa-solid fa-route mr-1"></i> 前來此處的交通自訂說明</span>
-                        <div class="grid grid-cols-3 gap-2">
-                            <div class="col-span-2">
-                                <label class="block text-[10px] text-slate-500 font-bold mb-1">交通工具 / 路線敘述</label>
-                                <input type="text" v-model="modal.data.transitMode" class="w-full bg-slate-900 border border-slate-800 p-1.5 rounded-lg text-xs font-bold text-white outline-none" placeholder="例如：搭叮叮車、步行、打的">
-                            </div>
-                            <div class="col-span-1">
-                                <label class="block text-[10px] text-slate-500 font-bold mb-1">耗時(分鐘)</label>
-                                <input type="number" v-model="modal.data.transitTime" class="w-full bg-slate-900 border border-slate-800 p-1.5 rounded-lg text-xs font-bold text-white outline-none">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-bold text-slate-400 mb-1">特色 & 備註細節</label>
-                        <textarea v-model="modal.data.note" rows="2" class="w-full bg-slate-950 border border-slate-800 p-2.5 rounded-xl font-bold text-white outline-none"></textarea>
-                    </div>
-                </div>
-
-                <div v-if="modal.type === 'shopping'" class="space-y-3 text-sm">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-400 mb-1">物品名稱</label>
-                        <input type="text" v-model="modal.data.name" class="w-full bg-slate-950 border border-slate-800 p-2.5 rounded-xl font-bold text-white outline-none" placeholder="曲奇餅乾">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-400 mb-1">備註說明 (型號/價格/對象)</label>
-                        <textarea v-model="modal.data.note" rows="3" class="w-full bg-slate-955 border border-slate-800 p-2.5 rounded-xl font-bold text-white outline-none"></textarea>
-                    </div>
-                </div>
-
-                <div v-if="modal.type === 'expenses'" class="space-y-3 text-sm">
-                    <div class="grid grid-cols-2 gap-2">
-                        <div>
-                            <label class="block text-xs font-bold text-slate-400 mb-1">類別</label>
-                            <select v-model="modal.data.category" class="w-full bg-slate-950 border border-slate-800 p-2.5 rounded-xl font-bold text-white outline-none">
-                                <option>交通</option><option>飲食</option><option>住宿</option><option>門票</option><option>購物</option><option>其他</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-slate-400 mb-1">日期</label>
-                            <input type="date" v-model="modal.data.date" class="w-full bg-slate-950 border border-slate-800 p-2 rounded-xl font-bold text-white outline-none">
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-400 mb-1">花費項目名稱</label>
-                        <input type="text" v-model="modal.data.name" class="w-full bg-slate-950 border border-slate-800 p-2.5 rounded-xl font-bold text-white outline-none">
-                    </div>
-                    <div class="grid grid-cols-3 gap-2">
-                        <div>
-                            <label class="block text-xs font-bold text-slate-400 mb-1">選擇幣別</label>
-                            <select v-model="modal.data.currency" class="w-full bg-slate-950 border border-slate-700 p-2.5 rounded-xl font-black text-hkSkyBlue outline-none">
-                                <option value="TWD">台幣</option><option value="CNY">人民幣</option><option value="HKD">港幣</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-slate-400 mb-1">消費金額</label>
-                            <input type="number" v-model="modal.data.amount" class="w-full bg-slate-950 border border-slate-800 p-2.5 rounded-xl font-bold text-white outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-slate-400 mb-1">付款方式</label>
-                            <select v-model="modal.data.payMethod" class="w-full bg-slate-950 border border-slate-800 p-2.5 rounded-xl font-bold text-white outline-none"><option>現金</option><option>信用卡</option></select>
-                        </div>
-                    </div>
-                </div>
-
-                <div v-if="modal.type === 'diary'" class="space-y-3 text-sm">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-400 mb-1">手帳主題名稱</label>
-                        <input type="text" v-model="modal.data.title" class="w-full bg-slate-950 border border-slate-800 p-2.5 rounded-xl font-bold text-white outline-none">
-                    </div>
-                    <div class="grid grid-cols-2 gap-2">
-                        <div>
-                            <label class="block text-xs font-bold text-slate-400 mb-1">記錄日期</label>
-                            <input type="date" v-model="modal.data.date" class="w-full bg-slate-950 border border-slate-800 p-2 rounded-xl font-bold text-white outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-slate-400 mb-1">美食/景點評分</label>
-                            <select v-model="modal.data.rating" class="w-full bg-slate-950 border border-slate-800 p-2.5 rounded-xl text-yellow-400 font-bold outline-none">
-                                <option :value="5">⭐⭐⭐⭐⭐ 絕代神店</option>
-                                <option :value="4">⭐⭐⭐⭐ 值得探訪</option>
-                                <option :value="3">⭐⭐⭐ 表現普通</option>
-                                <option :value="2">⭐⭐ 不太合口</option>
-                                <option :value="1">⭐ 極度踩雷</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-400 mb-1">相片紀錄</label>
-                        <div class="flex items-center space-x-3">
-                            <label class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-hkSkyBlue px-4 py-2 rounded-xl cursor-pointer text-xs font-bold inline-flex items-center">
-                                <i class="fa-solid fa-camera mr-1.5"></i> 開啟相簿
-                                <input type="file" accept="image/*" @change="uploadDiaryImg($event)" class="hidden">
-                            </label>
-                            <span v-if="modal.data.image" class="text-xs text-hkMintGreen font-bold">✅ 照片已匯入</span>
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-400 mb-1">日記隨筆內容</label>
-                        <textarea v-model="modal.data.note" rows="3" class="w-full bg-slate-950 border border-slate-800 p-2.5 rounded-xl font-bold text-white outline-none"></textarea>
-                    </div>
-                </div>
-
-                <div class="flex space-x-2 pt-4 border-t border-white/5">
-                    <button v-
+                                <p class="font-bold text-sm text-white truncate

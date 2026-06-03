@@ -40,6 +40,9 @@
 .note-collapsed { max-height: 4.8em; overflow: hidden;}
 .note-expanded {max-height: none !important; overflow: visible !important;}
         
+        /* 旅行筆記文字：避免長文字、網址、連續字串超出便利貼 */
+.note-text { max-width: 100%; overflow-wrap: anywhere; word-break: break-word; white-space: pre-wrap; }
+        
         /* 🎫 登機證票券效果：左右凹洞真正透明，虛線與凹洞共用同一條中軸 */
 .boarding-pass-ticket {
     --ticket-hole: 13px;
@@ -637,7 +640,7 @@
 
             <div class="flex items-start justify-between gap-3 pt-1">
                 <div class="min-w-0 flex-1">
-                    <h4 class="text-sm font-semibold text-hkNavyText leading-snug">
+                    <h4 class="note-text text-sm font-semibold text-hkNavyText leading-snug">
                         {{ log.title }}
                     </h4>
 
@@ -660,9 +663,9 @@
             </div>
 
             <div v-if="log.note" class="mt-3">
-    <p class="text-[12px] text-slate-700 leading-relaxed whitespace-pre-line"
-       :class="expandedNotes[dIdx] ? 'note-expanded' : 'note-collapsed'">
-        {{ log.note }}
+    <p class="note-text text-[12px] text-slate-700 leading-relaxed"
+   :class="expandedNotes[dIdx] ? 'note-expanded' : 'note-collapsed'">
+    {{ log.note }}
     </p>
 
     <button v-if="log.note.length > 70"

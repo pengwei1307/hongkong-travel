@@ -700,7 +700,7 @@
             },
             methods: {
                 // 🔄 跨裝置全自動拉取機制：強制以雲端資料蓋過本地，實現手機改完、筆電重新整理立刻看見
-                syncFromCloud() {
+               syncFromCloud() {
     this.cloudStatus = 'syncing';
 
     fetch(this.cloudUrl + '?t=' + Date.now())
@@ -721,15 +721,30 @@
             return res.json();
         })
         .then(data => {
-            if (data) {
-                this.itineraries = data.itineraries || [];
-                this.shoppingList = data.shoppingList || [];
-                this.expenses = data.expenses || [];
-                this.diaryList = data.diaryList || [];
-                this.saveToLocalCache();
-                this.cloudStatus = 'synced';
-                console.log('✅ 已從雲端讀取最新資料');
+            if (!data) return;
+
+            const isValidCloudData =
+                Array.isArray(data.itineraries) &&
+                Array.isArray(data.shoppingList) &&
+                Array.isArray(data.expenses) &&
+                Array.isArray(data.diaryList);
+
+            if (!isValidCloudData) {
+                console.warn('雲端資料格式不正確，改用本機或預設資料:', data);
+                this.loadLocalOrDefaults();
+                this.cloudStatus = 'error';
+                alert('雲端目前不是正式行程資料，已先改用這台裝置的本機資料。請新增或儲存一次資料來覆蓋雲端測試資料。');
+                return;
             }
+
+            this.itineraries = data.itineraries;
+            this.shoppingList = data.shoppingList;
+            this.expenses = data.expenses;
+            this.diaryList = data.diaryList;
+
+            this.saveToLocalCache();
+            this.cloudStatus = 'synced';
+            console.log('✅ 已從雲端讀取最新資料');
         })
         .catch(err => {
             console.warn('❌ 雲端讀取失敗，改用本機儲存:', err);
@@ -775,6 +790,9 @@
 
     fetch(this.cloudUrl, {
         method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
         body: jsonData
     })
     .then(res => {

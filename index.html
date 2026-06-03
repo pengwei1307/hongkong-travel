@@ -13,26 +13,24 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         
-        /* 網頁全域大底色：延伸自璀璨維港夜景的深藍色調 */
+        /* 網頁全域底色 */
         body { 
-            background-color: #040712; 
-            background-image: radial-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-            background-size: 30px 30px;
+            background-color: #030611; 
         }
 
-        /* 🔮 都會極簡純淨毛玻璃面版 (Glassmorphism 特效) */
+        /* 🔮 高純度都會毛玻璃面板 (特別加深背景色調，確保在實景圖片上文字依然擁有頂級清晰度) */
         .glass-panel {
-            background: rgba(15, 25, 48, 0.60);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
+            background: rgba(11, 19, 38, 0.75);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
         /* 內部小元件專用：高透光微亮毛玻璃 */
         .glass-panel-light {
             background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
     </style>
@@ -55,10 +53,15 @@
 </head>
 <body class="antialiased text-slate-300 font-sans tracking-wide">
 
-    <div id="app" v-cloak class="max-w-md mx-auto bg-hkDeepNavy min-h-screen shadow-[0_0_60px_rgba(0,0,0,0.8)] relative flex flex-col overflow-x-hidden pb-32 border-x border-slate-800/40">
+    <div id="app" v-cloak class="max-w-md mx-auto bg-hkDeepNavy min-h-screen shadow-[0_0_60px_rgba(0,0,0,0.9)] relative flex flex-col overflow-x-hidden pb-32 border-x border-slate-800/40">
         
-        <div class="h-[250px] w-full relative overflow-hidden border-b border-slate-800/30">
-            <img src="Web app Banner 素材.jpg" alt="港深夜景Banner" class="w-full h-full object-cover">
+        <div class="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+            <img src="網頁背景.png" alt="維港實景夜景" class="w-full h-full object-cover fixed max-w-md mx-auto">
+            <div class="absolute inset-0 bg-gradient-to-b from-black/30 via-hkDeepNavy/50 to-hkSpaceBlack/85 fixed max-w-md mx-auto"></div>
+        </div>
+
+        <div class="h-[250px] w-full relative overflow-hidden border-b border-slate-800/40 z-10">
+            <img src="Web app Banner 素材.png" alt="港深插畫Banner" class="w-full h-full object-cover">
             
             <div class="absolute bottom-12 right-4 flex space-x-1.5 bg-slate-950/40 backdrop-blur-xl p-1.5 rounded-2xl border border-white/10 shadow-2xl z-30 max-w-[90%] overflow-x-auto no-scrollbar">
                 <button @click="currentTab = 'itinerary'" :class="{'bg-white/10 text-hkSkyBlue border border-white/20 shadow-md': currentTab === 'itinerary', 'text-slate-400': currentTab !== 'itinerary'}" class="w-9 h-9 rounded-xl flex shrink-0 transition-all duration-300">
@@ -79,7 +82,7 @@
             </div>
         </div>
 
-        <div class="-mt-8 rounded-t-[32px] bg-gradient-to-b from-hkDeepNavy via-hkDeepNavy to-hkSpaceBlack relative z-20 px-4 pt-6 flex-1 border-t border-white/[0.03]">
+        <div class="-mt-8 rounded-t-[32px] bg-transparent relative z-20 px-4 pt-6 flex-1">
             
             <div v-if="currentTab === 'itinerary'" class="space-y-4">
                 
@@ -100,20 +103,20 @@
                 <div class="flex space-x-2.5 overflow-x-auto no-scrollbar pb-3">
                     <button v-for="(day, index) in days" :key="index" 
                             @click="selectedDayIndex = index"
-                            :class="{'glass-panel border-hkSkyBlue/40 text-white font-bold bg-white/[0.04]': selectedDayIndex === index, 'bg-slate-900/30 text-slate-500 border border-white/[0.02]': selectedDayIndex !== index}"
+                            :class="{'glass-panel border-hkSkyBlue/40 text-white font-bold bg-white/[0.04]': selectedDayIndex === index, 'bg-slate-950/60 text-slate-500 border border-white/[0.02]': selectedDayIndex !== index}"
                             class="flex flex-col items-center justify-center min-w-[66px] h-20 rounded-2xl transition-all duration-300 shadow-sm">
                         <span class="text-[11px] uppercase font-bold tracking-widest mb-1" :class="selectedDayIndex === index ? 'text-hkSkyBlue' : 'text-slate-600'">{{ day.weekday }}</span>
                         <span class="text-base font-extrabold">{{ day.dateStr }}</span>
                     </button>
                 </div>
 
-                <div class="space-y-4 relative before:absolute before:top-4 before:bottom-4 before:left-[19px] before:w-[1px] before:bg-slate-800">
+                <div class="space-y-4 relative before:absolute before:top-4 before:bottom-4 before:left-[19px] before:w-[1px] before:bg-slate-700/50">
                     <div v-for="(item, idx) in activeDayItinerary" :key="item.id" class="relative">
                         
                         <div v-if="idx > 0" class="ml-10 my-2 flex items-center space-x-2 text-xs text-slate-400">
                             <div class="glass-panel-light px-3 py-1 rounded-full flex items-center space-x-2 text-[11px]">
                                 <i :class="getTransitIcon(item.transitMode)" class="text-hkSkyBlue"></i>
-                                <span class="font-medium text-slate-300">{{ item.transitMode || '前進方式' }}</span>
+                                <span class="font-medium text-slate-200">{{ item.transitMode || '前進方式' }}</span>
                                 <span v-if="item.transitTime" class="text-hkRoseGold font-bold">({{ item.transitTime }}分)</span>
                             </div>
                         </div>
@@ -154,8 +157,8 @@
                                 </div>
                             </div>
 
-                            <div v-else class="glass-panel rounded-2xl p-4 flex-1 shadow-xl hover:bg-slate-800/30 transition-all duration-300 relative">
-                                <div class="absolute top-3 right-3 flex space-x-1 opacity-20 group-hover:opacity-100 transition-opacity">
+                            <div v-else class="glass-panel rounded-2xl p-4 flex-1 shadow-xl hover:bg-slate-900/40 transition-all duration-300 relative">
+                                <div class="absolute top-3 right-3 flex space-x-1 opacity-30 group-hover:opacity-100 transition-opacity">
                                     <button @click="moveItem(idx, -1)" class="text-slate-400 hover:text-white p-1" title="上移"><i class="fa-solid fa-chevron-up text-xs"></i></button>
                                     <button @click="moveItem(idx, 1)" class="text-slate-400 hover:text-white p-1" title="下移"><i class="fa-solid fa-chevron-down text-xs"></i></button>
                                     <button @click="openEditModal(item, idx)" class="text-hkSkyBlue hover:text-white p-1" title="編輯項目"><i class="fa-solid fa-pen text-xs"></i></button>
@@ -163,10 +166,10 @@
 
                                 <h4 class="font-bold text-base text-white pr-16 tracking-wide">{{ item.name }}</h4>
                                 
-                                <div class="text-xs text-slate-400 space-y-1.5 mt-2.5 font-medium">
+                                <div class="text-xs text-slate-300 space-y-1.5 mt-2.5 font-medium">
                                     <p v-if="item.time" class="flex items-center"><i class="fa-regular fa-clock w-4 text-hkSkyBlue/80"></i>時間: {{ item.time }}</p>
                                     <p v-if="item.ticket && item.category === '景點'" class="flex items-center"><i class="fa-solid fa-ticket w-4 text-hkRoseGold/80"></i>門票: {{ item.ticket }}</p>
-                                    <p v-if="item.note" class="flex items-start bg-slate-950/40 p-2.5 rounded-xl text-slate-300 mt-2 border border-white/[0.02]"><i class="fa-solid fa-quote-left w-4 text-hkRoseGold shrink-0 text-[9px] mt-0.5 opacity-70"></i><span class="ml-1 flex-1 text-slate-300 leading-relaxed">{{ item.note }}</span></p>
+                                    <p v-if="item.note" class="flex items-start bg-slate-950/70 p-2.5 rounded-xl text-slate-200 mt-2 border border-white/[0.02] shadow-inner"><i class="fa-solid fa-quote-left w-4 text-hkRoseGold shrink-0 text-[9px] mt-0.5 opacity-70"></i><span class="ml-1 flex-1 leading-relaxed">{{ item.note }}</span></p>
                                 </div>
 
                                 <div class="mt-3.5 pt-2 border-t border-white/5 flex justify-end">
@@ -192,14 +195,17 @@
                 <div class="glass-panel rounded-2xl p-4 shadow-xl">
                     <h3 class="font-bold text-md text-white mb-3 flex items-center"><i class="fa-solid fa-money-bill-transfer text-hkSkyBlue mr-2"></i>即時跨境匯率試算</h3>
                     <div class="space-y-3 text-sm">
-                        <div class="flex space-x-2">
-                            <input type="number" v-model="fx.amount" class="w-full bg-slate-900/60 border border-slate-700 rounded-xl p-2.5 font-bold text-white outline-none focus:border-hkSkyBlue">
-                            <select v-model="fx.currency" class="bg-slate-800 border border-slate-700 rounded-xl px-3 font-bold text-hkSkyBlue outline-none">
-                                <option value="HKD">港幣 (HKD)</option>
-                                <option value="CNY">人民幣 (CNY)</option>
-                            </select>
+                        <div>
+                            <label class="block text-xs text-slate-400 font-medium mb-1">外幣輸入</label>
+                            <div class="flex space-x-2">
+                                <input type="number" v-model="fx.amount" class="w-full bg-slate-950/60 border border-slate-800 rounded-xl p-2.5 font-bold text-white outline-none focus:border-hkSkyBlue">
+                                <select v-model="fx.currency" class="bg-slate-800 border border-slate-700 rounded-xl px-3 font-bold text-hkSkyBlue outline-none">
+                                    <option value="HKD">港幣 (HKD)</option>
+                                    <option value="CNY">人民幣 (CNY)</option>
+                                </select>
+                            </div>
                         </div>
-                        <div class="bg-slate-950/60 p-3 rounded-xl flex justify-between items-center border border-white/5">
+                        <div class="bg-slate-950/80 p-3 rounded-xl flex justify-between items-center border border-white/5">
                             <span class="text-xs text-slate-400 font-bold">折合新台幣金額</span>
                             <span class="text-base font-bold text-hkMintGreen">NT$ {{ calculatedTWD }} 元</span>
                         </div>
@@ -207,7 +213,7 @@
                 </div>
 
                 <div class="glass-panel rounded-2xl shadow-xl p-4 space-y-3">
-                    <h3 class="font-bold text-sm text-white flex items-center"><i class="fa-solid fa-plane text-hkRoseGold mr-2"></i>長榮航空正本航班資訊</h3>
+                    <h3 class="font-bold text-sm text-white flex items-center"><i class="fa-solid fa-plane text-hkRoseGold mr-2"></i>長榮航空航班資訊</h3>
                     <div class="border-b border-white/5 pb-2">
                         <div class="flex justify-between font-bold text-xs text-hkSkyBlue">
                             <span>去程 BR845</span>
@@ -225,15 +231,15 @@
                 </div>
 
                 <div class="glass-panel rounded-2xl p-4 shadow-xl space-y-3">
-                    <h3 class="font-bold text-md text-white flex items-center"><i class="fa-solid fa-hotel text-hkMintGreen mr-2"></i>特選入住酒店導航清單</h3>
+                    <h3 class="font-bold text-md text-white flex items-center"><i class="fa-solid fa-hotel text-hkMintGreen mr-2"></i>入住酒店導航清單</h3>
                     <div class="text-xs space-y-3 divide-y divide-white/5">
                         <div class="space-y-0.5 pt-1">
-                            <p class="font-bold text-white text-sm">第一晚：唯港薈 (Hotel ICON)</p>
+                            <p class="font-bold text-white text-sm">唯港薈 (Hotel ICON)</p>
                             <p class="text-slate-400">📍 香港尖沙咀科學館道17號 (電話: +852 3400 1000)</p>
                             <a href="https://www.google.com/maps/search/?api=1&query=Hotel+ICON+Hong+Kong" target="_blank" class="inline-block text-hkSkyBlue font-bold mt-1.5 hover:underline">開啟 Google 地圖導航 ➡️</a>
                         </div>
                         <div class="space-y-0.5 pt-3">
-                            <p class="font-bold text-white text-sm">第二、三晚：里白酒店 (深圳會展中心店)</p>
+                            <p class="font-bold text-white text-sm">里白酒店 (深圳會展中心店)</p>
                             <p class="text-slate-400">📍 深圳福田區 (鄰近福民地鐵站)</p>
                             <a href="https://www.google.com/maps/search/?api=1&query=深圳里白酒店" target="_blank" class="inline-block text-hkSkyBlue font-bold mt-1.5 hover:underline">開啟 Google 地圖導航 ➡️</a>
                         </div>
@@ -243,11 +249,11 @@
                 <div class="grid grid-cols-2 gap-3 text-xs font-bold">
                     <div class="glass-panel p-3 rounded-xl">
                         <p class="text-slate-400 uppercase text-[10px] tracking-wider mb-0.5">緊急求助醫療</p>
-                        <p class="text-hkRoseGold">港/深通話: 999 / 110 / 120</p>
+                        <p class="text-hkRoseGold">港/深通話: 999 / 110</p>
                     </div>
                     <div class="glass-panel p-3 rounded-xl">
                         <p class="text-slate-400 uppercase text-[10px] tracking-wider mb-0.5">跨境高鐵提示</p>
-                        <p class="text-white">提前購買西九龍跨境車票</p>
+                        <p class="text-white">請提早至西九龍站購票</p>
                     </div>
                 </div>
             </div>
@@ -255,25 +261,25 @@
             <div v-if="currentTab === 'shopping'">
                 <div class="grid grid-cols-2 gap-3">
                     <div v-for="(shop, sIdx) in shoppingList" :key="sIdx" class="glass-panel rounded-2xl overflow-hidden flex flex-col shadow-xl">
-                        <div class="h-32 bg-slate-950/60 relative border-b border-white/5">
+                        <div class="h-32 bg-slate-950/50 relative border-b border-white/5">
                             <img v-if="shop.image" :src="shop.image" class="w-full h-full object-cover">
-                            <div v-else class="w-full h-full flex flex-col items-center justify-center text-slate-600">
+                            <div v-else class="w-full h-full flex flex-col items-center justify-center text-slate-500">
                                 <i class="fa-regular fa-image text-xl mb-1"></i>
-                                <span class="text-[9px]">點相機上傳照片</span>
+                                <span class="text-[9px]">上傳照片</span>
                             </div>
-                            <label class="absolute bottom-2 right-2 bg-slate-900/80 text-hkSkyBlue w-7 h-7 rounded-lg flex items-center justify-center cursor-pointer border border-white/10">
+                            <label class="absolute bottom-2 right-2 bg-slate-900/90 text-hkSkyBlue w-7 h-7 rounded-lg flex items-center justify-center cursor-pointer border border-white/10">
                                 <i class="fa-solid fa-camera text-xs m-auto"></i>
                                 <input type="file" accept="image/*" @change="uploadShoppingImg($event, sIdx)" class="hidden">
                             </label>
                         </div>
-                        <div class="p-3 flex-1 flex flex-col justify-between space-y-2">
+                        <div class="p-3 flex-1 flex flex-col justify-between space-y-2 bg-slate-900/30">
                             <div>
                                 <p class="font-bold text-sm text-white truncate">🛍️ {{ shop.name }}</p>
-                                <p v-if="shop.note" class="text-[11px] text-slate-400 bg-slate-955 p-1.5 rounded-xl border border-white/5 mt-1 font-medium whitespace-pre-wrap leading-tight">
+                                <p v-if="shop.note" class="text-[11px] text-slate-300 bg-slate-950/70 p-1.5 rounded-xl border border-white/5 mt-1 font-medium whitespace-pre-wrap leading-tight shadow-inner">
                                     {{ shop.note }}
                                 </p>
                             </div>
-                            <button @click="shoppingList.splice(sIdx, 1)" class="text-right text-xs text-slate-500 font-bold self-end hover:text-white"><i class="fa-regular fa-trash-can text-[10px]"></i> 刪除</button>
+                            <button @click="shoppingList.splice(sIdx, 1)" class="text-right text-xs text-slate-400 font-bold self-end hover:text-white"><i class="fa-regular fa-trash-can text-[10px]"></i> 刪除</button>
                         </div>
                     </div>
                 </div>
@@ -294,20 +300,19 @@
                 </div>
 
                 <div class="glass-panel rounded-2xl shadow-xl overflow-hidden divide-y divide-white/5">
-                    <div v-for="(exp, eIdx) in expenses" :key="eIdx" class="p-3.5 flex items-center justify-between">
+                    <div v-for="(exp, eIdx) in expenses" :key="eIdx" class="p-3.5 flex items-center justify-between hover:bg-white/[0.02] transition-colors">
                         <div class="flex items-center space-x-3">
                             <span :class="getExpenseCategoryColor(exp.category)" class="text-[11px] px-2 py-0.5 rounded-lg font-bold border border-white/5">{{ exp.category }}</span>
                             <div>
                                 <p class="text-sm font-bold text-white">{{ exp.name }}</p>
-                                <p class="text-[10px] text-slate-500 font-bold">{{ exp.date }} · 方式: {{ exp.payMethod }}</p>
+                                <p class="text-[10px] text-slate-400 font-bold">{{ exp.date }} · 方式: {{ exp.payMethod }}</p>
                             </div>
                         </div>
                         <div class="text-right flex items-center space-x-3">
                             <span class="text-sm font-bold text-hkRoseGold">{{ getCurrencySymbol(exp.currency) }} {{ exp.amount }}</span>
-                            <button @click="expenses.splice(eIdx, 1)" class="text-slate-500 hover:text-hkPink transition-colors"><i class="fa-solid fa-circle-xmark"></i></button>
+                            <button @click="expenses.splice(eIdx, 1)" class="text-slate-500 hover:text-white transition-colors"><i class="fa-solid fa-circle-xmark"></i></button>
                         </div>
                     </div>
-                    <div v-if="expenses.length === 0" class="p-8 text-center text-xs text-slate-500">目前尚無消費紀錄。</div>
                 </div>
                 <div class="fixed bottom-6 max-w-md w-full pr-10 flex justify-end z-40 pointer-events-none">
                     <button @click="openAddModal('expenses')" class="pointer-events-auto w-14 h-14 bg-gradient-to-br from-hkSkyBlue to-blue-600 text-white rounded-full flex items-center justify-center text-xl border border-white/20 shadow-xl">
@@ -331,13 +336,10 @@
                             <i v-for="s in (5 - log.rating)" :key="'empty-'+s" class="fa-regular fa-star opacity-20"></i>
                         </div>
                     </div>
-                    <p v-if="log.note" class="text-xs text-slate-300 bg-slate-950/40 p-3 rounded-xl border border-white/5 font-medium leading-relaxed whitespace-pre-line">{{ log.note }}</p>
+                    <p v-if="log.note" class="text-xs text-slate-200 bg-slate-950/70 p-3 rounded-xl border border-white/5 font-medium leading-relaxed whitespace-pre-line shadow-inner">{{ log.note }}</p>
                     <div class="flex justify-end pt-1">
-                        <button @click="diaryList.splice(dIdx, 1)" class="text-xs text-slate-500 font-bold hover:text-white"><i class="fa-regular fa-trash-can mr-1"></i>刪除紀錄</button>
+                        <button @click="diaryList.splice(dIdx, 1)" class="text-xs text-slate-400 font-bold hover:text-white"><i class="fa-regular fa-trash-can mr-1"></i>刪除紀錄</button>
                     </div>
-                </div>
-                <div v-if="diaryList.length === 0" class="p-12 text-center text-xs text-slate-500 bg-slate-950/30 rounded-2xl border border-dashed border-white/5">
-                    還沒有記錄下任何旅行手帳，點擊右下角按鈕開始吧！
                 </div>
                 <div class="fixed bottom-6 max-w-md w-full pr-10 flex justify-end z-40 pointer-events-none">
                     <button @click="openAddModal('diary')" class="pointer-events-auto w-14 h-14 bg-gradient-to-br from-hkPink to-purple-600 text-white rounded-full flex items-center justify-center text-xl border border-white/20 shadow-xl">
@@ -414,7 +416,7 @@
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-400 mb-1">備註說明項目 (規格/預估售價/幫誰代購)</label>
-                        <textarea v-model="modal.data.note" rows="3" class="w-full bg-slate-950 border border-slate-800 p-2.5 rounded-xl font-bold text-white outline-none" placeholder="例如：買4味大盒裝裝的 / 幫大姐帶2盒"></textarea>
+                        <textarea v-model="modal.data.note" rows="3" class="w-full bg-slate-955 border border-slate-800 p-2.5 rounded-xl font-bold text-white outline-none" placeholder="例如：買4味大盒裝的 / 幫大姐帶2盒"></textarea>
                     </div>
                 </div>
 
@@ -512,7 +514,6 @@
                     currentTab: 'itinerary',
                     selectedDayIndex: 0,
                     fx: { amount: 100, currency: 'HKD', hkdTwd: 4.15, cnyTwd: 4.45 },
-                    // 🌦️ 精緻化：4天對應的高級天氣資料庫
                     weathers: [
                         { city: '香港尖沙咀', temp: '25', feelsLike: '27', desc: '維港微風夜色美', icon: '🌃' },
                         { city: '香港九龍', temp: '26', feelsLike: '28', desc: '星空晴朗', icon: '✨' },
@@ -596,7 +597,7 @@
                     return icons[cat] || 'fa-solid fa-location-dot';
                 },
                 getCategoryBg(cat) {
-                    const bgs = { '景點': 'bg-sky-500/40', '住宿': 'bg-indigo-500/40', '美食': 'bg-amber-500/40', '購物': 'bg-pink-500/40', '航班': 'bg-emerald-500/40', '其他': 'bg-slate-600/40' };
+                    const bgs = { '景點': 'bg-sky-500/40', '住宿': 'bg-indigo-500/40', '美食': 'bg-hkRoseGold/40', '購物': 'bg-hkPink/40', '航班': 'bg-emerald-500/40', '其他': 'bg-slate-600/40' };
                     return bgs[cat] || 'bg-sky-500/40';
                 },
                 getTransitIcon(mode) {

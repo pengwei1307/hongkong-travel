@@ -445,8 +445,11 @@
                         </select>
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-slate-500 mb-1">地標/項目名稱</label>
-                        <input type="text" v-model="modal.data.name" class="ui-input" placeholder="例如：華僑城創意文化園">
+                        <label class="block text-xs font-bold text-slate-500 mb-1">地點城市</label>
+    <select v-model="modal.data.region" class="ui-select">
+        <option value="hongkong">香港：使用 Google 地圖</option>
+        <option value="shenzhen">深圳：使用高德地圖</option>
+    </select>
                     </div>
                     
                     <div v-if="modal.data.category === '航班'" class="grid grid-cols-2 gap-2 bg-slate-200/50 p-3 rounded-xl border border-slate-300">
@@ -615,10 +618,10 @@
                         { city: '深圳福田', temp: '25', feelsLike: '27', desc: '晚風清涼舒適', icon: '🌌' }
                     ],
                     days: [
-                        { weekday: 'Thu', dateStr: '6/13' },
-                        { weekday: 'Fri', dateStr: '6/14' },
-                        { weekday: 'Sat', dateStr: '6/15' },
-                        { weekday: 'Sun', dateStr: '6/16' }
+                        { weekday: 'Sat', dateStr: '6/13' },
+                        { weekday: 'Sun', dateStr: '6/14' },
+                        { weekday: 'Mon', dateStr: '6/15' },
+                        { weekday: 'Tue', dateStr: '6/16' }
                     ],
                     // 預設正本數據資料庫
                     defaultItineraries: [
@@ -749,20 +752,39 @@
                     }
                 },
                 // 🗺️ 智慧跨境跳轉演算法：精準識別 14、16 號兩天跨國混編地標
-                isShenzhenItinerary(item) {
-                    if (item.name.includes('回程') || item.name.includes('BR850') || item.name.includes('去程') || item.name.includes('BR845')) return false;
-                    return this.selectedDayIndex === 1 || this.selectedDayIndex === 2 || 
-                           item.name.includes('深圳') || item.name.includes('里白') || 
-                           item.name.includes('老街') || item.name.includes('華僑城') || 
-                           item.name.includes('萬象城') || item.name.includes('火鍋') || 
-                           item.name.includes('人才') || item.name.includes('東門') || 
-                           item.name.includes('鯇魚');
-                },
-                getMapLink(item) {
-                    const query = encodeURIComponent(item.name);
-                    if (this.isShenzhenItinerary(item)) { return `https://www.amap.com/search?query=${query}`; } 
-                    else { return `https://www.google.com/maps/search/?api=1&query=${query}`; }
-                },
+               isShenzhenItinerary(item) {
+    if (item.region) {
+        return item.region === 'shenzhen';
+    }
+
+    const name = item.name || '';
+
+    const shenzhenKeywords = [
+        '深圳',
+        '福田',
+        '里白',
+        '東門',
+        '水圍',
+        '華僑城',
+        '萬象城',
+        '人才公園',
+        '深圳灣',
+        '潮汕',
+        '鯇魚',
+        '會展中心'
+    ];
+
+    return shenzhenKeywords.some(keyword => name.includes(keyword));
+},
+               getMapLink(item) {
+    const query = encodeURIComponent(item.mapQuery || item.name || '');
+
+    if (this.isShenzhenItinerary(item)) {
+        return `https://www.amap.com/search?query=${query}`;
+    }
+
+    return `https://www.google.com/maps/search/?api=1&query=${query}`;
+},
                 getCategoryIcon(cat) {
                     const icons = { '景點': 'fa-solid fa-camera-retro', '住宿': 'fa-solid fa-hotel', '美食': 'fa-solid fa-utensils', '購物': 'fa-solid fa-bag-shopping', '航班': 'fa-solid fa-plane', '其他': 'fa-solid fa-ellipsis' };
                     return icons[cat] || 'fa-solid fa-location-dot';
@@ -795,7 +817,9 @@
                 openAddModal(type) {
                     this.modal.type = type; this.modal.isEdit = false; this.modal.show = true;
                     let today = new Date().toISOString().split('T')[0];
-                    if (type === 'itinerary') { this.modal.title = '🚀 規劃新行程'; this.modal.data = { category: '景點', name: '', time: '', ticket: '', note: '', transitMode: '搭乘大眾運輸', transitTime: '15', flightNo: '', image: '' }; } 
+                    if (type === 'itinerary') { this.modal.title = '🚀 規劃新行程'; this.modal.data = {  category: '景點', name: '',
+    time: '', ticket: '', note: '', transitMode: '搭乘大眾運輸', transitTime: '15', flightNo: '', image: '',
+    region: this.selectedDayIndex === 2 ? 'shenzhen' : 'hongkong'}; } 
                     else if (type === 'shopping') { this.modal.title = '🛍️ 新增購物清單'; this.modal.data = { name: '', image: '', note: '' }; } 
                     else if (type === 'expenses') { this.modal.title = '💰 新增旅程支出'; this.modal.data = { category: '飲食', name: '', date: today, amount: '', currency: 'CNY', payMethod: '現金' }; } 
                     else if (type === 'diary') { this.modal.title = '📖 寫下一篇旅途手帳'; this.modal.data = { title: '', date: today, rating: 5, note: '', image: '' }; }

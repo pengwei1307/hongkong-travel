@@ -9,23 +9,23 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         [v-cloak] { display: none !important; }
-        body { background-color: #030611; }
-        .glass-panel { background: rgba(253, 251, 247, 0.88); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.6); }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        body { background-color: #030611; overflow-x: hidden; }
+        .glass-panel { background: rgba(253, 251, 247, 0.88); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.6); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2); }
         .ui-input { width: 100%; background: white; border: 1px solid #cbd5e1; padding: 12px; border-radius: 12px; font-weight: bold; }
     </style>
 </head>
-<body>
-    <div id="app" v-cloak class="max-w-md mx-auto min-h-screen relative flex flex-col pb-20">
+<body class="antialiased">
+    <div id="app" v-cloak class="max-w-md mx-auto min-h-screen relative flex flex-col pb-20 border-x border-slate-800/40">
         <div class="fixed inset-0 z-0">
             <img src="網頁背景.png" class="w-full h-full object-cover">
             <div class="absolute inset-0 bg-black/60"></div>
         </div>
-
-        <div class="relative z-10 p-6 pt-12 text-white text-center">
+        <div class="relative z-10 p-6 pt-12 text-center text-white">
             <h1 class="text-2xl font-black">港深雙城行</h1>
             <p class="text-xs opacity-70">{{ cloudStatus }}</p>
         </div>
-
         <div class="relative z-10 px-4 space-y-4">
             <div class="glass-panel p-4 rounded-2xl">
                 <h2 class="font-bold mb-2">行程表</h2>
@@ -35,9 +35,8 @@
                 </div>
                 <button @click="openModal('itinerary')" class="w-full mt-4 bg-slate-800 text-white py-3 rounded-xl font-bold">+ 新增行程</button>
             </div>
-            
             <div class="glass-panel p-4 rounded-2xl">
-                <h2 class="font-bold mb-2">花費記帳</h2>
+                <h2 class="font-bold mb-2">記帳</h2>
                 <div v-for="(exp, idx) in expenses" :key="idx" class="flex justify-between p-2 border-b">
                     <span>{{ exp.name }}: {{ exp.amount }}</span>
                     <button @click="deleteExpense(idx)" class="text-red-500 font-bold">刪除</button>
@@ -45,10 +44,9 @@
                 <button @click="openModal('expenses')" class="w-full mt-4 bg-slate-800 text-white py-3 rounded-xl font-bold">+ 新增支出</button>
             </div>
         </div>
-
         <div v-if="modalShow" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
             <div class="bg-white w-full max-w-sm rounded-3xl p-6 space-y-4">
-                <h3 class="font-bold text-lg">新增項目</h3>
+                <h3 class="font-bold text-lg">{{ modalTitle }}</h3>
                 <input v-model="modalData.name" class="ui-input" placeholder="名稱">
                 <input v-if="modalType==='expenses'" type="number" v-model="modalData.amount" class="ui-input" placeholder="金額">
                 <div class="flex space-x-2">
@@ -58,17 +56,16 @@
             </div>
         </div>
     </div>
-
     <script>
         const { createApp } = Vue;
         createApp({
             data() { return {
-                cloudStatus: '正在同步...',
+                cloudStatus: '正在連線...',
                 cloudUrl: 'https://kvdb.io/HKSZ2026_Tour_Shared/data',
                 itineraries: [[{ id: Date.now(), name: '唯港薈' }]],
                 expenses: [{ name: '燒鵝', amount: 380, currency: 'HKD' }],
-                modalShow: false, modalType: '', modalData: { name: '', amount: '' }
-            },
+                modalShow: false, modalType: '', modalTitle: '', modalData: { name: '', amount: 0 }
+            }},
             mounted() { this.fetchData(); },
             methods: {
                 async fetchData() {
@@ -76,11 +73,16 @@
                         const res = await fetch(this.cloudUrl);
                         if(res.ok) {
                             const data = await res.json();
-                            this.itineraries = data.itineraries;
-                            this.expenses = data.expenses;
+                            this.itineraries = data.itineraries || this.itineraries;
+                            this.expenses = data.expenses || this.expenses;
                             this.cloudStatus = '已同步';
                         }
                     } catch(e) { this.cloudStatus = '離線模式'; }
+                },
+                async syncData() {
+                    this.cloudStatus = '同步中...';
+                    await fetch(this.cloudUrl, { method: 'POST', body: JSON.stringify({ itineraries: this.itineraries, expenses: this.expenses }) });
+                    this.cloudStatus = '已同步';
                 },
                 async saveData() {
                     if(this.modalType === 'itinerary') this.itineraries[0].push({ id: Date.now(), name: this.modalData.name });
@@ -90,12 +92,7 @@
                 },
                 async deleteItem(d, i) { this.itineraries[d].splice(i, 1); await this.syncData(); },
                 async deleteExpense(i) { this.expenses.splice(i, 1); await this.syncData(); },
-                async syncData() {
-                    this.cloudStatus = '同步中...';
-                    await fetch(this.cloudUrl, { method: 'POST', body: JSON.stringify({ itineraries: this.itineraries, expenses: this.expenses }) });
-                    this.cloudStatus = '已同步';
-                },
-                openModal(type) { this.modalType = type; this.modalShow = true; this.modalData = { name: '', amount: '' }; }
+                openModal(type) { this.modalType = type; this.modalTitle = '新增項目'; this.modalShow = true; this.modalData = { name: '', amount: 0 }; }
             }
         }).mount('#app');
     </script>

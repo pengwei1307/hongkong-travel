@@ -165,16 +165,16 @@
                 </div>
 
                 <div class="sticky top-0 z-30 -mx-4 px-4 py-2.5 bg-[#fdfbf7]/90 backdrop-blur-md border-b border-slate-200/60 shadow-sm shrink-0">
-                    <div class="flex space-x-2.5 overflow-x-auto no-scrollbar">
-                        <button v-for="(day, index) in days" :key="index" 
-                                @click="selectedDayIndex = index"
-                                :class="{'bg-slate-800 text-white shadow-md transform scale-105 font-bold': selectedDayIndex === index, 'bg-white/90 text-slate-700 border border-slate-300': selectedDayIndex !== index}"
-                                class="flex flex-col items-center justify-center min-w-[66px] h-16 rounded-xl transition-all duration-300 shadow-sm">
-                            <span class="text-[10px] uppercase font-bold tracking-wider mb-0.5" :class="selectedDayIndex === index ? 'text-hkRoseGold' : 'text-slate-400'">{{ day.weekday }}</span>
-                            <span class="text-sm font-extrabold">{{ day.dateStr }}</span>
-                        </button>
-                    </div>
-                </div>
+    <div class="grid grid-cols-4 gap-2.5">
+        <button v-for="(day, index) in days" :key="index" 
+                @click="selectedDayIndex = index"
+                :class="{'bg-slate-800 text-white shadow-md transform scale-105 font-bold': selectedDayIndex === index, 'bg-white/90 text-slate-700 border border-slate-300': selectedDayIndex !== index}"
+                class="w-full flex flex-col items-center justify-center h-16 rounded-xl transition-all duration-300 shadow-sm">
+            <span class="text-[10px] uppercase font-bold tracking-wider mb-0.5" :class="selectedDayIndex === index ? 'text-hkRoseGold' : 'text-slate-400'">{{ day.weekday }}</span>
+            <span class="text-sm font-extrabold">{{ day.dateStr }}</span>
+        </button>
+    </div>
+</div>
 
                 <div class="space-y-4 relative pb-12 flex-1 before:absolute before:top-4 before:bottom-4 before:left-[19px] before:w-[2px] before:bg-white/20">
                     <div v-for="(item, idx) in activeDayItinerary" :key="item.id" class="relative">

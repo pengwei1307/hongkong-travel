@@ -42,6 +42,10 @@
         
         /* 旅行筆記文字：避免長文字、網址、連續字串超出便利貼 */
 .note-text { max-width: 100%; overflow-wrap: anywhere; word-break: break-word; white-space: pre-wrap; }
+
+        /* 願望清單備註：預設只顯示一行 */
+.wish-note-collapsed { display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden;}
+.wish-note-expanded { display: block; max-height: none !important; overflow: visible !important;}
         
         /* 🎫 登機證票券效果：左右凹洞真正透明，虛線與凹洞共用同一條中軸 */
 .boarding-pass-ticket {
@@ -513,10 +517,18 @@
                             {{ shop.name }}
                         </p>
 
-                        <p v-if="shop.note"
-                           class="text-[11px] text-slate-600 mt-1.5 leading-relaxed note-text">
-                            {{ shop.note }}
-                        </p>
+                        <div v-if="shop.note" class="mt-1.5">
+    <p class="note-text text-[11px] text-slate-600 leading-relaxed"
+       :class="expandedWishNotes[sIdx] ? 'wish-note-expanded' : 'wish-note-collapsed'">
+        {{ shop.note }}
+    </p>
+
+    <button v-if="shop.note.length > 28"
+            @click="toggleWishNoteExpand(sIdx)"
+            class="mt-1.5 text-[11px] font-semibold text-hkThemeGreen hover:underline">
+        {{ expandedWishNotes[sIdx] ? '收合備註' : '展開備註' }}
+    </button>
+</div>
                     </div>
 
                     <button @click="deleteShoppingItem(sIdx)"
@@ -560,10 +572,18 @@
                             {{ shop.name }}
                         </p>
 
-                        <p v-if="shop.note"
-                           class="text-[11px] text-slate-600 mt-1.5 leading-relaxed note-text">
-                            {{ shop.note }}
-                        </p>
+                        <div v-if="shop.note" class="mt-1.5">
+    <p class="note-text text-[11px] text-slate-600 leading-relaxed"
+       :class="expandedWishNotes[sIdx] ? 'wish-note-expanded' : 'wish-note-collapsed'">
+        {{ shop.note }}
+    </p>
+
+    <button v-if="shop.note.length > 28"
+            @click="toggleWishNoteExpand(sIdx)"
+            class="mt-1.5 text-[11px] font-semibold text-hkThemeGreen hover:underline">
+        {{ expandedWishNotes[sIdx] ? '收合備註' : '展開備註' }}
+    </button>
+</div>
                     </div>
 
                     <button @click="deleteShoppingItem(sIdx)"
@@ -922,6 +942,7 @@
                     expenses: [],
                     diaryList: [],
                     expandedNotes: {},
+                    expandedWishNotes: {},
                     modal: { show: false, type: 'itinerary', title: '', isEdit: false, editIndex: null, data: { name: '', image: '', amount: '', category: '飲食' } }
                 }
             },
@@ -1213,6 +1234,12 @@
                 toggleNoteExpand(index) { this.expandedNotes = {
         ...this.expandedNotes,
         [index]: !this.expandedNotes[index]
+    };
+},
+                toggleWishNoteExpand(index) {
+    this.expandedWishNotes = {
+        ...this.expandedWishNotes,
+        [index]: !this.expandedWishNotes[index]
     };
 },
                 deleteDiaryItem(index) {

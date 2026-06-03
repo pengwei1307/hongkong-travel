@@ -320,64 +320,7 @@
     </div>
 </div>
 
-        <!-- 航線主資訊 -->
-        <div class="px-4 py-4 text-hkNavyText">
-            <div class="grid grid-cols-[1fr_auto_1fr] items-center gap-3">
-                <div class="min-w-0">
-                    <p class="text-[8px] uppercase tracking-[0.2em] text-hkMutedText mb-1">
-                        From
-                    </p>
-                   
-                        <p class="text-lg font-semibold tracking-[0.08em] leading-none">
-                   {{ item.fromCode || (item.flightNo === 'BR850' ? 'HKG' : 'KHH') }}         
-                    </p>
-                    <p class="text-xs font-medium text-slate-600 mt-1">
-                        {{ item.fromCity || (item.flightNo === 'BR850' ? '香港' : '高雄') }}
-                    </p>
-                </div>
 
-                <div class="flex flex-col items-center justify-center">
-                    <div class="w-8 h-8 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center shadow-inner">
-                        <i class="fa-solid fa-plane text-hkAccentOrange text-xs"></i>
-                    </div>
-                </div>
-
-                <div class="min-w-0 text-right">
-                    <p class="text-[8px] uppercase tracking-[0.2em] text-hkMutedText mb-1">
-                        To
-                    </p>
-                    <p class="text-lg font-semibold tracking-[0.08em] leading-none">
-                        {{ item.toCode || (item.flightNo === 'BR850' ? 'KHH' : 'HKG') }}
-                    </p>
-                    <p class="text-xs font-medium text-slate-600 mt-1">
-                        {{ item.toCity || (item.flightNo === 'BR850' ? '高雄' : '香港') }}
-                    </p>
-                </div>
-            </div>
-
-            <!-- 虛線撕線：左右凹洞會由 CSS mask 真正挖掉 -->
-            <div class="my-4 border-t border-dashed border-slate-300"></div>
-
-            <!-- 備註 -->
-           <div v-if="item.note" class="text-[11px] leading-relaxed text-slate-700 bg-slate-50/90 border border-slate-200 rounded-xl px-3 py-2.5">
-                {{ item.note }}
-            </div>
-
-            <!-- 底部資訊 -->
-            <div class="mt-3.5 pt-3 border-t border-slate-200 flex items-center justify-between gap-2">
-                <p class="text-[10px] font-mono tracking-[0.12em] text-slate-400 truncate">
-                    SEQ {{ item.id }} · {{ item.flightNo || 'BOARDING' }}
-                </p>
-
-                <a :href="getMapLink(item)" target="_blank"
-                   class="inline-flex items-center space-x-1 text-[11px] text-hkThemeGreen font-semibold hover:underline transition-all shrink-0">
-                    <i class="fa-solid fa-map-location-dot"></i>
-                    <span>機場地圖導航</span>
-                </a>
-            </div>
-        </div>
-    </div>
-</div>
 
                             <div v-else class="glass-panel rounded-2xl p-4 flex-1 shadow-md hover:bg-slate-50/90 transition-all duration-300 relative text-hkNavyText">
                                 <div class="absolute top-3 right-3 flex space-x-1 opacity-30 group-hover:opacity-100 transition-opacity">
@@ -453,8 +396,8 @@
                             <span>香港 HKG ✈️ 高雄 KHH</span>
                         </div>
                         <p class="text-[11px] text-hkMutedText mt-1 font-medium">🕒 時間：19:25 - 21:00 (飛行 1小時35分)</p>
+                 </div>
                     </div>
-                </div>
 
                 <div class="glass-panel rounded-2xl p-4 shadow-md space-y-3 text-hkNavyText">
                     <h3 class="font-black text-md text-hkNavyText flex items-center"><i class="fa-solid fa-hotel text-hkThemeGreen mr-2"></i>入住酒店導航清單</h3>

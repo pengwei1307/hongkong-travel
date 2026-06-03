@@ -11,12 +11,12 @@
     <!-- FontAwesome 高級圖示庫 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* 隱形防護罩：確保 Vue 完全加載好才解開，避免排版閃爍 */
+        /* 防止 Vue 載入前畫面閃爍與原始碼外露 */
         [v-cloak] { display: none !important; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         
-        /* 網頁整體底色：完美延伸自璀璨夜景的深藍色調 */
+        /* 網頁整體底色：高階深邃星空藍 */
         body { 
             background-color: #090D16; 
             background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
@@ -31,7 +31,7 @@
             border: 1px solid rgba(255, 255, 255, 0.09);
         }
 
-        /* 略亮一層的精緻毛玻璃，用於內部元件 */
+        /* 略亮一層的精緻毛玻璃 */
         .glass-panel-light {
             background: rgba(255, 255, 255, 0.06);
             backdrop-filter: blur(16px);
@@ -57,15 +57,15 @@
 </head>
 <body class="antialiased text-slate-300 font-sans tracking-wide">
 
-    <!-- App 主容器：手機原生的緊湊操作美感 -->
+    <!-- App 主容器 -->
     <div id="app" v-cloak class="max-w-md mx-auto bg-hkDeepNavy min-h-screen shadow-[0_0_50px_rgba(0,0,0,0.6)] relative flex flex-col overflow-x-hidden pb-32 border-x border-slate-800/60">
         
         <!-- 頁首 Banner 區塊 -->
         <div class="h-[250px] w-full relative overflow-hidden border-b border-slate-800/40">
-            <!-- 🔗 精准配對你上傳的橫幅照片 -->
-            <img src="Web app Banner 素材.png" alt="港深夜景Banner" class="w-full h-full object-cover">
+            <!-- 📌 圖片路徑設定（若你的圖片在 GitHub 結尾是 .png，請手動將下方 .jpg 改成 .png） -->
+            <img src="Web app Banner 素材.jpg" alt="港深夜景Banner" class="w-full h-full object-cover">
             
-            <!-- 🔮 冰晶毛玻璃浮動分頁導覽列 (整合為 5 個功能分頁) -->
+            <!-- 🔮 冰晶毛玻璃浮動分頁導覽列 -->
             <div class="absolute bottom-12 right-4 flex space-x-1.5 bg-slate-950/40 backdrop-blur-xl p-1.5 rounded-2xl border border-white/10 shadow-2xl z-30 max-w-[90%] overflow-x-auto no-scrollbar">
                 <button @click="currentTab = 'itinerary'" :class="{'bg-white/10 text-hkSkyBlue border border-white/20 shadow-md': currentTab === 'itinerary', 'text-slate-400': currentTab !== 'itinerary'}" class="w-9 h-9 rounded-xl flex shrink-0 transition-all duration-300">
                     <i class="fa-solid fa-calendar-days text-xs m-auto"></i>
@@ -85,7 +85,7 @@
             </div>
         </div>
 
-        <!-- 主內容區域：順暢無縫向上接軌 -->
+        <!-- 主內容區域 -->
         <div class="-mt-8 rounded-t-[32px] bg-hkDeepNavy relative z-20 px-4 pt-6 flex-1">
             
             <!-- ==========================================
@@ -93,7 +93,7 @@
             =========================================== -->
             <div v-if="currentTab === 'itinerary'" class="space-y-4">
                 
-                <!-- 🔮 每日天氣預測 (徹底修復變數 Bug，隨日期智慧切換) -->
+                <!-- 天氣預測毛玻璃面版 -->
                 <div class="glass-panel rounded-2xl p-4 flex items-center justify-between shadow-lg">
                     <div class="flex items-center space-x-3">
                         <span class="text-2xl filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]">{{ activeDayWeather.icon }}</span>
@@ -108,7 +108,7 @@
                     </div>
                 </div>
 
-                <!-- 橫向滾動極簡日期選單 (星期在上，日期在下) -->
+                <!-- 日期選單 -->
                 <div class="flex space-x-2.5 overflow-x-auto no-scrollbar pb-3">
                     <button v-for="(day, index) in days" :key="index" 
                             @click="selectedDayIndex = index"
@@ -123,7 +123,7 @@
                 <div class="space-y-4 relative before:absolute before:top-4 before:bottom-4 before:left-[19px] before:w-[1px] before:bg-slate-800">
                     <div v-for="(item, idx) in activeDayItinerary" :key="item.id" class="relative">
                         
-                        <!-- 全自訂文字交通欄位 -->
+                        <!-- 自訂交通欄位 -->
                         <div v-if="idx > 0" class="ml-10 my-2 flex items-center space-x-2 text-xs text-slate-400">
                             <div class="glass-panel-light px-3 py-1 rounded-full flex items-center space-x-2 text-[11px]">
                                 <i :class="getTransitIcon(item.transitMode)" class="text-hkSkyBlue"></i>
@@ -134,12 +134,11 @@
 
                         <!-- 行程卡片主體 -->
                         <div class="flex items-start space-x-3 group">
-                            <!-- 分類項目定位球 -->
                             <div :class="getCategoryBg(item.category)" class="w-10 h-10 rounded-xl flex items-center justify-center text-white shrink-0 mt-1 relative z-10 border border-white/10 shadow-md">
                                 <i :class="getCategoryIcon(item.category)" class="text-xs"></i>
                             </div>
 
-                            <!-- 🎫 機票：專屬冰晶半透明登機證視覺卡片 -->
+                            <!-- 🎫 冰晶半透明登機證 -->
                             <div v-if="item.category === '航班'" class="glass-panel rounded-2xl flex-1 shadow-xl relative overflow-hidden">
                                 <div class="bg-gradient-to-r from-hkSkyBlue via-indigo-400 to-hkRoseGold h-[3px] w-full opacity-70"></div>
                                 <div class="p-4">
@@ -171,12 +170,12 @@
                                 </div>
                             </div>
 
-                            <!-- 🧱 一般常規行程卡片 -->
+                            <!-- 🧱 一般卡片 -->
                             <div v-else class="glass-panel rounded-2xl p-4 flex-1 shadow-xl hover:bg-slate-800/40 transition-all duration-300 relative">
                                 <div class="absolute top-3 right-3 flex space-x-1 opacity-20 group-hover:opacity-100 transition-opacity">
-                                    <button @click="moveItem(idx, -1)" class="text-slate-400 hover:text-white p-1" title="上移"><i class="fa-solid fa-chevron-up text-xs"></i></button>
-                                    <button @click="moveItem(idx, 1)" class="text-slate-400 hover:text-white p-1" title="下移"><i class="fa-solid fa-chevron-down text-xs"></i></button>
-                                    <button @click="openEditModal(item, idx)" class="text-hkSkyBlue hover:text-white p-1" title="編輯項目"><i class="fa-solid fa-pen text-xs"></i></button>
+                                    <button @click="moveItem(idx, -1)" class="text-slate-400 hover:text-white p-1"><i class="fa-solid fa-chevron-up text-xs"></i></button>
+                                    <button @click="moveItem(idx, 1)" class="text-slate-400 hover:text-white p-1"><i class="fa-solid fa-chevron-down text-xs"></i></button>
+                                    <button @click="openEditModal(item, idx)" class="text-hkSkyBlue hover:text-white p-1"><i class="fa-solid fa-pen text-xs"></i></button>
                                 </div>
 
                                 <h4 class="font-bold text-base text-white pr-16 tracking-wide">{{ item.name }}</h4>
@@ -190,7 +189,7 @@
                                 <div class="mt-3.5 pt-2 border-t border-white/5 flex justify-end">
                                     <a :href="'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(item.name)" target="_blank" class="inline-flex items-center space-x-1 text-xs text-hkSkyBlue font-bold hover:brightness-110 transition-all">
                                         <i class="fa-solid fa-map-location-dot"></i>
-                                        <span>地圖導航 ➡️</span>
+                                        <span>智慧導航 ➡️</span>
                                     </a>
                                 </div>
                             </div>
@@ -199,7 +198,7 @@
                     </div>
                 </div>
 
-                <!-- 📌 專屬圓形浮動新增按鈕 (只在此分頁顯示，點擊才呼叫視窗) -->
+                <!-- 浮動新增按鈕 -->
                 <div class="fixed bottom-6 max-w-md w-full pr-10 flex justify-end z-40 pointer-events-none">
                     <button @click="openAddModal('itinerary')" class="pointer-events-auto w-14 h-14 bg-gradient-to-br from-hkSkyBlue to-blue-600 text-white rounded-full flex items-center justify-center text-xl transition-all shadow-[0_4px_15px_rgba(56,189,248,0.3)] border border-white/10 active:scale-95">
                         <i class="fa-solid fa-plus"></i>
@@ -211,7 +210,7 @@
                  分頁二：必備資訊
             =========================================== -->
             <div v-if="currentTab === 'info'" class="space-y-4">
-                <!-- 🔮 匯率計算機 -->
+                <!-- 匯率 -->
                 <div class="glass-panel rounded-2xl p-4 shadow-xl">
                     <h3 class="font-bold text-md text-white mb-3 flex items-center"><i class="fa-solid fa-money-bill-transfer text-hkSkyBlue mr-2"></i>即時跨境匯率試算</h3>
                     <div class="space-y-3 text-sm">
@@ -229,57 +228,45 @@
                     </div>
                 </div>
 
-                <!-- 航班詳細資訊 -->
+                <!-- 機票資訊 -->
                 <div class="glass-panel rounded-2xl shadow-xl p-4 space-y-3">
-                    <h3 class="font-bold text-sm text-white flex items-center"><i class="fa-solid fa-plane text-hkRoseGold mr-2"></i>長榮航空正本航班明細</h3>
+                    <h3 class="font-bold text-sm text-white flex items-center"><i class="fa-solid fa-plane text-hkRoseGold mr-2"></i>長榮航空航班資訊</h3>
                     <div class="border-b border-white/5 pb-2">
                         <div class="flex justify-between font-bold text-xs text-hkSkyBlue">
                             <span>去程 BR845</span>
                             <span>高雄 KHH ✈️ 香港 HKG</span>
                         </div>
-                        <p class="text-[11px] text-slate-400 mt-1">🕒 時間：09:15 - 10:55 (飛行 1小時40分)</p>
+                        <p class="text-[11px] text-slate-400 mt-1">🕒 時間：09:15 - 10:55</p>
                     </div>
                     <div>
                         <div class="flex justify-between font-bold text-xs text-hkRoseGold">
                             <span>回程 BR850</span>
                             <span>香港 HKG ✈️ 高雄 KHH</span>
                         </div>
-                        <p class="text-[11px] text-slate-400 mt-1">🕒 時間：19:25 - 21:00 (飛行 1小時35分)</p>
+                        <p class="text-[11px] text-slate-400 mt-1">🕒 時間：19:25 - 21:00</p>
                     </div>
                 </div>
 
-                <!-- 住宿飯店 -->
+                <!-- 住宿 -->
                 <div class="glass-panel rounded-2xl p-4 shadow-xl space-y-3">
-                    <h3 class="font-bold text-md text-white flex items-center"><i class="fa-solid fa-hotel text-hkMintGreen mr-2"></i>入住酒店導航清單</h3>
+                    <h3 class="font-bold text-md text-white flex items-center"><i class="fa-solid fa-hotel text-hkMintGreen mr-2"></i>入住酒店明細</h3>
                     <div class="text-xs space-y-3 divide-y divide-white/5">
                         <div class="space-y-0.5 pt-1">
-                            <p class="font-bold text-white text-sm">第一晚：唯港薈 (Hotel ICON)</p>
-                            <p class="text-slate-400">📍 香港尖沙咀科學館道17號 (電話: +852 3400 1000)</p>
-                            <a href="https://www.google.com/maps/search/?api=1&query=Hotel+ICON+Hong+Kong" target="_blank" class="inline-block text-hkSkyBlue font-bold mt-1.5 hover:underline">開啟 Google 地圖導航 ➡️</a>
+                            <p class="font-bold text-white text-sm">唯港薈 (Hotel ICON)</p>
+                            <p class="text-slate-400">📍 香港尖沙咀科學館道17號</p>
+                            <a href="https://www.google.com/maps/search/?api=1&query=Hotel+ICON+Hong+Kong" target="_blank" class="inline-block text-hkSkyBlue font-bold mt-1.5 hover:underline">地圖導航 ➡️</a>
                         </div>
                         <div class="space-y-0.5 pt-3">
-                            <p class="font-bold text-white text-sm">第二、三晚：里白酒店 (深圳會展中心店)</p>
-                            <p class="text-slate-400">📍 深圳福田區 (鄰近福民地鐵站)</p>
-                            <a href="https://www.google.com/maps/search/?api=1&query=深圳里白酒店" target="_blank" class="inline-block text-hkSkyBlue font-bold mt-1.5 hover:underline">開啟 Google 地圖導航 ➡️</a>
+                            <p class="font-bold text-white text-sm">里白酒店 (深圳會展中心店)</p>
+                            <p class="text-slate-400">📍 深圳福田區 (近福民地鐵站)</p>
+                            <a href="https://www.google.com/maps/search/?api=1&query=深圳里白酒店" target="_blank" class="inline-block text-hkSkyBlue font-bold mt-1.5 hover:underline">地圖導航 ➡️</a>
                         </div>
-                    </div>
-                </div>
-
-                <!-- 求助聯絡電話 -->
-                <div class="grid grid-cols-2 gap-3 text-xs font-bold">
-                    <div class="glass-panel p-3 rounded-xl">
-                        <p class="text-slate-400 uppercase text-[10px] tracking-wider mb-0.5">緊急醫療求助</p>
-                        <p class="text-hkRoseGold">香港/深圳通話: 999 / 110</p>
-                    </div>
-                    <div class="glass-panel p-3 rounded-xl">
-                        <p class="text-slate-400 uppercase text-[10px] tracking-wider mb-0.5">跨境高鐵提示</p>
-                        <p class="text-white">請提早至西九龍站購票</p>
                     </div>
                 </div>
             </div>
 
             <!-- ==========================================
-                 分頁三：購物清單 (已含自訂備註欄)
+                 分頁三：購物清單
             =========================================== -->
             <div v-if="currentTab === 'shopping'">
                 <div class="grid grid-cols-2 gap-3">
@@ -288,7 +275,7 @@
                             <img v-if="shop.image" :src="shop.image" class="w-full h-full object-cover">
                             <div v-else class="w-full h-full flex flex-col items-center justify-center text-slate-600">
                                 <i class="fa-regular fa-image text-xl mb-1"></i>
-                                <span class="text-[9px]">點相機上傳照片</span>
+                                <span class="text-[9px]">上傳照片</span>
                             </div>
                             <label class="absolute bottom-2 right-2 bg-slate-900/80 text-hkSkyBlue w-7 h-7 rounded-lg flex items-center justify-center cursor-pointer border border-white/10">
                                 <i class="fa-solid fa-camera text-xs m-auto"></i>
@@ -315,14 +302,15 @@
             </div>
 
             <!-- ==========================================
-                 分頁四：花費記帳 (多幣別混合，台幣總結)
+                 分頁四：花費記帳
             =========================================== -->
             <div v-if="currentTab === 'expenses'" class="space-y-4">
+                <!-- 記帳支出看板 -->
                 <div class="glass-panel rounded-3xl p-5 border border-white/10 shadow-xl">
                     <p class="text-xs text-slate-400 font-bold uppercase tracking-widest">旅程消費總支出計價</p>
                     <div class="mt-2 flex items-baseline space-x-1">
                         <span class="text-3xl font-black text-white">NT$ {{ totalExpensesInTWD }}</span>
-                        <span class="text-xs text-hkSkyBlue ml-2">(自動換算新台幣加總)</span>
+                        <span class="text-xs text-hkSkyBlue ml-2">(自動換算新台幣)</span>
                     </div>
                 </div>
 
@@ -332,7 +320,7 @@
                             <span :class="getExpenseCategoryColor(exp.category)" class="text-[11px] px-2 py-0.5 rounded-lg font-bold border border-white/5">{{ exp.category }}</span>
                             <div>
                                 <p class="text-sm font-bold text-white">{{ exp.name }}</p>
-                                <p class="text-[10px] text-slate-500 font-bold">{{ exp.date }} · 方式: {{ exp.payMethod }}</p>
+                                <p class="text-[10px] text-slate-500 font-bold">{{ exp.date }} · {{ exp.payMethod }}</p>
                             </div>
                         </div>
                         <div class="text-right flex items-center space-x-3">
@@ -350,7 +338,7 @@
             </div>
 
             <!-- ==========================================
-                 分頁五：手帳紀錄 (相片上傳/五星評分)
+                 分頁五：手帳紀錄
             =========================================== -->
             <div v-if="currentTab === 'diary'" class="space-y-4">
                 <div v-for="(log, dIdx) in diaryList" :key="dIdx" class="glass-panel rounded-2xl p-4 space-y-3 shadow-xl">
@@ -372,6 +360,7 @@
                         <button @click="diaryList.splice(dIdx, 1)" class="text-xs text-slate-500 font-bold hover:text-white"><i class="fa-regular fa-trash-can mr-1"></i>刪除紀錄</button>
                     </div>
                 </div>
+                
                 <!-- 浮動按鈕 -->
                 <div class="fixed bottom-6 max-w-md w-full pr-10 flex justify-end z-40 pointer-events-none">
                     <button @click="openAddModal('diary')" class="pointer-events-auto w-14 h-14 bg-gradient-to-br from-hkSkyBlue to-blue-600 text-white rounded-full flex items-center justify-center text-xl border border-white/20 shadow-xl">
@@ -384,16 +373,15 @@
 
         <!-- ==========================================
              🔒 核心安全防護彈出視窗 (Modal)
-             全面改用 v-if，關閉時組件直接銷毀，0% 機率產生變數未定義崩潰
         =========================================== -->
-        <div v-if="modal.show" class="fixed inset-0 bg-slate-950/80 backdrop-blur-xl z-50 flex items-end justify-center">
+        <div v-if="modal.show" class="fixed inset-0 bg-slate-955/80 backdrop-blur-xl z-50 flex items-end justify-center">
             <div class="bg-slate-900 w-full max-w-md rounded-t-[32px] p-6 space-y-4 max-h-[90vh] overflow-y-auto border-t border-white/10 shadow-2xl text-slate-300">
                 <div class="flex justify-between items-center pb-2 border-b border-white/5">
                     <h3 class="font-bold text-lg text-white">{{ modal.title }}</h3>
                     <button @click="modal.show = false" class="text-slate-400 hover:text-white"><i class="fa-solid fa-circle-xmark text-2xl"></i></button>
                 </div>
 
-                <!-- 1. 行程新增/修改表單 -->
+                <!-- 1. 行程編輯 -->
                 <div v-if="modal.type === 'itinerary'" class="space-y-3 text-sm">
                     <div>
                         <label class="block text-xs font-bold text-slate-400 mb-1">行程分類項目</label>
@@ -406,7 +394,6 @@
                         <input type="text" v-model="modal.data.name" class="w-full bg-slate-950 border border-slate-800 p-2.5 rounded-xl font-bold text-white outline-none">
                     </div>
                     
-                    <!-- 航班欄位 -->
                     <div v-if="modal.data.category === '航班'" class="grid grid-cols-2 gap-2 bg-slate-950 p-3 rounded-xl border border-white/5">
                         <div>
                             <label class="block text-[11px] font-bold text-slate-400 mb-1">航班編號</label>
@@ -427,7 +414,7 @@
                         <input type="text" v-model="modal.data.ticket" class="w-full bg-slate-950 border border-slate-800 p-2.5 rounded-xl font-bold text-white outline-none">
                     </div>
                     
-                    <!-- 全自訂交通自訂 -->
+                    <!-- 自由交通自訂框 -->
                     <div class="bg-slate-950 p-3 rounded-xl border border-white/5 space-y-2">
                         <span class="text-xs font-bold text-hkSkyBlue block"><i class="fa-solid fa-route mr-1"></i> 前來此處的交通自訂說明</span>
                         <div class="grid grid-cols-3 gap-2">
@@ -448,7 +435,7 @@
                     </div>
                 </div>
 
-                <!-- 2. 購物清單表單 -->
+                <!-- 2. 購物清單 -->
                 <div v-if="modal.type === 'shopping'" class="space-y-3 text-sm">
                     <div>
                         <label class="block text-xs font-bold text-slate-400 mb-1">物品名稱</label>
@@ -460,7 +447,7 @@
                     </div>
                 </div>
 
-                <!-- 3. 記帳花費表單 -->
+                <!-- 3. 記帳花費 -->
                 <div v-if="modal.type === 'expenses'" class="space-y-3 text-sm">
                     <div class="grid grid-cols-2 gap-2">
                         <div>
@@ -476,7 +463,7 @@
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-400 mb-1">花費項目名稱</label>
-                        <input type="text" v-model="modal.data.name" class="w-full bg-slate-955 border border-slate-800 p-2.5 rounded-xl font-bold text-white outline-none">
+                        <input type="text" v-model="modal.data.name" class="w-full bg-slate-950 border border-slate-800 p-2.5 rounded-xl font-bold text-white outline-none">
                     </div>
                     <div class="grid grid-cols-3 gap-2">
                         <div>
@@ -496,7 +483,7 @@
                     </div>
                 </div>
 
-                <!-- 4. 旅遊手帳表單 -->
+                <!-- 4. 手帳 -->
                 <div v-if="modal.type === 'diary'" class="space-y-3 text-sm">
                     <div>
                         <label class="block text-xs font-bold text-slate-400 mb-1">手帳主題名稱</label>
@@ -534,9 +521,9 @@
                     </div>
                 </div>
 
-                <!-- 按鈕區 (含安全刪除確認機制) -->
+                <!-- 按鈕區 -->
                 <div class="flex space-x-2 pt-4 border-t border-white/5">
-                    <button v-if="modal.isEdit" @click="confirmDelete" class="bg-red-950/30 text-red-400 border border-red-900/60 font-bold px-4 py-2.5 rounded-xl text-sm flex-1">
+                    <button v-if="modal.isEdit" @click="confirmDelete" class="bg-red-955/30 text-red-400 border border-red-900/60 font-bold px-4 py-2.5 rounded-xl text-sm flex-1">
                         刪除
                     </button>
                     <button @click="saveModalData" class="bg-gradient-to-r from-hkSkyBlue to-blue-600 text-white font-black px-4 py-2.5 rounded-xl text-sm flex-[2] text-center shadow-lg">
@@ -557,7 +544,6 @@
                     currentTab: 'itinerary',
                     selectedDayIndex: 0,
                     fx: { amount: 100, currency: 'HKD', hkdTwd: 4.15, cnyTwd: 4.45 },
-                    // 智慧對接：4天的精準高階天氣資料
                     weathers: [
                         { city: '香港尖沙咀', temp: '25', feelsLike: '27', desc: '維港微風夜色美', icon: '🌃' },
                         { city: '香港九龍', temp: '26', feelsLike: '28', desc: '星空晴朗', icon: '✨' },
@@ -572,7 +558,7 @@
                     ],
                     itineraries: [
                         [
-                            { id: 1, category: '航班', name: '長榮航空 BR845 (高雄KHH - 香港HKG)', time: '09:15-10:55', flightNo: 'BR845', note: '出發前往香港', transitMode: '搭乘豪華飛機', transitTime: '0' },
+                            { id: 1, category: '航班', name: '長榮航空 BR845 (高雄KHH - 香港HKG)', time: '09:15', flightNo: 'BR845', note: '出發前往香港', transitMode: '搭乘豪華飛機', transitTime: '0' },
                             { id: 2, category: '住宿', name: '唯港薈 (Hotel ICON)', time: '12:30 寄行李 / 15:00 Check in', note: '提前到店好像可以先用設施，爸爸可以去健身房', transitMode: '搭機場快線轉接駁專車', transitTime: '40' },
                             { id: 3, category: '美食', name: '棋子燒鵝（尖沙咀）', time: '13:30-15:00', note: '午餐美食饗宴', transitMode: '沿路徒步前去', transitTime: '12' },
                             { id: 4, category: '其他', name: '飯店辦理入房與休息', time: '15:00', note: '休息片刻', transitMode: '走路回飯店放行李', transitTime: '12' },
@@ -619,7 +605,7 @@
                     return this.itineraries[this.selectedDayIndex] || [];
                 },
                 activeDayWeather() {
-                    return this.weathers[this.selectedDayIndex] || { city: '香港', temp: '25', feelsLike: '25', desc: '晴', icon: '☀️' };
+                    return this.weathers[this.selectedDayIndex] || { city: '香港', temp: '25', feelsLike: '25', desc: '明朗', icon: '☀️' };
                 },
                 calculatedTWD() {
                     let rate = this.fx.currency === 'HKD' ? this.fx.hkdTwd : this.fx.cnyTwd;
@@ -677,13 +663,13 @@
                         this.modal.title = '🚀 規劃新行程';
                         this.modal.data = { category: '景點', name: '', time: '', ticket: '', note: '', transitMode: '搭乘大眾運輸', transitTime: '15', flightNo: '' };
                     } else if (type === 'shopping') {
-                        this.modal.title = '🛍️ 新增購物清單';
+                        this.modal.title = '🛍️ 新增代購購物標的';
                         this.modal.data = { name: '', image: '', note: '' };
                     } else if (type === 'expenses') {
                         this.modal.title = '💰 新增旅程支出';
                         this.modal.data = { category: '飲食', name: '', date: today, amount: '', currency: 'CNY', payMethod: '現金' };
                     } else if (type === 'diary') {
-                        this.modal.title = '📖 寫下一篇旅途手帳';
+                        this.modal.title = '📖 新增旅行手帳細節';
                         this.modal.data = { title: '', date: today, rating: 5, note: '', image: '' };
                     }
                 },

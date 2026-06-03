@@ -226,16 +226,16 @@
                             </div>
 
                             <div v-if="item.category === '航班'" class="flex-1">
-    <div class="boarding-pass-ticket relative rounded-[22px] bg-[#fffdf8] border border-slate-300/80 shadow-lg overflow-hidden">
+    <div class="boarding-pass-ticket relative rounded-[22px] bg-white/95 border border-white/70 shadow-md overflow-hidden">
         
         <!-- 深棕色登機證票頭 -->
-        <div class="bg-gradient-to-r from-[#26170F] via-[#3A2418] to-[#6B4A32] text-white px-4 py-3">
+        <div class="bg-gradient-to-r from-[#24170F] via-[#332117] to-[#4A3021] text-white px-4 py-3">
             <div class="flex items-start justify-between gap-3">
                 <div>
                     <p class="text-[8px] uppercase tracking-[0.24em] text-white/55 mb-1">
                         Boarding Pass
                     </p>
-                    <p class="text-xl font-semibold tracking-[0.14em] leading-none">
+                    <p class="text-xl font-semibold tracking-[0.12em] leading-none">
                         {{ item.flightNo || 'FLIGHT' }}
                     </p>
                 </div>
@@ -264,8 +264,9 @@
                     <p class="text-[8px] uppercase tracking-[0.2em] text-hkMutedText mb-1">
                         From
                     </p>
-                    <p class="text-3xl font-semibold tracking-[0.06em] leading-none">
-                        {{ item.fromCode || (item.flightNo === 'BR850' ? 'HKG' : 'KHH') }}
+                   
+                        <p class="text-lg font-semibold tracking-[0.08em] leading-none">
+                   {{ item.fromCode || (item.flightNo === 'BR850' ? 'HKG' : 'KHH') }}         
                     </p>
                     <p class="text-xs font-medium text-slate-600 mt-1">
                         {{ item.fromCity || (item.flightNo === 'BR850' ? '香港' : '高雄') }}
@@ -273,7 +274,7 @@
                 </div>
 
                 <div class="flex flex-col items-center justify-center">
-                    <div class="w-9 h-9 rounded-full bg-[#f3eee7] border border-[#e4d8c8] flex items-center justify-center shadow-inner">
+                    <div class="w-8 h-8 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center shadow-inner">
                         <i class="fa-solid fa-plane text-hkAccentOrange text-xs"></i>
                     </div>
                 </div>
@@ -282,7 +283,7 @@
                     <p class="text-[8px] uppercase tracking-[0.2em] text-hkMutedText mb-1">
                         To
                     </p>
-                    <p class="text-3xl font-semibold tracking-[0.06em] leading-none">
+                    <p class="text-lg font-semibold tracking-[0.08em] leading-none">
                         {{ item.toCode || (item.flightNo === 'BR850' ? 'KHH' : 'HKG') }}
                     </p>
                     <p class="text-xs font-medium text-slate-600 mt-1">
@@ -295,7 +296,7 @@
             <div class="my-4 border-t border-dashed border-slate-300"></div>
 
             <!-- 備註 -->
-            <div v-if="item.note" class="text-[11px] leading-relaxed text-slate-700 bg-[#f8f3ec] border border-[#eadfce] rounded-xl px-3 py-2.5">
+           <div v-if="item.note" class="text-[11px] leading-relaxed text-slate-700 bg-slate-50/90 border border-slate-200 rounded-xl px-3 py-2.5">
                 {{ item.note }}
             </div>
 

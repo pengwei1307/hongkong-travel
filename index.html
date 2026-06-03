@@ -619,16 +619,18 @@
             旅行筆記
         </h3>
         <p class="text-[11px] text-hkMutedText mt-1 leading-relaxed">
-            記錄市集、表演、臨時活動、商場快閃、想順路去的地方，旅途中可以隨時打開查看。
+            像便利貼一樣記下市集、表演、商場快閃、臨時活動，旅途中可以隨時打開查看。
         </p>
     </div>
 
     <div class="space-y-3">
         <div v-for="(log, dIdx) in diaryList"
              :key="dIdx"
-             class="glass-panel rounded-2xl p-4 shadow-md text-hkNavyText">
+             class="relative overflow-hidden rounded-2xl bg-[#FFF7CC]/95 border border-yellow-200/80 shadow-md text-hkNavyText p-4">
             
-            <div class="flex items-start justify-between gap-3">
+            <div class="absolute top-0 left-0 right-0 h-2 bg-yellow-300/60"></div>
+
+            <div class="flex items-start justify-between gap-3 pt-1">
                 <div class="min-w-0 flex-1">
                     <h4 class="text-sm font-semibold text-hkNavyText leading-snug">
                         {{ log.title }}
@@ -639,14 +641,21 @@
                     </p>
                 </div>
 
-                <button @click="deleteDiaryItem(dIdx)"
-                        class="shrink-0 text-slate-400 hover:text-red-600 transition-colors pt-0.5">
-                    <i class="fa-regular fa-trash-can text-xs"></i>
-                </button>
+                <div class="shrink-0 flex items-center space-x-2 pt-0.5">
+                    <button @click="openEditDiaryModal(log, dIdx)"
+                            class="text-slate-500 hover:text-hkThemeGreen transition-colors">
+                        <i class="fa-solid fa-pen text-xs"></i>
+                    </button>
+
+                    <button @click="deleteDiaryItem(dIdx)"
+                            class="text-slate-400 hover:text-red-600 transition-colors">
+                        <i class="fa-regular fa-trash-can text-xs"></i>
+                    </button>
+                </div>
             </div>
 
             <p v-if="log.note"
-               class="text-[12px] text-slate-700 bg-white/50 p-3 rounded-xl border border-slate-200 font-medium leading-relaxed whitespace-pre-line shadow-inner mt-3">
+               class="text-[12px] text-slate-700 mt-3 leading-relaxed whitespace-pre-line">
                 {{ log.note }}
             </p>
         </div>
@@ -1137,6 +1146,10 @@
                     this.modal.type = 'itinerary'; this.modal.isEdit = true; this.modal.editIndex = index; this.modal.title = '📝 修改行程欄位';
                     this.modal.data = JSON.parse(JSON.stringify(item)); this.modal.show = true;
                 },
+                openEditDiaryModal(item, index) {
+    this.modal.type = 'diary'; this.modal.isEdit = true; this.modal.editIndex = index; this.modal.title = '📝 修改旅行筆記'; this.modal.data = JSON.parse(JSON.stringify(item)); this.modal.show = true;
+                },
+                
                 saveModalData() {
                    if (this.modal.type === 'diary' && !this.modal.data.title) return alert('請填寫筆記標題！');
                     if (this.modal.type !== 'diary' && !this.modal.data.name) return alert('請填寫名稱！');
@@ -1146,18 +1159,28 @@
                         else { this.modal.data.id = Date.now(); this.itineraries[this.selectedDayIndex].push(this.modal.data); }
                     } else if (this.modal.type === 'shopping') { this.shoppingList.push(this.modal.data); } 
                     else if (this.modal.type === 'expenses') { this.expenses.unshift(this.modal.data); } 
-                    else if (this.modal.type === 'diary') { this.diaryList.unshift(this.modal.data); }
+                   else if (this.modal.type === 'diary') { if (this.modal.isEdit) { this.diaryList[this.modal.editIndex] = this.modal.data; } else { this.diaryList.unshift(this.modal.data);} }
                     
                     this.modal.show = false;
                     this.pushDataToCloud(); // 全自動同步推播至全家人手機與其他裝置
                 },
                 confirmDelete() {
-                    if (confirm('確定要從行程中刪除這個項目嗎？')) {
-                        this.itineraries[this.selectedDayIndex].splice(this.modal.editIndex, 1);
-                        this.modal.show = false;
-                        this.pushDataToCloud(); // 全自動同步推播至全家人手機與其他裝置
-                    }
-                },
+    if (this.modal.type === 'itinerary') {
+        if (confirm('確定要從行程中刪除這個項目嗎？')) {
+            this.itineraries[this.selectedDayIndex].splice(this.modal.editIndex, 1);
+            this.modal.show = false;
+            this.pushDataToCloud();
+        }
+    }
+
+    if (this.modal.type === 'diary') {
+        if (confirm('確定要刪除這則旅行筆記嗎？')) {
+            this.diaryList.splice(this.modal.editIndex, 1);
+            this.modal.show = false;
+            this.pushDataToCloud();
+        }
+    }
+},
                 deleteShoppingItem(index) {
                     if (confirm('確定要刪除這個購物項目嗎？')) {
                     this.shoppingList.splice(index, 1);

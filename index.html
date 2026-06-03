@@ -113,6 +113,27 @@
         
         <div class="h-[250px] w-full relative overflow-hidden border-b border-slate-800/20 z-10 shrink-0">
             <img src="Web app Banner 素材.jpg" alt="港深插畫Banner" class="w-full h-full object-cover">
+            <div class="absolute top-5 left-0 right-0 z-30 text-center px-4">
+    <div class="inline-flex flex-col items-center justify-center px-5 py-3 bg-slate-950/35 backdrop-blur-xl border border-white/15 shadow-xl">
+        <span class="text-[10px] uppercase font-black tracking-[0.28em] text-white/60 block mb-1">
+            Boutique Private Itinerary
+        </span>
+
+        <div class="flex items-center justify-center space-x-2">
+            <h1 class="text-2xl font-black text-white tracking-[0.22em] filter drop-shadow-md pl-4">
+                港深雙城行
+            </h1>
+
+            <span class="text-xs transition-all duration-300">
+                <i v-if="cloudStatus === 'synced'" class="fa-solid fa-cloud-arrow-up text-emerald-400 filter drop-shadow-md" title="跨裝置雲端數據同步成功"></i>
+                <i v-if="cloudStatus === 'syncing'" class="fa-solid fa-spinner fa-spin text-hkSkyBlue" title="正在讀取/推送最新全家族共享資料..."></i>
+                <i v-if="cloudStatus === 'error'" class="fa-solid fa-cloud-bounce text-red-400" title="本地離線儲存安全防護導通"></i>
+            </span>
+        </div>
+
+        <div class="w-10 h-[2.5px] bg-hkAccentOrange mx-auto mt-2.5"></div>
+    </div>
+</div>
             
             <div class="absolute bottom-12 right-4 flex space-x-1.5 bg-white/60 backdrop-blur-xl p-1.5 rounded-2xl border border-white/40 shadow-xl z-30 max-w-[90%] overflow-x-auto no-scrollbar">
                 <button @click="currentTab = 'itinerary'" :class="{'bg-slate-800 text-white shadow-md': currentTab === 'itinerary', 'text-slate-800': currentTab !== 'itinerary'}" class="w-9 h-9 rounded-xl flex shrink-0 transition-all duration-300">
@@ -133,19 +154,8 @@
             </div>
         </div>
 
-        <div class="-mt-8 rounded-t-[32px] bg-transparent relative z-20 px-4 pt-6 flex-1 flex flex-col">
-            
-            <div class="mb-5 text-center z-10 relative shrink-0 flex flex-col items-center justify-center">
-                <span class="text-[10px] uppercase font-black tracking-[0.28em] text-white/50 block mb-1">Boutique Private Itinerary</span>
-                <div class="flex items-center justify-center space-x-2">
-                    <h1 class="text-2xl font-black text-white tracking-[0.22em] filter drop-shadow-md pl-4">港深雙城行</h1>
-                    <span class="text-xs transition-all duration-300">
-                        <i v-if="cloudStatus === 'synced'" class="fa-solid fa-cloud-arrow-up text-emerald-400 filter drop-shadow-md" title="跨裝置雲端數據同步成功"></i>
-                        <i v-if="cloudStatus === 'syncing'" class="fa-solid fa-spinner fa-spin text-hkSkyBlue" title="正在讀取/推送最新全家族共享資料..."></i>
-                        <i v-if="cloudStatus === 'error'" class="fa-solid fa-cloud-bounce text-red-400" title="本地離線儲存安全防護導通"></i>
-                    </span>
-                </div>
-                <div class="w-10 h-[2.5px] bg-hkAccentOrange mx-auto mt-2.5 rounded-full"></div>
+        <div class="-mt-8 rounded-t-[32px] bg-transparent relative z-20 px-4 pt-6 flex-1 flex flex-col">    
+           
             </div>
 
             <div v-if="currentTab === 'itinerary'" class="space-y-4 flex-1 flex flex-col">

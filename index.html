@@ -355,11 +355,13 @@
                                     <button @click="moveItem(idx, 1)" class="text-slate-500 hover:text-slate-800 p-1" title="下移"><i class="fa-solid fa-chevron-down text-xs"></i></button>
                                     <button @click="openEditModal(item, idx)" class="text-hkThemeGreen hover:text-slate-900 p-1" title="編輯項目"><i class="fa-solid fa-pen text-xs"></i></button>
                                 </div>
-
+                                
+                                <!--
                                 <div v-if="item.image" class="w-full h-32 rounded-xl overflow-hidden mb-3 border border-slate-300/40 shadow-inner">
                                     <img :src="item.image" alt="行程相片" class="w-full h-full object-cover">
                                 </div>
-
+                                -->
+                                
                                 <h4 class="font-black text-base text-hkNavyText pr-16 tracking-wide">{{ item.name }}</h4>
                                 
                                 <div class="text-xs text-hkMutedText space-y-1.5 mt-2.5 font-semibold">
@@ -464,35 +466,53 @@
             </div>
 
             <div v-if="currentTab === 'shopping'" class="space-y-4">
-                <div class="grid grid-cols-2 gap-3">
-                    <div v-for="(shop, sIdx) in shoppingList" :key="sIdx" class="glass-panel rounded-2xl overflow-hidden flex flex-col shadow-md text-hkNavyText">
-                        <div class="h-32 bg-slate-200/50 relative border-b border-slate-200">
-                            <img v-if="shop.image" :src="shop.image" class="w-full h-full object-cover">
-                            <div v-else class="w-full h-full flex flex-col items-center justify-center text-slate-400">
-                                <i class="fa-regular fa-image text-xl mb-1"></i>
-                                <span class="text-[9px]">點相機上傳照片</span>
-                            </div>
-                            <label class="absolute bottom-2 right-2 bg-slate-800 text-white w-7 h-7 rounded-lg flex items-center justify-center cursor-pointer shadow-md">
-                                <i class="fa-solid fa-camera text-xs m-auto"></i>
-                                <input type="file" accept="image/*" @change="uploadShoppingImg($event, sIdx)" class="hidden">
-                            </label>
-                        </div>
-                        <div class="p-3 flex-1 flex flex-col justify-between space-y-2 bg-white/40">
-                            <div>
-                                <p class="font-black text-sm text-hkNavyText truncate">🛍️ {{ shop.name }}</p>
-                                <p v-if="shop.note" class="text-[11px] text-slate-600 bg-white/80 p-1.5 rounded-xl border border-slate-300/60 mt-1 font-medium whitespace-pre-wrap leading-tight shadow-sm">
-                                    {{ shop.note }}
-                                </p>
-                            </div>
-                                <button @click="deleteShoppingItem(sIdx)" class="text-right text-xs text-red-600 font-bold self-end hover:underline"><i class="fa-regular fa-trash-can text-[10px]"></i> 刪除</button>                        </div>
-                    </div>
-                </div>
-                <div class="fixed bottom-6 max-w-md w-full pr-10 flex justify-end z-40 pointer-events-none">
-                    <button @click="openAddModal('shopping')" class="pointer-events-auto w-14 h-14 bg-slate-800 text-white rounded-full flex items-center justify-center text-xl border border-white/20 shadow-xl">
-                        <i class="fa-solid fa-plus"></i>
-                    </button>
+    <div class="glass-panel rounded-2xl p-4 shadow-md text-hkNavyText">
+        <p class="text-[10px] text-hkMutedText font-semibold uppercase tracking-[0.22em] mb-1">
+            Wish List
+        </p>
+        <h3 class="text-base font-semibold text-hkNavyText">
+            購物 / 想吃清單
+        </h3>
+        <p class="text-[11px] text-hkMutedText mt-1 leading-relaxed">
+            記下想買的東西、想吃的餐廳，家人更新網頁後也能一起看到。
+        </p>
+    </div>
+
+    <div class="space-y-3">
+        <div v-for="(shop, sIdx) in shoppingList" :key="sIdx"
+             class="glass-panel rounded-2xl p-4 shadow-md text-hkNavyText flex items-start justify-between gap-3">
+            
+            <div class="flex items-start gap-3 min-w-0 flex-1">
+                <span :class="getWishTypeStyle(shop.type)"
+                      class="shrink-0 text-[11px] px-2.5 py-1 rounded-full font-semibold border">
+                    {{ shop.type || '購物' }}
+                </span>
+
+                <div class="min-w-0 flex-1">
+                    <p class="text-sm font-semibold text-hkNavyText leading-snug">
+                        {{ shop.name }}
+                    </p>
+
+                    <p v-if="shop.note"
+                       class="text-[11px] text-slate-600 mt-1.5 leading-relaxed whitespace-pre-wrap">
+                        {{ shop.note }}
+                    </p>
                 </div>
             </div>
+
+            <button @click="deleteShoppingItem(sIdx)"
+                    class="shrink-0 text-slate-400 hover:text-red-600 transition-colors pt-0.5">
+                <i class="fa-regular fa-trash-can text-xs"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="fixed bottom-6 max-w-md w-full pr-10 flex justify-end z-40 pointer-events-none">
+        <button @click="openAddModal('shopping')" class="pointer-events-auto w-14 h-14 bg-slate-800 text-white rounded-full flex items-center justify-center text-xl border border-white/20 shadow-xl">
+            <i class="fa-solid fa-plus"></i>
+        </button>
+    </div>
+</div>
 
             <div v-if="currentTab === 'expenses'" class="space-y-4">
                 <div class="glass-panel rounded-3xl p-5 border border-white/40 shadow-md text-hkNavyText">
@@ -615,6 +635,7 @@
                         </div>
                     </div>
 
+                   <!--
                     <div class="bg-slate-200/60 p-3 rounded-xl border border-slate-300 space-y-1">
                         <label class="block text-xs font-bold text-slate-500 mb-1">為此行程附上實拍照 / 票券地圖截圖</label>
                         <div class="flex items-center space-x-3">
@@ -625,7 +646,7 @@
                             <span v-if="modal.data.image" class="text-xs text-hkThemeGreen font-bold">✅ 照片已成功匯入</span>
                         </div>
                     </div>
-
+                    -->
                     <div>
                         <label class="block text-xs font-bold text-slate-500 mb-1">特色 & 備註細節</label>
                         <textarea v-model="modal.data.note" rows="2" class="ui-textarea" placeholder="輸入特色或備註..."></textarea>
@@ -633,15 +654,24 @@
                 </div>
 
                 <div v-if="modal.type === 'shopping'" class="space-y-3 text-sm">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-500 mb-1">想買的物品名稱</label>
-                        <input type="text" v-model="modal.data.name" class="ui-input" placeholder="例如：珍妮曲奇小熊餅乾">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-500 mb-1">備註說明項目 (規格/幫誰代購)</label>
-                        <textarea v-model="modal.data.note" rows="3" class="ui-textarea" placeholder="例如：買4味大盒裝x2 / 幫大姐帶的"></textarea>
-                    </div>
-                </div>
+    <div>
+        <label class="block text-xs font-bold text-slate-500 mb-1">清單類型</label>
+        <select v-model="modal.data.type" class="ui-select">
+            <option value="購物">購物</option>
+            <option value="想吃">想吃</option>
+        </select>
+    </div>
+
+    <div>
+        <label class="block text-xs font-bold text-slate-500 mb-1">名稱</label>
+        <input type="text" v-model="modal.data.name" class="ui-input" placeholder="例如：珍妮曲奇 / 澳洲牛奶公司">
+    </div>
+
+    <div>
+        <label class="block text-xs font-bold text-slate-500 mb-1">備註</label>
+        <textarea v-model="modal.data.note" rows="3" class="ui-textarea" placeholder="例如：想買幾盒、推薦餐點、在哪一區順路去"></textarea>
+    </div>
+</div>
 
                 <div v-if="modal.type === 'expenses'" class="space-y-3 text-sm">
                     <div class="grid grid-cols-2 gap-2">
@@ -699,6 +729,7 @@
                             </select>
                         </div>
                     </div>
+                    <!--
                     <div>
                         <label class="block text-xs font-bold text-slate-400 mb-1">相片紀錄</label>
                         <div class="flex items-center space-x-3">
@@ -709,6 +740,7 @@
                             <span v-if="modal.data.image" class="text-xs text-hkThemeGreen font-bold">✅ 照片已導入</span>
                         </div>
                     </div>
+                    -->
                     <div>
                         <label class="block text-xs font-bold text-slate-400 mb-1">日記隨筆內容</label>
                         <textarea v-model="modal.data.note" rows="3" class="ui-textarea" placeholder="留下當時的感動與日記隨筆..."></textarea>
@@ -879,7 +911,22 @@
                     ];
                     this.saveToLocalCache();
                 },
-                saveToLocalCache() {
+                saveToLocalCache() 
+                removeImageFields() {
+                    this.itineraries = this.itineraries.map(day => {
+                    return day.map(item => {
+                    return { ...item, image: '' }; });
+    });
+
+                    this.shoppingList = this.shoppingList.map(item => {
+                    return { ...item, image: '' };
+    });
+
+                    this.diaryList = this.diaryList.map(item => {
+                    return { ...item, image: '' };
+    });
+},
+                {
                     localStorage.setItem('hk_sz_itineraries', JSON.stringify(this.itineraries));
                     localStorage.setItem('hk_sz_shoppingList', JSON.stringify(this.shoppingList));
                     localStorage.setItem('hk_sz_expenses', JSON.stringify(this.expenses));
@@ -887,6 +934,7 @@
                 },
                 pushDataToCloud() {
     this.cloudStatus = 'syncing';
+    this.removeImageFields();
     this.saveToLocalCache();
 
     const payload = {
@@ -980,6 +1028,10 @@
                     if (text.includes('地鐵') || text.includes('港鐵') || text.includes('巴') || text.includes('捷') || text.includes('鐵') || text.includes('船') || text.includes('渡') || text.includes('飛機')) return 'fa-solid fa-bus-simple';
                     return 'fa-solid fa-route';
                 },
+                getWishTypeStyle(type) {
+                    if (type === '想吃') { return 'bg-orange-100 text-hkAccentOrange border-orange-200'; } return 'bg-emerald-100 text-hkThemeGreen border-emerald-200';
+                },
+                
                 getExpenseCategoryColor(cat) {
                     const colors = { '交通': 'bg-cyan-100 text-cyan-800', '飲食': 'bg-orange-100 text-hkAccentOrange', '住宿': 'bg-indigo-100 text-indigo-800', '門票': 'bg-emerald-100 text-emerald-800', '購物': 'bg-pink-100 text-hkPink', '其他': 'bg-slate-200 text-slate-800' };
                     return colors[cat] || 'bg-slate-200 text-slate-800';
@@ -999,7 +1051,7 @@
                     if (type === 'itinerary') { this.modal.title = '🚀 規劃新行程'; this.modal.data = {  category: '景點', name: '',
     time: '', ticket: '', note: '', transitMode: '搭乘大眾運輸', transitTime: '15', flightNo: '', image: '',
     region: this.selectedDayIndex === 2 ? 'shenzhen' : 'hongkong'}; } 
-                    else if (type === 'shopping') { this.modal.title = '🛍️ 新增購物清單'; this.modal.data = { name: '', image: '', note: '' }; } 
+                    else if (type === 'shopping') { this.modal.title = '📝 新增願望清單'; this.modal.data = { type: '購物', name: '', note: '' }; }
                     else if (type === 'expenses') { this.modal.title = '💰 新增旅程支出'; this.modal.data = { category: '飲食', name: '', date: today, amount: '', currency: 'CNY', payMethod: '現金' }; } 
                     else if (type === 'diary') { this.modal.title = '📖 寫下一篇旅途手帳'; this.modal.data = { title: '', date: today, rating: 5, note: '', image: '' }; }
                 },

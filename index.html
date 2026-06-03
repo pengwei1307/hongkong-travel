@@ -75,26 +75,31 @@
         .ui-input:focus {
             border-color: #1E4620 !important; /* 聚焦時切換為質感暗綠邊框 */
         }
-        /* 統一日期欄位樣式，避免 type="date" 看起來和其他輸入框不同 */
+       /* 統一日期欄位樣式，讓 type="date" 和旁邊的 select 高度一致 */
 .ui-input[type="date"] {
     appearance: none;
     -webkit-appearance: none;
-    min-height: 48px;
-    line-height: normal;
-    font-size: 16px !important;
+    height: 48px !important;
+    min-height: 48px !important;
+    padding: 12px !important;
+    font-size: 14px !important;
+    line-height: 1.2 !important;
     font-family: inherit;
+    box-sizing: border-box !important;
 }
 
 /* 修正 Chrome / Safari 日期文字垂直位置 */
 .ui-input[type="date"]::-webkit-date-and-time-value {
     text-align: left;
-    min-height: 24px;
+    line-height: 1.2;
+    padding: 0;
 }
 
 /* 讓日期選擇圖示不要太突兀 */
 .ui-input[type="date"]::-webkit-calendar-picker-indicator {
     opacity: 0.65;
     cursor: pointer;
+    margin-left: 4px;
 }
         
         .ui-select {

@@ -611,33 +611,58 @@
             </div>
 
             <div v-if="currentTab === 'diary'" class="space-y-4">
-                <div v-for="(log, dIdx) in diaryList" :key="dIdx" class="glass-panel rounded-2xl p-4 space-y-3 shadow-md text-hkNavyText">
-                    <div v-if="log.image" class="h-44 w-full rounded-xl overflow-hidden border border-slate-200">
-                        <img :src="log.image" class="w-full h-full object-cover">
-                    </div>
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h4 class="font-black text-base text-hkNavyText">✏️ {{ log.title }}</h4>
-                            <p class="text-[10px] text-hkMutedText font-bold">📅 {{ log.date }}</p>
-                        </div>
-                        <div class="text-amber-500 text-xs shrink-0 bg-slate-800 px-2 py-1 rounded-xl shadow-sm">
-                            <i v-for="s in log.rating" :key="'star-'+s" class="fa-solid fa-star"></i>
-                            <i v-for="s in (5 - log.rating)" :key="'empty-'+s" class="fa-regular fa-star opacity-30"></i>
-                        </div>
-                    </div>
-                    <p v-if="log.note" class="text-xs text-slate-700 bg-white/50 p-3 rounded-xl border border-slate-200 font-medium leading-relaxed whitespace-pre-line shadow-inner">{{ log.note }}</p>
-                    <div class="flex justify-end pt-1">
-                        <button @click="deleteDiaryItem(dIdx)" class="text-xs text-red-600 font-bold hover:underline"><i class="fa-regular fa-trash-can mr-1"></i>刪除手帳</button>
-                    </div>
+    <div class="glass-panel rounded-2xl p-4 shadow-md text-hkNavyText">
+        <p class="text-[10px] text-hkMutedText font-semibold uppercase tracking-[0.22em] mb-1">
+            Travel Notes
+        </p>
+        <h3 class="text-base font-semibold text-hkNavyText">
+            旅行筆記
+        </h3>
+        <p class="text-[11px] text-hkMutedText mt-1 leading-relaxed">
+            記錄市集、表演、臨時活動、商場快閃、想順路去的地方，旅途中可以隨時打開查看。
+        </p>
+    </div>
+
+    <div class="space-y-3">
+        <div v-for="(log, dIdx) in diaryList"
+             :key="dIdx"
+             class="glass-panel rounded-2xl p-4 shadow-md text-hkNavyText">
+            
+            <div class="flex items-start justify-between gap-3">
+                <div class="min-w-0 flex-1">
+                    <h4 class="text-sm font-semibold text-hkNavyText leading-snug">
+                        {{ log.title }}
+                    </h4>
+
+                    <p v-if="log.date" class="text-[10px] text-hkMutedText font-semibold mt-1">
+                        {{ log.date }}
+                    </p>
                 </div>
-                <div class="fixed bottom-6 max-w-md w-full pr-10 flex justify-end z-40 pointer-events-none">
-                    <button @click="openAddModal('diary')" class="pointer-events-auto w-14 h-14 bg-slate-800 text-white rounded-full flex items-center justify-center text-xl border border-white/20 shadow-xl">
-                        <i class="fa-solid fa-plus"></i>
-                    </button>
-                </div>
+
+                <button @click="deleteDiaryItem(dIdx)"
+                        class="shrink-0 text-slate-400 hover:text-red-600 transition-colors pt-0.5">
+                    <i class="fa-regular fa-trash-can text-xs"></i>
+                </button>
             </div>
 
+            <p v-if="log.note"
+               class="text-[12px] text-slate-700 bg-white/50 p-3 rounded-xl border border-slate-200 font-medium leading-relaxed whitespace-pre-line shadow-inner mt-3">
+                {{ log.note }}
+            </p>
         </div>
+
+        <p v-if="diaryList.length === 0"
+           class="glass-panel rounded-2xl p-4 text-center text-[12px] text-hkMutedText">
+            目前還沒有旅行筆記。
+        </p>
+    </div>
+
+    <div class="fixed bottom-6 max-w-md w-full pr-10 flex justify-end z-40 pointer-events-none">
+        <button @click="openAddModal('diary')" class="pointer-events-auto w-14 h-14 bg-slate-800 text-white rounded-full flex items-center justify-center text-xl border border-white/20 shadow-xl">
+            <i class="fa-solid fa-plus"></i>
+        </button>
+    </div>
+</div>
 
         <div v-if="modal.show" class="fixed inset-0 bg-slate-950/80 backdrop-blur-xl z-50 flex items-end justify-center">
             <div class="bg-slate-100 w-full max-w-md rounded-t-[32px] p-6 space-y-4 max-h-[90vh] overflow-y-auto border-t border-slate-300 shadow-2xl text-slate-800">
@@ -774,43 +799,29 @@
                 </div>
 
                 <div v-if="modal.type === 'diary'" class="space-y-3 text-sm">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-400 mb-1">手帳主題名稱</label>
-                        <input type="text" v-model="modal.data.title" class="ui-input" placeholder="地標或點評主題">
-                    </div>
-                    <div class="grid grid-cols-2 gap-2">
-                        <div>
-                            <label class="block text-xs font-bold text-slate-400 mb-1">記錄日期</label>
-                            <input type="date" v-model="modal.data.date" class="ui-input">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-slate-400 mb-1">美食/景點評分</label>
-                            <select v-model="modal.data.rating" class="ui-select text-amber-600 font-bold">
-                                <option :value="5">⭐⭐⭐⭐⭐ 絕代神店</option>
-                                <option :value="4">⭐⭐⭐⭐ 值得探訪</option>
-                                <option :value="3">⭐⭐⭐ 表現普通</option>
-                                <option :value="2">⭐⭐ 不太合口</option>
-                                <option :value="1">⭐ 極度踩雷</option>
-                            </select>
-                        </div>
-                    </div>
-                    <!--
-                    <div>
-                        <label class="block text-xs font-bold text-slate-400 mb-1">相片紀錄</label>
-                        <div class="flex items-center space-x-3">
-                            <label class="bg-slate-800 text-white px-4 py-2 rounded-xl cursor-pointer text-xs font-bold inline-flex items-center shadow-md hover:bg-slate-700 transition-colors">
-                                <i class="fa-solid fa-camera mr-1.5 text-hkRoseGold"></i> 開啟相簿
-                                <input type="file" accept="image/*" @change="uploadDiaryImg($event)" class="hidden">
-                            </label>
-                            <span v-if="modal.data.image" class="text-xs text-hkThemeGreen font-bold">✅ 照片已導入</span>
-                        </div>
-                    </div>
-                    -->
-                    <div>
-                        <label class="block text-xs font-bold text-slate-400 mb-1">日記隨筆內容</label>
-                        <textarea v-model="modal.data.note" rows="3" class="ui-textarea" placeholder="留下當時的感動與日記隨筆..."></textarea>
-                    </div>
-                </div>
+    <div>
+        <label class="block text-xs font-bold text-slate-500 mb-1">筆記標題</label>
+        <input type="text"
+               v-model="modal.data.title"
+               class="ui-input"
+               placeholder="例如：K11 MUSEA 週末市集 / 深圳灣夜景候選">
+    </div>
+
+    <div>
+        <label class="block text-xs font-bold text-slate-500 mb-1">日期</label>
+        <input type="date"
+               v-model="modal.data.date"
+               class="ui-input">
+    </div>
+
+    <div>
+        <label class="block text-xs font-bold text-slate-500 mb-1">筆記內容</label>
+        <textarea v-model="modal.data.note"
+                  rows="5"
+                  class="ui-textarea"
+                  placeholder="可以自由記錄活動時間、地點、表演、市集、商場快閃、臨時想去的地方……"></textarea>
+    </div>
+</div>
 
                 <div class="flex space-x-2 pt-4 border-t border-slate-200">
                     <button v-if="modal.isEdit" @click="confirmDelete" class="bg-red-100 text-red-700 border border-red-300 font-bold px-4 py-2.5 rounded-xl text-sm flex-1 hover:bg-red-200 transition-colors">
@@ -1120,14 +1131,13 @@
     region: this.selectedDayIndex === 2 ? 'shenzhen' : 'hongkong'}; } 
                     else if (type === 'shopping') { this.modal.title = '📝 新增願望清單'; this.modal.data = { type: '購物', name: '', note: '' }; }
                     else if (type === 'expenses') { this.modal.title = '💰 新增旅程支出'; this.modal.data = { category: '飲食', name: '', date: today, amount: '', currency: 'CNY', payMethod: '現金' }; } 
-                    else if (type === 'diary') { this.modal.title = '📖 寫下一篇旅途手帳'; this.modal.data = { title: '', date: today, rating: 5, note: '', image: '' }; }
-                },
+                    else if (type === 'diary') { this.modal.title = '📝 新增旅行筆記'; this.modal.data = { title: '', date: today, note: '', image: '' }; }
                 openEditModal(item, index) {
                     this.modal.type = 'itinerary'; this.modal.isEdit = true; this.modal.editIndex = index; this.modal.title = '📝 修改行程欄位';
                     this.modal.data = JSON.parse(JSON.stringify(item)); this.modal.show = true;
                 },
                 saveModalData() {
-                    if (this.modal.type === 'diary' && !this.modal.data.title) return alert('請填寫手帳主題！');
+                   if (this.modal.type === 'diary' && !this.modal.data.title) return alert('請填寫筆記標題！');
                     if (this.modal.type !== 'diary' && !this.modal.data.name) return alert('請填寫名稱！');
                     
                     if (this.modal.type === 'itinerary') {
@@ -1160,7 +1170,7 @@
                     }
                 },
                 deleteDiaryItem(index) {
-                    if (confirm('確定要刪除這篇旅行手帳嗎？')) {
+                    if (confirm('確定要刪除這則旅行筆記嗎？')) {
                     this.diaryList.splice(index, 1);
                     this.pushDataToCloud();
                     }

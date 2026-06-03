@@ -13,29 +13,29 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         
-        /* 網頁全域底色，用於照片加載前的沉穩基底 */
+        /* 網頁全域底色 */
         body { 
             background-color: #030611; 
         }
 
         /* 🔮 高級都會極簡「淺米色/奶茶色」純淨毛玻璃面版 (Glassmorphism 特效) */
         .glass-panel {
-            background: rgba(253, 251, 247, 0.86);
+            background: rgba(253, 251, 247, 0.88);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.6);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.18);
         }
 
         /* 內部小元件專用：高透光淺色毛玻璃 */
         .glass-panel-light {
-            background: rgba(255, 255, 255, 0.55);
+            background: rgba(255, 255, 255, 0.6);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.7);
         }
 
-        /* 🎯 依據要求：全面統一所有「新增/編輯」表單文字框與選擇框樣式 */
+        /* 🎯 全面統一所有「新增/編輯」表單文字框與選擇框樣式 (高階純淨白底) */
         .ui-input {
             width: 100%;
             background-color: white !important;
@@ -43,11 +43,11 @@
             padding: 12px !important;
             border-radius: 12px !important;
             font-weight: bold !important;
-            color: #0F172A !important; /* hkNavyText */
+            color: #0F172A !important;
             outline: none !important;
         }
         .ui-input:focus {
-            border-color: #1E4620 !important; /* 聚焦時切換為質感優雅暗綠邊框 */
+            border-color: #1E4620 !important;
         }
         .ui-select {
             width: 100%;
@@ -56,7 +56,7 @@
             padding: 12px !important;
             border-radius: 12px !important;
             font-weight: bold !important;
-            color: #0F172A !important; /* hkNavyText */
+            color: #0F172A !important;
             outline: none !important;
             appearance: none;
             background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
@@ -102,8 +102,8 @@
 
     <div id="app" v-cloak class="max-w-md mx-auto bg-slate-955 min-h-screen relative z-10 flex flex-col overflow-x-hidden pb-32 border-x border-slate-800/40 shadow-2xl">
         
-        <div class="absolute inset-0 z-0 pointer-events-none overflow-hidden max-w-md mx-auto border-x border-slate-800/40">
-            <img src="網頁背景.png" alt="維港實景夜景" class="w-full h-full object-cover fixed max-w-md mx-auto">
+        <div class="fixed inset-0 z-0 pointer-events-none overflow-hidden max-w-md mx-auto border-x border-slate-800/40">
+            <img src="網頁背景.png" alt="維港實景夜景" class="w-full h-full object-cover">
             <div class="absolute inset-0 bg-slate-900/60"></div>
         </div>
 
@@ -131,6 +131,12 @@
 
         <div class="-mt-8 rounded-t-[32px] bg-transparent relative z-20 px-4 pt-6 flex-1">
             
+            <div class="mb-5 text-center z-10 relative">
+                <span class="text-[10px] uppercase font-black tracking-[0.28em] text-white/40 block mb-1">Premium Private Tour</span>
+                <h1 class="text-2xl font-black text-white tracking-[0.2em] filter drop-shadow-md">港深雙城行</h1>
+                <div class="w-10 h-[2.5px] bg-hkAccentOrange mx-auto mt-2.5 rounded-full"></div>
+            </div>
+
             <div v-if="currentTab === 'itinerary'" class="space-y-4">
                 
                 <div class="glass-panel rounded-2xl p-4 flex items-center justify-between shadow-md">
@@ -147,14 +153,16 @@
                     </div>
                 </div>
 
-                <div class="flex space-x-2.5 overflow-x-auto no-scrollbar pb-2">
-                    <button v-for="(day, index) in days" :key="index" 
-                            @click="selectedDayIndex = index"
-                            :class="{'bg-slate-800 text-white shadow-md transform scale-105 font-bold': selectedDayIndex === index, 'bg-white/80 text-slate-700 border border-white/40': selectedDayIndex !== index}"
-                            class="flex flex-col items-center justify-center min-w-[66px] h-20 rounded-2xl transition-all duration-300 shadow-sm backdrop-blur-md">
-                        <span class="text-[11px] uppercase font-bold tracking-widest mb-1" :class="selectedDayIndex === index ? 'text-hkRoseGold' : 'text-slate-400'">{{ day.weekday }}</span>
-                        <span class="text-base font-extrabold">{{ day.dateStr }}</span>
-                    </button>
+                <div class="sticky top-0 z-30 -mx-4 px-4 py-2 bg-slate-900/10 backdrop-blur-md border-b border-white/10 shadow-sm">
+                    <div class="flex space-x-2.5 overflow-x-auto no-scrollbar">
+                        <button v-for="(day, index) in days" :key="index" 
+                                @click="selectedDayIndex = index"
+                                :class="{'bg-slate-800 text-white shadow-md transform scale-105 font-bold': selectedDayIndex === index, 'bg-white/90 text-slate-700 border border-white/50': selectedDayIndex !== index}"
+                                class="flex flex-col items-center justify-center min-w-[66px] h-16 rounded-xl transition-all duration-300 shadow-sm">
+                            <span class="text-[10px] uppercase font-bold tracking-wider mb-0.5" :class="selectedDayIndex === index ? 'text-hkRoseGold' : 'text-slate-400'">{{ day.weekday }}</span>
+                            <span class="text-sm font-extrabold">{{ day.dateStr }}</span>
+                        </button>
+                    </div>
                 </div>
 
                 <div class="space-y-4 relative before:absolute before:top-4 before:bottom-4 before:left-[19px] before:w-[2px] before:bg-white/20">
@@ -220,13 +228,13 @@
                                 <div class="text-xs text-hkMutedText space-y-1.5 mt-2.5 font-semibold">
                                     <p v-if="item.time" class="flex items-center"><i class="fa-regular fa-clock w-4 text-hkThemeGreen"></i>時間: {{ item.time }}</p>
                                     <p v-if="item.ticket && item.category === '景點'" class="flex items-center"><i class="fa-solid fa-ticket w-4 text-hkAccentOrange"></i>門票: {{ item.ticket }}</p>
-                                    <p v-if="item.note" class="flex items-start bg-amber-50/50 p-2.5 rounded-xl text-slate-700 mt-2 border border-amber-900/10 shadow-inner"><i class="fa-solid fa-quote-left w-4 text-hkAccentOrange shrink-0 text-[9px] mt-0.5 opacity-70"></i><span class="ml-1 flex-1 text-slate-800 leading-relaxed font-medium">{{ item.note }}</span></p>
+                                    <p v-if="item.note" class="flex items-start bg-amber-50/40 p-2.5 rounded-xl text-slate-700 mt-2 border border-amber-900/10 shadow-inner"><i class="fa-solid fa-quote-left w-4 text-hkAccentOrange shrink-0 text-[9px] mt-0.5 opacity-70"></i><span class="ml-1 flex-1 text-slate-800 leading-relaxed font-medium">{{ item.note }}</span></p>
                                 </div>
 
                                 <div class="mt-3.5 pt-2 border-t border-slate-200 flex justify-end">
-                                    <a :href="'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(item.name)" target="_blank" class="inline-flex items-center space-x-1 text-xs text-hkThemeGreen font-black hover:underline transition-all">
+                                    <a :href="getMapLink(item)" target="_blank" class="inline-flex items-center space-x-1 text-xs text-hkThemeGreen font-black hover:underline transition-all">
                                         <i class="fa-solid fa-map-location-dot"></i>
-                                        <span>地圖導航 ➡️</span>
+                                        <span>{{ isShenzhenItinerary(item) ? '高德地圖導航 ➡️' : 'Google 地圖導航 ➡️' }}</span>
                                     </a>
                                 </div>
                             </div>
@@ -286,13 +294,13 @@
                     <div class="text-xs space-y-3 divide-y divide-slate-200">
                         <div class="space-y-0.5 pt-1">
                             <p class="font-bold text-hkNavyText text-sm">第一晚：唯港薈 (Hotel ICON)</p>
-                            <p class="text-hkMutedText">📍 香港尖沙咀科學館道17號 (電話: +852 3400 1000)</p>
-                            <a href="http://maps.google.com/?q=Hotel+ICON+Hong+Kong" target="_blank" class="inline-block text-hkAccentOrange font-black mt-1.5 hover:underline">開啟 Google 地圖導航 ➡️</a>
+                            <p class="text-hkMutedText">📍 香港尖沙咀科學館道17號</p>
+                            <a href="https://www.google.com/maps/search/?api=1&query=%E5%94%AF%E6%B8%AF%E8%96%A4%20Hotel%20ICON" target="_blank" class="inline-block text-hkAccentOrange font-black mt-1.5 hover:underline">開啟 Google 地圖 ➡️</a>
                         </div>
                         <div class="space-y-0.5 pt-3">
                             <p class="font-bold text-hkNavyText text-sm">第二、三晚：里白酒店 (深圳會展中心店)</p>
                             <p class="text-hkMutedText">📍 深圳福田區 (鄰近福民地鐵站)</p>
-                            <a href="http://maps.google.com/?q=深圳里白酒店" target="_blank" class="inline-block text-hkAccentOrange font-black mt-1.5 hover:underline">開啟 Google 地圖導航 ➡️</a>
+                            <a href="https://www.amap.com/search?query=%E9%85%8D%E9%85%8C%E9%87%8C%E7%99%BD%E9%85%92%E5%BA%97%20%E6%B7%B1%E5%9C%B3%E6%9C%83%E5%B1%95%E4%B8%AD%E5%BF%83%E5%BA%97" target="_blank" class="inline-block text-hkAccentOrange font-black mt-1.5 hover:underline">開啟 高德地圖 ➡️</a>
                         </div>
                     </div>
                 </div>
@@ -360,7 +368,7 @@
                             </div>
                         </div>
                         <div class="text-right flex items-center space-x-3">
-                            <span class="text-sm font-black text-hkAccentOrange">{{ getCurrencySymbol(exp.currency) }} {{ exp.amount }}</span>
+                            <span class="text-sm font-bold text-hkAccentOrange">{{ getCurrencySymbol(exp.currency) }} {{ exp.amount }}</span>
                             <button @click="expenses.splice(eIdx, 1)" class="text-slate-400 hover:text-red-600 transition-colors"><i class="fa-solid fa-circle-xmark"></i></button>
                         </div>
                     </div>
@@ -417,7 +425,7 @@
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-500 mb-1">地標/項目名稱</label>
-                        <input type="text" v-model="modal.data.name" class="ui-input" placeholder="例如：棋子燒鵝">
+                        <input type="text" v-model="modal.data.name" class="ui-input" placeholder="例如：華僑城創意文化園">
                     </div>
                     
                     <div v-if="modal.data.category === '航班'" class="grid grid-cols-2 gap-2 bg-slate-200/50 p-3 rounded-xl border border-slate-300">
@@ -445,7 +453,7 @@
                         <div class="grid grid-cols-3 gap-2">
                             <div class="col-span-2">
                                 <label class="block text-[10px] text-slate-500 font-bold mb-1">交通工具 / 路線敘述</label>
-                                <input type="text" v-model="modal.data.transitMode" class="ui-input" placeholder="例如：搭叮叮車、天星小輪、步行">
+                                <input type="text" v-model="modal.data.transitMode" class="ui-input" placeholder="例如：搭地鐵到中環、打D">
                             </div>
                             <div class="col-span-1">
                                 <label class="block text-[10px] text-slate-500 font-bold mb-1">耗時(分鐘)</label>
@@ -477,7 +485,7 @@
                         <input type="text" v-model="modal.data.name" class="ui-input" placeholder="例如：珍妮曲奇小熊餅乾">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-slate-500 mb-1">備註說明項目 (規格/預估售價/幫誰代購)</label>
+                        <label class="block text-xs font-bold text-slate-500 mb-1">備註說明項目 (規格/幫誰代購)</label>
                         <textarea v-model="modal.data.note" rows="3" class="ui-textarea" placeholder="例如：買4味大盒裝x2 / 幫大姐帶的"></textarea>
                     </div>
                 </div>
@@ -497,7 +505,7 @@
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-500 mb-1">花費項目名稱</label>
-                        <input type="text" v-model="modal.data.name" class="ui-input" placeholder="例如：燒鵝午餐費用">
+                        <input type="text" v-model="modal.data.name" class="ui-input" placeholder="例如：鯇魚火鍋晚餐費">
                     </div>
                     <div class="grid grid-cols-3 gap-2">
                         <div>
@@ -589,7 +597,7 @@
                         { weekday: 'Sun', dateStr: '6/16' }
                     ],
                     itineraries: [
-                        // 6/13 完整行程明細 (全數打出，保留原版程式碼所有中文物件描述)
+                        // 6/13 完整行程明細
                         [
                             { id: 1, category: '航班', name: '去程：長榮航空 BR845 (高雄KHH ✈️ 香港HKG)', time: '09:15-10:55', flightNo: 'BR845', note: '出發前往香港，開啟精彩雙城微旅行！', transitMode: '搭乘豪華客機', transitTime: '100', image: '' },
                             { id: 2, category: '住宿', name: '唯港薈 (Hotel ICON) 寄行李', time: '12:30', note: '中午抵達先寄行李。15:00可以正式Check in。提前到店好像可以先使用設施，爸爸可以去健身房健身！', transitMode: '搭機場快線轉專車接駁', transitTime: '40', image: '' },
@@ -612,14 +620,14 @@
                         ],
                         // 6/15 完整行程明細
                         [
-                            { id: 16, category: '美食', name: '牛肉火鍋', time: '中午 12:00', note: '必點牛胸口油！！！爽脆彈牙不油膩。', transitMode: '步行前去', transitTime: '0', image: '' },
+                            { id: 16, category: '美食', name: '潮汕牛肉火鍋午餐', time: '中午 12:00', note: '必點牛胸口油！！！爽脆彈牙不油膩。', transitMode: '步行前去', transitTime: '0', image: '' },
                             { id: 17, category: '景點', name: '華僑城創意文化園', time: '下午', note: '深圳著名的文青藝術園區，文創氛圍滿滿。', transitMode: '打計程車前往', transitTime: '30', image: '' },
                             { id: 18, category: '景點', name: '深圳灣萬象城 / 人才公園 / 深圳灣公園', time: '傍晚夜景', note: '散步看夕陽與璀璨城市燈光秀。', transitMode: '搭地鐵或打D前往', transitTime: '25', image: '' }
                         ],
                         // 6/16 完整行程明細 (回程包含與第一天格式相同之精美登機證卡片)
                         [
-                            { id: 19, category: '住宿', name: '里白酒店退房', time: '12:00前', note: '準備收拾行李回港。', transitMode: '確認帶齊隨身行李', transitTime: '0', image: '' },
-                            { id: 20, category: '核心', name: '啟程回港移動', time: '最晚 14:00 回港', note: '目前安排之後會再修改。', transitMode: '深圳福田搭高鐵回香港西九龍', transitTime: '45', image: '' },
+                            { id: 19, category: '住宿', name: '里白酒店退房', time: '12:00前', note: '收拾整頓全部行李，準備啟程返回香港。', transitMode: '清點手提行李', transitTime: '0', image: '' },
+                            { id: 20, category: '其他', name: '啟程回港移動', time: '最晚 14:00 回港', note: '目前安排之後會再修改。', transitMode: '深圳福田搭高鐵回香港西九龍', transitTime: '45', image: '' },
                             { id: 21, category: '航班', name: '回程：長榮航空 BR850 (香港HKG ✈️ 高雄KHH)', time: '19:25-21:00', flightNo: 'BR850', note: '璀璨雙城微旅行圓滿結束，平安返回高雄！', transitMode: '搭乘豪華客機', transitTime: '95', image: '' }
                         ]
                     ],
@@ -659,6 +667,23 @@
                 }
             },
             methods: {
+                // 🗺️ 智慧跨境跳轉地圖判斷演算法
+                isShenzhenItinerary(item) {
+                    return this.selectedDayIndex === 1 || this.selectedDayIndex === 2 || 
+                           item.name.includes('深圳') || item.name.includes('里白') || 
+                           item.name.includes('老街') || item.name.includes('華僑城') || 
+                           item.name.includes('萬象城') || item.name.includes('火鍋');
+                },
+                getMapLink(item) {
+                    const query = encodeURIComponent(item.name);
+                    if (this.isShenzhenItinerary(item)) {
+                        // 內地地標全自動導航至高德地圖
+                        return `https://www.amap.com/search?query=${query}`;
+                    } else {
+                        // 香港地標全自動導航至 Google 地圖
+                        return `https://www.google.com/maps/search/?api=1&query=${query}`;
+                    }
+                },
                 getCategoryIcon(cat) {
                     const icons = { '景點': 'fa-solid fa-camera-retro', '住宿': 'fa-solid fa-hotel', '美食': 'fa-solid fa-utensils', '購物': 'fa-solid fa-bag-shopping', '航班': 'fa-solid fa-plane', '其他': 'fa-solid fa-ellipsis' };
                     return icons[cat] || 'fa-solid fa-location-dot';

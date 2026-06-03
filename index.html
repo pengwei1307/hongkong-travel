@@ -9,61 +9,52 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         [v-cloak] { display: none !important; }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        body { background-color: #030611; overflow-x: hidden; }
-        .glass-panel { background: rgba(253, 251, 247, 0.88); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.6); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2); }
-        .glass-panel-light { background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.7); }
-        .ui-input { width: 100%; background-color: white !important; border: 1px solid #cbd5e1 !important; padding: 12px !important; border-radius: 12px !important; font-weight: bold !important; color: #0F172A !important; outline: none !important; }
-        .ui-select { width: 100%; background-color: white !important; border: 1px solid #cbd5e1 !important; padding: 12px !important; border-radius: 12px !important; font-weight: bold !important; color: #0F172A !important; outline: none !important; }
-        .ui-textarea { width: 100%; background-color: white !important; border: 1px solid #cbd5e1 !important; padding: 12px !important; border-radius: 12px !important; font-weight: bold !important; color: #0F172A !important; outline: none !important; }
+        body { background-color: #030611; }
+        .glass-panel { background: rgba(253, 251, 247, 0.88); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.6); }
+        .ui-input { width: 100%; background: white; border: 1px solid #cbd5e1; padding: 12px; border-radius: 12px; font-weight: bold; }
     </style>
 </head>
-<body class="antialiased text-slate-800 font-sans tracking-wide">
-    <div id="app" v-cloak class="max-w-md mx-auto bg-transparent min-h-screen relative z-10 flex flex-col pb-32 border-x border-slate-800/40 shadow-2xl">
-        <div class="fixed inset-0 z-0 pointer-events-none overflow-hidden max-w-md mx-auto border-x border-slate-800/40">
-            <img src="網頁背景.png" alt="維港" class="w-full h-full object-cover">
-            <div class="absolute inset-0 bg-slate-900/60"></div>
+<body>
+    <div id="app" v-cloak class="max-w-md mx-auto min-h-screen relative flex flex-col pb-20">
+        <div class="fixed inset-0 z-0">
+            <img src="網頁背景.png" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-black/60"></div>
         </div>
 
-        <div class="h-[250px] w-full relative z-10 shrink-0">
-            <img src="Web app Banner 素材.jpg" alt="Banner" class="w-full h-full object-cover">
+        <div class="relative z-10 p-6 pt-12 text-white text-center">
+            <h1 class="text-2xl font-black">港深雙城行</h1>
+            <p class="text-xs opacity-70">{{ cloudStatus }}</p>
         </div>
 
-        <div class="-mt-8 rounded-t-[32px] bg-transparent relative z-20 px-4 pt-6 flex-1">
-            <div class="mb-5 text-center text-white">
-                <h1 class="text-2xl font-black tracking-widest">港深雙城行</h1>
-                <span v-if="cloudStatus" class="text-[10px] opacity-70">{{ cloudStatus }}</span>
-            </div>
-
-            <div class="flex space-x-2 mb-4">
-                <button @click="currentTab = 'itinerary'" class="p-3 glass-panel rounded-xl">行程</button>
-                <button @click="currentTab = 'expenses'" class="p-3 glass-panel rounded-xl">記帳</button>
-            </div>
-
-            <div v-if="currentTab === 'itinerary'" class="space-y-4">
-                <div v-for="(item, idx) in itineraries[0]" :key="item.id" class="glass-panel p-4 rounded-2xl flex justify-between items-center">
+        <div class="relative z-10 px-4 space-y-4">
+            <div class="glass-panel p-4 rounded-2xl">
+                <h2 class="font-bold mb-2">行程表</h2>
+                <div v-for="(item, idx) in itineraries[0]" :key="item.id" class="flex justify-between p-2 border-b">
                     <span>{{ item.name }}</span>
-                    <button @click="deleteItem(0, idx)" class="text-red-500">刪除</button>
+                    <button @click="deleteItem(0, idx)" class="text-red-500 font-bold">刪除</button>
                 </div>
-                <button @click="openAddModal('itinerary')" class="w-full py-4 bg-slate-800 text-white rounded-xl font-bold">+ 新增行程</button>
+                <button @click="openModal('itinerary')" class="w-full mt-4 bg-slate-800 text-white py-3 rounded-xl font-bold">+ 新增行程</button>
             </div>
-
-            <div v-if="currentTab === 'expenses'" class="space-y-4">
-                <div v-for="(exp, idx) in expenses" :key="idx" class="glass-panel p-4 rounded-2xl flex justify-between items-center">
-                    <span>{{ exp.name }}: {{ exp.amount }} {{ exp.currency }}</span>
-                    <button @click="deleteExpense(idx)" class="text-red-500">刪除</button>
+            
+            <div class="glass-panel p-4 rounded-2xl">
+                <h2 class="font-bold mb-2">花費記帳</h2>
+                <div v-for="(exp, idx) in expenses" :key="idx" class="flex justify-between p-2 border-b">
+                    <span>{{ exp.name }}: {{ exp.amount }}</span>
+                    <button @click="deleteExpense(idx)" class="text-red-500 font-bold">刪除</button>
                 </div>
-                <button @click="openAddModal('expenses')" class="w-full py-4 bg-slate-800 text-white rounded-xl font-bold">+ 新增支出</button>
+                <button @click="openModal('expenses')" class="w-full mt-4 bg-slate-800 text-white py-3 rounded-xl font-bold">+ 新增支出</button>
             </div>
         </div>
 
-        <div v-if="modal.show" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
+        <div v-if="modalShow" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
             <div class="bg-white w-full max-w-sm rounded-3xl p-6 space-y-4">
-                <h3 class="font-bold text-lg">{{ modal.title }}</h3>
-                <input v-model="modal.data.name" class="ui-input" placeholder="名稱">
-                <input v-if="modal.type==='expenses'" type="number" v-model="modal.data.amount" class="ui-input" placeholder="金額">
-                <button @click="saveData" class="w-full bg-slate-800 text-white py-3 rounded-xl font-bold">儲存</button>
+                <h3 class="font-bold text-lg">新增項目</h3>
+                <input v-model="modalData.name" class="ui-input" placeholder="名稱">
+                <input v-if="modalType==='expenses'" type="number" v-model="modalData.amount" class="ui-input" placeholder="金額">
+                <div class="flex space-x-2">
+                    <button @click="modalShow = false" class="flex-1 py-3 bg-gray-200 rounded-xl font-bold">取消</button>
+                    <button @click="saveData" class="flex-1 py-3 bg-slate-800 text-white rounded-xl font-bold">儲存</button>
+                </div>
             </div>
         </div>
     </div>
@@ -71,41 +62,40 @@
     <script>
         const { createApp } = Vue;
         createApp({
-            data() { return { 
-                currentTab: 'itinerary',
-                cloudStatus: '連線中...',
+            data() { return {
+                cloudStatus: '正在同步...',
                 cloudUrl: 'https://kvdb.io/HKSZ2026_Tour_Shared/data',
-                itineraries: [[{ id: Date.now(), name: '唯港薈', category: '住宿' }]],
-                expenses: [{ name: '燒鵝午餐', amount: 380, currency: 'HKD' }],
-                modal: { show: false, type: '', title: '', data: { name: '', amount: '', currency: 'HKD' } }
+                itineraries: [[{ id: Date.now(), name: '唯港薈' }]],
+                expenses: [{ name: '燒鵝', amount: 380, currency: 'HKD' }],
+                modalShow: false, modalType: '', modalData: { name: '', amount: '' }
             },
-            mounted() { this.fetchCloud(); },
+            mounted() { this.fetchData(); },
             methods: {
-                async fetchCloud() {
+                async fetchData() {
                     try {
                         const res = await fetch(this.cloudUrl);
-                        if (res.ok) {
+                        if(res.ok) {
                             const data = await res.json();
                             this.itineraries = data.itineraries;
                             this.expenses = data.expenses;
                             this.cloudStatus = '已同步';
                         }
-                    } catch (e) { this.cloudStatus = '離線模式'; }
+                    } catch(e) { this.cloudStatus = '離線模式'; }
                 },
-                async pushCloud() {
+                async saveData() {
+                    if(this.modalType === 'itinerary') this.itineraries[0].push({ id: Date.now(), name: this.modalData.name });
+                    else this.expenses.push({ name: this.modalData.name, amount: this.modalData.amount, currency: 'HKD' });
+                    this.modalShow = false;
+                    await this.syncData();
+                },
+                async deleteItem(d, i) { this.itineraries[d].splice(i, 1); await this.syncData(); },
+                async deleteExpense(i) { this.expenses.splice(i, 1); await this.syncData(); },
+                async syncData() {
                     this.cloudStatus = '同步中...';
                     await fetch(this.cloudUrl, { method: 'POST', body: JSON.stringify({ itineraries: this.itineraries, expenses: this.expenses }) });
                     this.cloudStatus = '已同步';
                 },
-                deleteItem(d, i) { this.itineraries[d].splice(i, 1); this.pushCloud(); },
-                deleteExpense(i) { this.expenses.splice(i, 1); this.pushCloud(); },
-                openAddModal(type) { this.modal.type = type; this.modal.title = '新增'; this.modal.show = true; },
-                saveData() {
-                    if (this.modal.type === 'itinerary') this.itineraries[0].push({ id: Date.now(), name: this.modal.data.name });
-                    else this.expenses.push({ name: this.modal.data.name, amount: this.modal.data.amount, currency: 'HKD' });
-                    this.modal.show = false;
-                    this.pushCloud();
-                }
+                openModal(type) { this.modalType = type; this.modalShow = true; this.modalData = { name: '', amount: '' }; }
             }
         }).mount('#app');
     </script>

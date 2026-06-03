@@ -701,32 +701,43 @@
             methods: {
                 // 🔄 跨裝置全自動拉取機制：強制以雲端資料蓋過本地，實現手機改完、筆電重新整理立刻看見
                 syncFromCloud() {
-                    this.cloudStatus = 'syncing';
-                    fetch(this.cloudUrl)
-                        .then(res => {
-                            if (res.status === 404) {
-                                this.loadLocalOrDefaults();
-                                this.cloudStatus = 'synced';
-                                return null;
-                            }
-                            return res.json();
-                        })
-                        .then(data => {
-                            if (data) {
-                                this.itineraries = data.itineraries || [];
-                                this.shoppingList = data.shoppingList || [];
-                                this.expenses = data.expenses || [];
-                                this.diaryList = data.diaryList || [];
-                                this.saveToLocalCache();
-                                this.cloudStatus = 'synced';
-                            }
-                        })
-                        .catch(err => {
-                            console.warn('雲端同步超時，降級讀取本地儲存:', err);
-                            this.loadLocalOrDefaults();
-                            this.cloudStatus = 'error';
-                        });
-                },
+    this.cloudStatus = 'syncing';
+
+    fetch(this.cloudUrl + '?t=' + Date.now())
+        .then(res => {
+            console.log('雲端讀取回應狀態：', res.status);
+
+            if (res.status === 404) {
+                console.warn('雲端目前沒有資料，改用本機或預設資料');
+                this.loadLocalOrDefaults();
+                this.cloudStatus = 'error';
+                return null;
+            }
+
+            if (!res.ok) {
+                throw new Error('雲端讀取失敗，HTTP 狀態碼：' + res.status);
+            }
+
+            return res.json();
+        })
+        .then(data => {
+            if (data) {
+                this.itineraries = data.itineraries || [];
+                this.shoppingList = data.shoppingList || [];
+                this.expenses = data.expenses || [];
+                this.diaryList = data.diaryList || [];
+                this.saveToLocalCache();
+                this.cloudStatus = 'synced';
+                console.log('✅ 已從雲端讀取最新資料');
+            }
+        })
+        .catch(err => {
+            console.warn('❌ 雲端讀取失敗，改用本機儲存:', err);
+            this.loadLocalOrDefaults();
+            this.cloudStatus = 'error';
+            alert('雲端讀取失敗，目前顯示的是這台裝置自己的本機資料。');
+        });
+},
                 loadLocalOrDefaults() {
                     this.itineraries = localStorage.getItem('hk_sz_itineraries') ? JSON.parse(localStorage.getItem('hk_sz_itineraries')) : JSON.parse(JSON.stringify(this.defaultItineraries));
                     this.shoppingList = localStorage.getItem('hk_sz_shoppingList') ? JSON.parse(localStorage.getItem('hk_sz_shoppingList')) : [
@@ -749,18 +760,39 @@
                     localStorage.setItem('hk_sz_diaryList', JSON.stringify(this.diaryList));
                 },
                 pushDataToCloud() {
-                    this.cloudStatus = 'syncing';
-                    this.saveToLocalCache();
-                    const payload = {
-                        itineraries: this.itineraries,
-                        shoppingList: this.shoppingList,
-                        expenses: this.expenses,
-                        diaryList: this.diaryList
-                    };
-                    fetch(this.cloudUrl, { method: 'POST', body: JSON.stringify(payload) })
-                    .then(() => { this.cloudStatus = 'synced'; })
-                    .catch(err => { console.error('雲端封裝同步失敗:', err); this.cloudStatus = 'error'; });
-                },
+    this.cloudStatus = 'syncing';
+    this.saveToLocalCache();
+
+    const payload = {
+        itineraries: this.itineraries,
+        shoppingList: this.shoppingList,
+        expenses: this.expenses,
+        diaryList: this.diaryList
+    };
+
+    const jsonData = JSON.stringify(payload);
+    console.log('準備同步到雲端，資料大小：', jsonData.length, 'bytes');
+
+    fetch(this.cloudUrl, {
+        method: 'POST',
+        body: jsonData
+    })
+    .then(res => {
+        console.log('雲端寫入回應狀態：', res.status);
+
+        if (!res.ok) {
+            throw new Error('雲端寫入失敗，HTTP 狀態碼：' + res.status);
+        }
+
+        this.cloudStatus = 'synced';
+        console.log('✅ 雲端同步成功');
+    })
+    .catch(err => {
+        console.error('❌ 雲端同步失敗:', err);
+        this.cloudStatus = 'error';
+        alert('雲端同步失敗，這次資料可能只存在本機。請開啟 Console 查看錯誤。');
+    });
+},
                 clearLocalStorageCache() {
                     if (confirm('確定要完全洗白本機與雲端中的所有手動自訂資料，重置回 GitHub 的初始淨空正本嗎？')) {
                         localStorage.clear();
